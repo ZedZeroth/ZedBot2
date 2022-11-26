@@ -1,0 +1,62 @@
+@font-face {
+    font-family: ShareTech;
+    src: url(ShareTech-Regular.ttf);
+}
+
+body {
+    padding-left: 50px;
+    font-size: 150%;
+    font-family: ShareTech;
+    background-color: #eef;
+}
+
+button {
+    font-size: 100%;
+    font-family: ShareTech;
+    background-color: #f80;
+}
+
+button:hover {
+    background-color: #fa2;
+}
+
+input {
+    font-size: 100%;
+    font-family: ShareTech;
+    background-color: #fa2;
+    text-align: center;
+}
+
+form {
+    display: inline;
+}
+
+td {
+    padding: 5px 10px;
+    vertical-align: top;
+}
+
+a:hover {
+    color: #e70;
+    text-decoration: none;
+  }
+
+h1, h2 {
+    text-shadow: 0 0 2px #557, 0 0 2px #557;
+}
+h1 {
+    color: #e70;
+}
+
+h2 {
+    color: #c50;
+}
+
+a {
+    color: #a30;
+    font-weight: bold;
+}
+
+li {
+    line-height: 2;
+}
