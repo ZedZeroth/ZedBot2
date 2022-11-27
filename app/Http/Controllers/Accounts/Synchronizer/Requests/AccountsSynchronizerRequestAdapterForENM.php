@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
 
-use Illuminate\Http\Client\Response;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
+use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
+use App\Http\Controllers\MultiDomain\Validators\AdapterValidator;
 
 class AccountsSynchronizerRequestAdapterForENM implements
     RequestAdapterInterface
@@ -26,7 +27,13 @@ class AccountsSynchronizerRequestAdapterForENM implements
         int $numberToFetch
     ): RequestAdapterInterface {
 
-        // Integer validation
+        // Validate the argument
+        (new IntegerValidator())->validate(
+            integer: $numberToFetch,
+            integerName: 'numberToFetch',
+            lowestValue: 1,
+            highestValue: pow(10, 5)
+        );
 
         $this->postParameters = [
             'accountERN' => env('ZED_ENM_ACCOUNT_ERN'),
@@ -39,11 +46,20 @@ class AccountsSynchronizerRequestAdapterForENM implements
      * Fetch the response.
      *
      * @param GeneralAdapterInterface $getOrPostAdapter
-     * @return Response
+     * @return array
      */
     public function fetchResponse(
         GeneralAdapterInterface $getOrPostAdapter
-    ): Response {
+    ): array {
+
+        // Validate the argument
+        (new AdapterValidator())->validate(
+            adapter: $getOrPostAdapter,
+            adapterName: 'getOrPostAdapter',
+            requiredMethods: ['post'],
+            platformSuffix: 'ENM'
+        );
+
         return ($getOrPostAdapter)
             ->post(
                 endpoint: env('ZED_ENM_BENEFICIARIES_ENDPOINT'),

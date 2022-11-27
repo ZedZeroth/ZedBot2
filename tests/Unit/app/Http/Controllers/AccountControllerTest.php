@@ -157,7 +157,7 @@ test('Expect AccountController\'s "sync" method, injected with a valid SyncComma
     ->expect(fn() => (new AccountController())->sync(
         syncCommandDTO: new SyncCommandDTO(
             provider: 'ENM',
-            numberToFetch: 0
+            numberToFetch: 1
         )
     ))
     ->toBeNull();

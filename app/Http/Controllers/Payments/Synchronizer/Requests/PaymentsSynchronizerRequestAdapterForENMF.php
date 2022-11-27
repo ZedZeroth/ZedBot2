@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Payments\Synchronizer\Requests;
 
-use Illuminate\Http\Client\Response;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
 
@@ -37,11 +36,11 @@ class PaymentsSynchronizerRequestAdapterForENMF implements
      * Fetch the response.
      *
      * @param GeneralAdapterInterface $getOrPostAdapter
-     * @return Response
+     * @return array
      */
     public function fetchResponse(
         GeneralAdapterInterface $getOrPostAdapter
-    ): Response {
+    ): array {
         return ($getOrPostAdapter)
             ->post(
                 endpoint: env('ZED_ENM_TRANSACTIONS_ENDPOINT'),

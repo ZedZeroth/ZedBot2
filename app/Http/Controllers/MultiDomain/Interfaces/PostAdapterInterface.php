@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\MultiDomain\Interfaces;
 
-use Illuminate\Http\Client\Response;
-
 interface PostAdapterInterface
 {
     /**
@@ -11,10 +9,10 @@ interface PostAdapterInterface
      *
      * @param string $endpoint
      * @param array $postParameters
-     * @return Response
+     * @return array
      */
     public function post(
         string $endpoint,
         array $postParameters
-    ): Response;
+    ): array;
 }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\MultiDomain\Interfaces;
 
-use Illuminate\Http\Client\Response;
-
 interface RequestAdapterInterface
 {
     /**
@@ -20,9 +18,9 @@ interface RequestAdapterInterface
      * Fetch the response.
      *
      * @param GeneralAdapterInterface $getOrPostAdapter
-     * @return Response
+     * @return array
      */
     public function fetchResponse(
         GeneralAdapterInterface $getOrPostAdapter
-    ): Response;
+    ): array;
 }

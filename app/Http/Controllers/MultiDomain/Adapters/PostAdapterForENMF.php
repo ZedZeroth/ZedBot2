@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\MultiDomain\Adapters;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\PostAdapterInterface;
@@ -17,12 +16,12 @@ class PostAdapterForENMF implements
      *
      * @param string $endpoint
      * @param array $postParameters
-     * @return Response
+     * @return array
      */
     public function post(
         string $endpoint,
         array $postParameters
-    ): Response {
+    ): array {
         // Build the URL
         $url = env('ZED_ENM_DOMAIN')
             . env('ZED_ENM_PATH')
@@ -36,10 +35,27 @@ class PostAdapterForENMF implements
                     ->first()->key
         ];
 
-        // Execute the request and return the response
-        return Http::withHeaders($headers)
+        // Execute the request
+        $response = Http::withHeaders($headers)
             ->connectTimeout(10)
             ->retry(3, 100)
             ->post($url, $postParameters);
+
+        // Decode the response
+        $statusCode = $response->status();
+        $responseBody = json_decode(
+            $response->getBody(),
+            true
+        );
+
+        /*💬*/ //print_r($responseBody);
+
+        //If valid then return response
+        if ($statusCode == 200) {
+            return $responseBody;
+        // If invalid then return an empty array
+        } else {
+            return [];
+        }
     }
 }

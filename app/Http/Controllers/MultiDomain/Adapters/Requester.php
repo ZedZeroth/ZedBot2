@@ -19,7 +19,7 @@ class Requester
     ): array {
 
         //Fetch the response
-        $response =
+        $responseBody =
             $adapterDTO->requestAdapter
                 ->buildPostParameters(
                     numberToFetch: $numberToFetch
@@ -28,27 +28,12 @@ class Requester
                     getOrPostAdapter: $adapterDTO->getOrPostAdapter
                 );
 
-        /*💬*/ //var_dump($response);
-
-        // Decode the response
-        $statusCode = $response->status();
-        $responseBody = json_decode(
-            $response->getBody(),
-            true
-        );
-
-        /*💬*/ //print_r($responseBody);
-
         //Adapt a valid response and return the DTOs
-        if ($statusCode == 200) {
+        if ($responseBody) {
             return $adapterDTO->responseAdapter
                 ->buildDTOs(
                     responseBody: $responseBody
                 );
-
-        // Return an empty array for an invalid response
-        } else {
-            return [];
         }
     }
 }

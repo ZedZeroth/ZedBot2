@@ -45,8 +45,10 @@ class ExceptionCatcher
             $exceptionCaught = $e;
         } catch (\Error $e) {
             $exceptionCaught = $e;
-        // String validation exceptions
+        // Custom validation exceptions
         } catch (\App\Http\Controllers\MultiDomain\Validators\StringValidationException $e) {
+            $exceptionCaught = $e;
+        } catch (\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException $e) {
             $exceptionCaught = $e;
         }
 

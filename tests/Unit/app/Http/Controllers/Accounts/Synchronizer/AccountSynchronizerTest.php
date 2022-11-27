@@ -10,8 +10,6 @@ use App\Http\Controllers\Accounts\AccountSynchronizer;
 use App\Http\Controllers\MultiDomain\Adapters\Requester;
 use App\Http\Controllers\MultiDomain\Adapters\AdapterDTO;
 
-//test('GIVEN no parameters WHEN instantiating THEN an instance is returned')
-
 test('Even more mock testing...', function () {
     $object = new stdClass();
     $mockRequester = mock('Requester')

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\MultiDomain\Interfaces;
 
-use Illuminate\Http\Client\Response;
-
 interface GetAdapterInterface
 {
     /**
      * Makes a GET request to an API
      *
      * @param string $endpoint
-     * @return Response
+     * @return array
      */
     public function get(
         string $endpoint,
-    ): Response;
+    ): array;
 }
