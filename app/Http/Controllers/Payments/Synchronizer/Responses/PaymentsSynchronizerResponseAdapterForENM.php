@@ -25,7 +25,7 @@ class PaymentsSynchronizerResponseAdapterForENM implements
         array $responseBody
     ): array {
         $paymentDTOs = [];
-        /*💬*/ //print_r($responseBody);
+        /*💬*/ print_r($responseBody);
 
         foreach (
             $responseBody['results'] as $result

@@ -2,7 +2,7 @@
 
 *Note: The four key entities not represented by Eloquent models are written uppercase and bold. These are: **NETWORK**, **EXCHANGE**, **MARKET**, and **API**. The twelve Eloquent models are written capitalized and bold: e.g. **Customer**, **Trade**, etc.*
 
-## Introduction
+## Function
 
 ZedBot is an semi-automated currency exchange application. It interacts with currency **MARKET**s, **EXCHANGE** platforms, and payment **NETWORK**s via their **API**s in order to:
 
@@ -18,6 +18,79 @@ ZedBot is an semi-automated currency exchange application. It interacts with cur
 6. **Customer** processing also involves **IdentityDocument** and **RiskAssessment** models.
 
 *Note: The **Currency** model is used throughout the application.*
+
+## Development & design
+
+I aim to implment Test Driven Development (TDD) and Domain Driven Design (DDD) while applying SOLID principles. "Single Responsibility" classes and "Interface Segregation" drive the use of many small and specific classes/interfaces as opposed to "fat" "God-like" ones. "Dependency Inversion" and "Dependency Injection" are both applied to create loose couplings so that changes can be applied to one class without requiring change to others.
+
+## "Command to action" chain
+
+Commands can be triggered by the CLI, the browser, or the scheduler. The resulting chain of events is structured as follows:
+
+*input*
+⇩
+ActionDomainCommand (e.g. SyncAccountsCommand)
+║
+DomainController (e.g. AccountController)
+   ║
+   ╠══ AdapterBuilder
+   ║
+   ╠══ Requester
+   ║   ║
+   ║   ╠══ RequestAdapter (e.g. AccountsSynchronizerRequestAdapterForENM0)
+   ║   ║   ║
+   ║   ║   ╚═ GetOrPostAdapter (e.g. PostAdapterForENM0)
+   ║   ║            ⇙
+   ║   ╚══ ResponseAdapter (e.g. AccountsSynchronizerResponseAdapterForENM0)
+   ║            ⇙
+   ╚═ DomainActioner (e.g. AccountSynchronizer)
+       ⇩
+       *ouput*
+
+## Directory structure
+
+*Controllers*
+║
+╠══ *Domain1* (e.g. Accounts)
+║   ║
+║   ╠══ Domain1Controller (e.g. AccountController.php)
+║   ║
+║   ╠══ Domain1DTO (e.g. AccountDTO.php)
+║   ║
+║   ╠══ *Action1* (e.g. Synchronizer)
+║   ║   ║
+║   ║   ╠══ Actioner1 (e.g. AccountSynchronizer.php)
+║   ║   ║
+║   ║   ╠══ *RequestAdapters*
+║   ║   ║   ║
+║   ║   ║   ╠══ Domain1Action1RequestAdapterForAPI1
+║   ║   ║   ║   (e.g. AccountSynchronizerRequestAdapterForENM0.php)
+║   ║   ║   ╠══ Domain1Action1RequestAdapterForAPI2
+║   ║   ║       (e.g. AccountSynchronizerRequestAdapterForLCS0.php)
+║   ║   ║
+║   ║   ╠══ *ResponseAdapters*
+║   ║   ║   ║
+║   ║   ║   ╠══ Domain1Action1ResponseAdapterForAPI1
+║   ║   ║   ║   (e.g. AccountSynchronizerResponseAdapterForENM0.php)
+║   ║   ║   ╠══ Domain1Action1ResponseAdapterForAPI2
+║   ║   ║       (e.g. AccountSynchronizerResponseAdapterForLCS0.php)
+║   ║
+║   ╠══ *Action2* (e.g. Maker)
+║   ║   ║
+║   ║   ╠══ Actioner2 (e.g. AccountMaker.php)
+║   ║   ║
+║   ║   ╠══ *RequestAdapters*
+║   ║   ║   ║
+║   ║   ║   ╠══ etc.
+║
+╠══ *Domain2* (e.g. Payments)
+║   ║
+║   ╠══ Domain2Controller (e.g. PaymentController.php)
+║   ║
+║   ╠══ Domain2DTO (e.g. PaymentDTO.php)
+║   ║
+║   ╠══ *Action1* (e.g. Synchronizer)
+etc.
 
 ## Non-model entities (4)
 
@@ -39,7 +112,7 @@ All **Rate**s exist on a real-world currency **MARKET** such as "GMN" or "BFX".
 1. ***Customer**s and their associated **IdentityDocument**s and **RiskAssessment***s
 3. *The **Currency** model.*
 
-### API services ("API")
+### API (Servies that provide APIs)
 
 All interactions with **NETWORK**s, **EXCHANGE**s, and **MARKET**s are made via **API**s and their respective adapter classes. Note that **NETWORK**s do not have their own **API** and hence are interacted with indirectly (e.g. via the **API**s of banks or blockchain explorers). **EXCHANGE**s and **MARKET**s provide their own **API**s and are interacted with directly.
 
@@ -57,9 +130,9 @@ Eloquent models can be grouped into the following five categories.
 
 ### Exchange-based models (5)
 
-* **Profile**  ("belongsTo" 1 **Customer**) ("hasMany" Offers, and Trades)
+* **Profile**  ("belongsTo" 1 **Customer**) ("hasMany" Offers)
     * **Offer** ("belongsTo" 1 Profile and 2 **Currency**) ("hasMany" Trades)
-    * **Trade** ("belongsTo" 1 Offer and 2 Profiles) ("hasMany" Messages) ("hasOne" Invoice)
+    * **Trade** ("belongsTo" 1 Offer and 1 "taker" Profile) ("hasMany" Messages) ("hasOne" Invoice)
     * **Message** ("belongsTo" 1 Trade)
     * **Invoice** ("belongsTo" 1 Trade) ("hasMany" **Payment**s)
 
