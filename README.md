@@ -5,7 +5,7 @@
 ## Introduction
 
 ZedBot is an semi-automated currency exchange application. It interacts with currency **MARKET**s, **EXCHANGE** platforms, and payment **NETWORK**s via their **API**s in order to:
-git push -u origin main
+
 1. Calculate exchange **Rate**s.
 2. Maintain **Offer**s at competitive **Rate**s.
 3. Detect new **Trade**s and communicate with a **Customer**'s exchange **Profile** via **Message**s, to either:
