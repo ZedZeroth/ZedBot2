@@ -27,25 +27,25 @@ I aim to implment Test Driven Development (TDD) and Domain Driven Design (DDD) w
 
 Commands can be triggered by the CLI, the browser, or the scheduler. The resulting chain of events is structured as follows:
 
-*input*
-⇩
-ActionDomainCommand (e.g. SyncAccountsCommand)
-║
-DomainController (e.g. AccountController)
-   ║
-   ╠══ AdapterBuilder
-   ║
-   ╠══ Requester
-   ║   ║
-   ║   ╠══ RequestAdapter (e.g. AccountsSynchronizerRequestAdapterForENM0)
-   ║   ║   ║
-   ║   ║   ╚═ GetOrPostAdapter (e.g. PostAdapterForENM0)
-   ║   ║            ⇙
-   ║   ╚══ ResponseAdapter (e.g. AccountsSynchronizerResponseAdapterForENM0)
-   ║            ⇙
-   ╚═ DomainActioner (e.g. AccountSynchronizer)
-       ⇩
-       *ouput*
+*input*  
+⇩  
+ActionDomainCommand (e.g. SyncAccountsCommand)  
+║  
+DomainController (e.g. AccountController)  
+   ║  
+   ╠══ AdapterBuilder  
+   ║  
+   ╠══ Requester  
+   ║   ║  
+   ║   ╠══ RequestAdapter (e.g. AccountsSynchronizerRequestAdapterForENM0)  
+   ║   ║   ║  
+   ║   ║   ╚═ GetOrPostAdapter (e.g. PostAdapterForENM0)  
+   ║   ║            ⇙  
+   ║   ╚══ ResponseAdapter (e.g. AccountsSynchronizerResponseAdapterForENM0)  
+   ║            ⇙  
+   ╚═ DomainActioner (e.g. AccountSynchronizer)  
+       ⇩  
+       *ouput*  
 
 ## Directory structure
 
