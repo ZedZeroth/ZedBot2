@@ -36,16 +36,16 @@ DomainController (e.g. AccountController)
 ......╠══ AdapterBuilder  
 ......║  
 ......╠══ Requester  
-......║......║  
-......║......╠══ RequestAdapter (e.g. AccountsSynchronizerRequestAdapterForENM0)  
-......║......║......║  
-......║......║......╚═ GetOrPostAdapter (e.g. PostAdapterForENM0)  
-......║......║........................⇙  
-......║......╚══ ResponseAdapter (e.g. AccountsSynchronizerResponseAdapterForENM0)  
-......║........................⇙  
+......║............║  
+......║............╠══ RequestAdapter (e.g. AccountsSynchronizerRequestAdapterForENM0)  
+......║............║............║  
+......║............║............╚═ GetOrPostAdapter (e.g. PostAdapterForENM0)  
+......║............║..............................⇙  
+......║............╚══ ResponseAdapter (e.g. AccountsSynchronizerResponseAdapterForENM0)  
+......║..............................⇙  
 ......╚═ DomainActioner (e.g. AccountSynchronizer)  
-............ ⇩  
-............ *ouput*  
+................. ⇩  
+.................. *ouput*  
 
 ## Directory structure
 
