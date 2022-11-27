@@ -52,44 +52,44 @@ DomainController (e.g. AccountController)
 *Controllers*  
 ║  
 ╠══ *Domain1* (e.g. Accounts)  
-║......║  
-║......╠══ Domain1Controller (e.g. AccountController.php)  
-║......║  
-║......╠══ Domain1DTO (e.g. AccountDTO.php)  
-║......║  
-║......╠══ *Action1* (e.g. Synchronizer)  
-║......║......║  
-║......║......╠══ Actioner1 (e.g. AccountSynchronizer.php)  
-║......║......║  
-║......║......╠══ *RequestAdapters*  
-║......║......║......║  
-║......║......║......╠══ Domain1Action1RequestAdapterForAPI1  
-║......║......║......║......(e.g. AccountSynchronizerRequestAdapterForENM0.php)  
-║......║......║......╚══ Domain1Action1RequestAdapterForAPI2  
-║......║......║............ (e.g. AccountSynchronizerRequestAdapterForLCS0.php)  
-║......║......║  
-║......║......╚══ *ResponseAdapters*  
-║......║............ ║  
-║......║............ ╠══ Domain1Action1ResponseAdapterForAPI1  
-║......║............ ║......(e.g. AccountSynchronizerResponseAdapterForENM0.php)  
-║......║............ ╚══ Domain1Action1ResponseAdapterForAPI2  
-║......║..................  (e.g. AccountSynchronizerResponseAdapterForLCS0.php)  
-║......║  
-║......╚══ *Action2* (e.g. Maker)  
-║............ ║  
-║............ ╚══ Actioner2 (e.g. AccountMaker.php)  
-║............ ║  
-║............ ╚══ *RequestAdapters*  
-║..................  ║  
-║..................  ╚══ etc.  
+║.........║  
+║.........╠══ Domain1Controller (e.g. AccountController.php)  
+║.........║  
+║.........╠══ Domain1DTO (e.g. AccountDTO.php)  
+║.........║  
+║.........╠══ *Action1* (e.g. Synchronizer)  
+║.........║.........║  
+║.........║.........╠══ Actioner1 (e.g. AccountSynchronizer.php)  
+║.........║.........║  
+║.........║.........╠══ *RequestAdapters*  
+║.........║.........║.........║  
+║.........║.........║.........╠══ Domain1Action1RequestAdapterForAPI1  
+║.........║.........║.........║.........(e.g. AccountSynchronizerRequestAdapterForENM0.php)  
+║.........║.........║.........╚══ Domain1Action1RequestAdapterForAPI2  
+║.........║.........║.................. (e.g. AccountSynchronizerRequestAdapterForLCS0.php)  
+║.........║.........║  
+║.........║.........╚══ *ResponseAdapters*  
+║.........║.................. ║  
+║.........║.................. ╠══ Domain1Action1ResponseAdapterForAPI1  
+║.........║.................. ║.........(e.g. AccountSynchronizerResponseAdapterForENM0.php)  
+║.........║.................. ╚══ Domain1Action1ResponseAdapterForAPI2  
+║.........║...........................  (e.g. AccountSynchronizerResponseAdapterForLCS0.php)  
+║.........║  
+║.........╚══ *Action2* (e.g. Maker)  
+║.................. ║  
+║.................. ╚══ Actioner2 (e.g. AccountMaker.php)  
+║.................. ║  
+║.................. ╚══ *RequestAdapters*  
+║...........................  ║  
+║...........................  ╚══ etc.  
 ║  
 ╠══ *Domain2* (e.g. Payments)  
-║......║  
-║......╠══ Domain2Controller (e.g. PaymentController.php)  
-║......║  
-║......╠══ Domain2DTO (e.g. PaymentDTO.php)  
-║......║  
-║......╚══ *Action1* (e.g. Synchronizer)  
+║.........║  
+║.........╠══ Domain2Controller (e.g. PaymentController.php)  
+║.........║  
+║.........╠══ Domain2DTO (e.g. PaymentDTO.php)  
+║.........║  
+║.........╚══ *Action1* (e.g. Synchronizer)  
 etc.  
 
 ## Non-model entities (4)
