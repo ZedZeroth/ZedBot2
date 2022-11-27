@@ -117,7 +117,7 @@ test('GIVEN a PostAdapterForENMF with a mocked post() method
     $builtRequestAdapter = (new AccountsSynchronizerRequestAdapterForENM())
         ->buildPostParameters(numberToFetch: 1);
 
-    // Mock a PostAdapter to return a fake request response array
+    // Mock an incorrect PostAdapter to return a fake request response array
     $postAdapterMock = mock(PostAdapterForENMF::class)
         ->shouldReceive('post')
         ->with(
@@ -137,7 +137,7 @@ test('GIVEN a PostAdapterForENMF with a mocked post() method
 
     /**
      * Inject the mocked PostAdapter into the RequestAdapter
-     * to check that the response array is passed back successfully.
+     * to check if the response array is passed back successfully.
      */
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
@@ -158,7 +158,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
     $builtRequestAdapter = (new AccountsSynchronizerRequestAdapterForENM())
         ->buildPostParameters(numberToFetch: 1);
 
-    // Mock a PostAdapter to return a fake request response array
+    // Mock an incorrect GetAdapter to return a fake request response array
     $postAdapterMock = mock(GetAdapterForLCS::class)
         ->shouldReceive('post')
         ->with(
@@ -178,7 +178,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
 
     /**
      * Inject the mocked PostAdapter into the RequestAdapter
-     * to check that the response array is passed back successfully.
+     * to check if the response array is passed back successfully.
      */
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
