@@ -36,7 +36,7 @@ All **Profile**s, **Offer**s, **Trade**s, **Message**s, and **Invoice**s exist o
 All **Rate**s exist on a real-world currency **MARKET** such as "GMN" or "BFX".
 
 *Note: Models not tied directly to a **NETWORK**, **EXCHANGE**, or **MARKET** include:*
-1. ***Customer**s and their associated **IdentityDocument**s and **RiskAssessments***
+1. ***Customer**s and their associated **IdentityDocument**s and **RiskAssessment***s
 3. *The **Currency** model.*
 
 ### API services ("API")
@@ -57,16 +57,16 @@ Eloquent models can be grouped into the following five categories.
 
 ### Exchange-based models (5)
 
-* **Profile**  ("belongsTo" 1 **Customer**) ("hasMany" Offers, Trades, and Messages)
+* **Profile**  ("belongsTo" 1 **Customer**) ("hasMany" Offers, and Trades)
     * **Offer** ("belongsTo" 1 Profile and 2 **Currency**) ("hasMany" Trades)
     * **Trade** ("belongsTo" 1 Offer and 2 Profiles) ("hasMany" Messages) ("hasOne" Invoice)
-    * **Message** ("belongsTo" 1 Trade and 2 Profiles)
+    * **Message** ("belongsTo" 1 Trade)
     * **Invoice** ("belongsTo" 1 Trade) ("hasMany" **Payment**s)
 
 ### Network-based models (2)
 
 * **Account** ("belongsTo" 1 **Customer** and 1 **Currency**) ("hasMany" Payments)
-    * **Payment** ("belongsTo" 2 Accounts and 1 **Currency**) ("hasMany" **Invoice**s)
+    * **Payment** ("belongsTo" 2 Accounts) ("hasMany" **Invoice**s)
 
 ### Market-based models (1)
 
@@ -74,11 +74,11 @@ Eloquent models can be grouped into the following five categories.
 
 ### The Currency model (1)
 
-* **Currency** ("hasMany" **Rate**s, **Offer**s, **Account**s, and **Payment**s)
+* **Currency** ("hasMany" **Rate**s, **Offer**s, and **Account**s)
 
 ## Model identifiers
 
-All models have a unique incrementing integer "id" property used in the Eloquent database as their primary key, and as a foreign key for defining relationships. In addition to this "id" property, each model has other unique identifier properties used for identification either on the internal system, on **NETWORK**s/**EXHANGE**s, or in communication with **Customers**. Such identifiers force the consideration of uniqueness in the real-world in order to avoid potential collisions (more than one real-world entity being representedy the same Eloquent model).
+All models have a unique incrementing integer "id" property used in the Eloquent database as their primary key, and as a foreign key for defining their relationships. In addition to this "id" property, each model has other unique identifier properties used for identification either on ZedBot's internal system, on **NETWORK**s/**EXHANGE**s, or in communication with **Customers**. Such identifiers force the consideration of uniqueness in the real-world in order to avoid potential collisions (more than one real-world entity being represented by the same Eloquent model).
 
 ### Customer Identifier
 
