@@ -18,27 +18,44 @@ class AccountSynchronizer implements
     public function sync(
         array $DTOs
     ): void {
-        foreach ($DTOs as $dto) {
+        foreach ($DTOs as $accountDTO) {
+            //Validate DTOs
+            (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+                ->validate(
+                    dto: $accountDTO,
+                    dtoName: 'accountDTO',
+                    requiredProperties: [
+                        'network',
+                        'identifier',
+                        'customer_id',
+                        'networkAccountName',
+                        'label',
+                        'currency_id',
+                        'balance',
+                    ]
+                );
+
+            // Create accounts
             Account::firstOrCreate(
-                ['identifier' => $dto->identifier],
+                ['identifier' => $accountDTO->identifier],
                 [
-                    'network' => $dto->network,
-                    'customer_id' => $dto->customer_id,
-                    'currency_id' => $dto->currency_id,
-                    'balance' => $dto->balance,
+                    'network' => $accountDTO->network,
+                    'customer_id' => $accountDTO->customer_id,
+                    'currency_id' => $accountDTO->currency_id,
+                    'balance' => $accountDTO->balance,
                 ]
             );
 
             // If a networkAccountName is passed then update it
-            if ($dto->networkAccountName) {
-                Account::where('identifier', $dto->identifier)
-                ->update(['networkAccountName' => $dto->networkAccountName]);
+            if ($accountDTO->networkAccountName) {
+                Account::where('identifier', $accountDTO->identifier)
+                ->update(['networkAccountName' => $accountDTO->networkAccountName]);
             }
 
             // If a label is passed then update it
-            if ($dto->label) {
-                Account::where('identifier', $dto->identifier)
-                ->update(['label' => $dto->label]);
+            if ($accountDTO->label) {
+                Account::where('identifier', $accountDTO->identifier)
+                ->update(['label' => $accountDTO->label]);
             }
         }
 

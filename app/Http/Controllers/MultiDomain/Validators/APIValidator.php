@@ -23,15 +23,21 @@ class APIValidator
             stringName: 'API',
             shortestLength: 4,
             longestLength: 4,
-            containsUppercase: true,
-            containsLowercase: false,
+            mustHaveUppercase: true,
+            canHaveUppercase: true,
+            mustHaveLowercase: false,
+            canHaveLowercase: false,
             isAlphabetical: false,
             isNumeric: false,
             isAlphanumeric: true
         );
 
-        // Validate the API code exists in the list
-        if (!in_array($apiCode, explode(',', env('ZED_API_LIST')))) {
+        // Validate the API code exists in the lists
+        $apiCodes =
+            env('ZED_EXCHANGE_API_LIST') . ',' .
+            env('ZED_MARKET_API_LIST') . ',' .
+            env('ZED_NETWORK_API_LIST');
+        if (!in_array($apiCode, explode(',', $apiCodes))) {
             throw new APIValidationException(
                 message: $prefix . 'is not in the API list'
             );

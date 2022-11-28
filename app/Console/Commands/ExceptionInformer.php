@@ -12,19 +12,57 @@ class ExceptionInformer
      *
      * @param Command $command
      * @param Exception|Error $e
-     * @param string $class
-     * @param string $function
-     * @param int $line
      * @return void
      */
     public function warn(
         \Illuminate\Console\Command $command,
-        \Exception|\Error $e,
-        string $class,
-        string $function,
-        int $line
+        \Exception|\Error $e
     ): void {
         /*💬*/ //print_r($e);
+
+        // Validate the command
+        (new CommandValidator())->validate(
+            command: $command,
+            commandName: $command->argument('command')
+        );
+
+        // Validate $e->getMessage()
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: $e->getMessage(),
+            stringName: '$e->getMessage()',
+            shortestLength: 1,
+            longestLength: pow(10, 3),
+            mustHaveUppercase: false,
+            canHaveUppercase: true,
+            mustHaveLowercase: false,
+            canHaveLowercase: true,
+            isAlphabetical: false,
+            isNumeric: false,
+            isAlphanumeric: false
+        );
+
+        // Validate $e->getFile()
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: str_replace(['/', '.'], '', $e->getFile()),
+            stringName: $e->getFile(),
+            shortestLength: 1,
+            longestLength: pow(10, 2),
+            mustHaveUppercase: false,
+            canHaveUppercase: true,
+            mustHaveLowercase: false,
+            canHaveLowercase: true,
+            isAlphabetical: false,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
+        // Validate $e->getLine()
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: (int) $e->getLine(),
+            integerName: '$e->getLine()',
+            lowestValue: 1,
+            highestValue: pow(10, 3)
+        );
 
         // Explode exception path
         $exceptionPath = explode('\\', $e::class); // Multi-line

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Payments\Synchronizer;
 
-class PaymentSynchronizer
-    implements \App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface
+class PaymentSynchronizer implements
+    \App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface
 {
     /**
      * Uses the DTOs to create payments for
@@ -16,17 +16,35 @@ class PaymentSynchronizer
     public function sync(
         array $DTOs
     ): void {
-        foreach ($DTOs as $dto) {
+        foreach ($DTOs as $paymentDTO) {
+            //Validate DTOs
+            (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+                ->validate(
+                    dto: $paymentDTO,
+                    dtoName: 'paymentDTO',
+                    requiredProperties: [
+                        'network',
+                        'identifier',
+                        'amount',
+                        'currency_id',
+                        'originator_id',
+                        'beneficiary_id',
+                        'memo',
+                        'timestamp',
+                    ]
+                );
+
+            // Create payments
             \App\Models\Payment::firstOrCreate(
-                ['identifier' => $dto->identifier],
+                ['identifier' => $paymentDTO->identifier],
                 [
-                    'network' => $dto->network,
-                    'amount' => $dto->amount,
-                    'currency_id' => $dto->currency_id,
-                    'originator_id' => $dto->originator_id,
-                    'beneficiary_id' => $dto->beneficiary_id,
-                    'memo' => $dto->memo,
-                    'timestamp' => $dto->timestamp,
+                    'network' => $paymentDTO->network,
+                    'amount' => $paymentDTO->amount,
+                    'currency_id' => $paymentDTO->currency_id,
+                    'originator_id' => $paymentDTO->originator_id,
+                    'beneficiary_id' => $paymentDTO->beneficiary_id,
+                    'memo' => $paymentDTO->memo,
+                    'timestamp' => $paymentDTO->timestamp,
                 ]
             );
         }

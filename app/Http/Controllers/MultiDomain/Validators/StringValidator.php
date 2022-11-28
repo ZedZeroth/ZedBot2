@@ -13,8 +13,10 @@ class StringValidator
      * @param string $stringName
      * @param int $shortestLength
      * @param int $longestLength
-     * @param bool $containsUppercase
-     * @param bool $containsLowercase
+     * @param bool $mustHaveUppercase
+     * @param bool $canHaveUppercase
+     * @param bool $mustHaveLowercase
+     * @param bool $canHaveLowercase
      * @param bool $isAlphabetical
      * @param bool $isNumeric
      * @param bool $isAlphanumeric
@@ -25,8 +27,10 @@ class StringValidator
         string $stringName,
         int $shortestLength,
         int $longestLength,
-        bool $containsUppercase,
-        bool $containsLowercase,
+        bool $mustHaveUppercase,
+        bool $canHaveUppercase,
+        bool $mustHaveLowercase,
+        bool $canHaveLowercase,
         bool $isAlphabetical,
         bool $isNumeric,
         bool $isAlphanumeric
@@ -40,14 +44,34 @@ class StringValidator
             throw new StringValidationException(
                 message: $prefix . 'is longer than ' . $longestLength . ' characters'
             );
-        } elseif ($containsUppercase and $string == strtolower($string)) {
-            throw new StringValidationException(message: $prefix . 'contains no uppercase characters');
-        } elseif (!$containsUppercase and $string != strtolower($string)) {
-            throw new StringValidationException(message: $prefix . 'contains uppercase characters');
-        } elseif ($containsLowercase and $string == strtoupper($string)) {
-            throw new StringValidationException(message: $prefix . 'contains no lowercase characters');
-        } elseif (!$containsLowercase and $string != strtoupper($string)) {
-            throw new StringValidationException(message: $prefix . 'contains lowercase characters');
+        } elseif (
+            $mustHaveUppercase and
+            $string == strtolower($string)
+        ) {
+            throw new StringValidationException(
+                message: $prefix . 'must have uppercase characters'
+            );
+        } elseif (
+            !$canHaveUppercase and
+            $string != strtolower($string)
+            ) {
+            throw new StringValidationException(
+                message: $prefix . 'cannot have uppercase characters'
+            );
+        } elseif (
+            $mustHaveLowercase and
+            $string == strtoupper($string)
+        ) {
+            throw new StringValidationException(
+                message: $prefix . 'must have lowercase characters'
+            );
+        } elseif (
+            !$canHaveLowercase and
+            $string != strtoupper($string)
+            ) {
+            throw new StringValidationException(
+                message: $prefix . 'cannot have lowercase characters'
+            );
         } elseif ($isAlphabetical and !ctype_alpha($string)) {
             throw new StringValidationException(message: $prefix . 'is not alphabetical');
         } elseif ($isNumeric and !is_numeric($string)) {

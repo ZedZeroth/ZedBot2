@@ -29,12 +29,7 @@ class SyncAccountsCommand extends \Illuminate\Console\Command
      */
     public function handle(): void
     {
-        (new ExceptionCatcher())->catch(
-            command: $this,
-            class: __CLASS__,
-            function: __FUNCTION__,
-            line: __LINE__
-        );
+        (new ExceptionCatcher())->catch(command: $this);
     }
 
     /**
@@ -44,23 +39,12 @@ class SyncAccountsCommand extends \Illuminate\Console\Command
      */
     public function runThisCommand(): void
     {
-        // Validate the command arguments
-        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-            string: $this->argument('API'),
-            stringName: 'API',
-            shortestLength: 4,
-            longestLength: 4,
-            containsUppercase: true,
-            containsLowercase: false,
-            isAlphabetical: false,
-            isNumeric: false,
-            isAlphanumeric: true
-        );
+        // Validate 'Number to fetch' with lower highestValue
         (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: (int) $this->argument('Number to fetch'),
             integerName: 'Number to fetch',
             lowestValue: 1,
-            highestValue: pow(10, 6)
+            highestValue: pow(10, 5)
         );
 
         // Build the DTO

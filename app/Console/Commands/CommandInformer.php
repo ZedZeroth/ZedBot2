@@ -125,6 +125,22 @@ class CommandInformer
     public function output(
         string $string
     ): void {
+
+        // Validate string
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: $string,
+            stringName: 'string',
+            shortestLength: 0,
+            longestLength: pow(10, 2),
+            mustHaveUppercase: false,
+            canHaveUppercase: true,
+            mustHaveLowercase: false,
+            canHaveLowercase: true,
+            isAlphabetical: false,
+            isNumeric: false,
+            isAlphanumeric: false
+        );
+
         $this->command->info($string);
         \Illuminate\Support\Facades\Log::info($string);
     }

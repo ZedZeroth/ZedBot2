@@ -40,7 +40,11 @@ class PaymentViewer implements
     public function showByIdentifier(
         string $identifier
     ): View {
+
+        //Verify payment exists
         $payment = Payment::where('id', $identifier)->firstOrFail();
+
+        // Return the View
         return view('payment', [
             'payment' => $payment,
             'modelTable' =>

@@ -31,7 +31,11 @@ class CurrencyViewer implements
     public function showByIdentifier(
         string $identifier
     ): View {
+
+        // Verify currency exists
         $currency = Currency::where('code', $identifier)->firstOrFail();
+
+        // Return the View
         return view('currency', [
             'currency' => $currency,
             'modelTable' =>

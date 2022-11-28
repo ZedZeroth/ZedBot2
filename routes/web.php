@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\ChartController;
-use App\Http\Controllers\CurrencyController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Accounts\AccountController;
+use App\Http\Controllers\Charts\ChartController;
+use App\Http\Controllers\Currencies\CurrencyController;
+use App\Http\Controllers\Payments\PaymentController;
 
 /*
 |--------------------------------------------------------------------------

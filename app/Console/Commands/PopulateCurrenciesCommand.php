@@ -29,12 +29,7 @@ class PopulateCurrenciesCommand extends \Illuminate\Console\Command
      */
     public function handle(): void
     {
-        (new ExceptionCatcher())->catch(
-            command: $this,
-            class: __CLASS__,
-            function: __FUNCTION__,
-            line: __LINE__
-        );
+        (new ExceptionCatcher())->catch(command: $this);
     }
 
     /**
@@ -44,6 +39,8 @@ class PopulateCurrenciesCommand extends \Illuminate\Console\Command
      */
     public function runThisCommand(): void
     {
+        /* Validated by ExceptionCatcher */
+
         (new \App\Http\Controllers\Currencies\CurrencyController())->populate();
         return;
     }

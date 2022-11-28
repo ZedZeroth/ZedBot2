@@ -38,7 +38,11 @@ class AccountViewer implements
     public function showByIdentifier(
         string $identifier
     ): View {
+
+        // Verify account exists
         $account = Account::where('identifier', $identifier)->firstOrFail();
+
+        // Return the View
         return view('account', [
             'account' => $account,
             'modelTable' =>
@@ -78,8 +82,17 @@ class AccountViewer implements
     public function showOnNetwork(
         string $network
     ): View {
+
+        // Verify network
+        if (!in_array($network, explode(',', env('ZED_NETWORK_API_LIST')))) {
+            throw new \Exception(
+                message: $network . 'is not in the NETWORK list',
+                code: 404
+            );
+        }
+
         $accounts = Account::where('network', $network)->get();
-        // Abort if no matches found
+        // Abort if no matches found (equivalent to firstOrFail)
         if (empty($accounts->count())) {
             abort(404);
         }

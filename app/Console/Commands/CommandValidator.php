@@ -19,6 +19,34 @@ class CommandValidator
     ): bool {
         $prefix = '"' . $commandName . '" command\'s';
 
+        // Validate command name
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: str_replace(':', '', $commandName),
+            stringName: 'commandName',
+            shortestLength: 12,
+            longestLength: 18,
+            mustHaveUppercase: false,
+            canHaveUppercase: false,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: true,
+            isNumeric: false,
+            isAlphanumeric: false
+        );
+
+        // Validate command source
+        if (
+            !$this->getEmojiFromCommandSource(
+                $command->argument('source')
+            )
+        ) {
+            throw new CommandValidationException(
+                message: $prefix . 'source of "' . $command->argument('source') . '" is invalid'
+            );
+        } else {
+            return true;
+        }
+
         // Validate API code is a valid string and exists in the list
         if ($command->argument('API')) {
             (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
@@ -34,19 +62,6 @@ class CommandValidator
                 highestValue: pow(10, 6) // Maximum accounts for payments
             );
         }
-
-        // Validate command source
-        if (
-            !$this->getEmojiFromCommandSource(
-                $command->argument('source')
-            )
-        ) {
-            throw new CommandValidationException(
-                message: $prefix . 'source of "' . $command->argument('source') . '" is invalid'
-            );
-        } else {
-            return true;
-        }
     }
 
     /**
@@ -58,6 +73,21 @@ class CommandValidator
      */
     public function getEmojiFromCommandSource(string $source): ?string
     {
+        // Validate source name
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: $source,
+            stringName: 'source',
+            shortestLength: 3,
+            longestLength: 9,
+            mustHaveUppercase: false,
+            canHaveUppercase: false,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: true,
+            isNumeric: false,
+            isAlphanumeric: false
+        );
+
         return match ($source) {
             'cli'       => '📟',
             'browser'   => '🖱️ ',

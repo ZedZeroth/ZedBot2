@@ -11,17 +11,18 @@ class ExceptionCatcher
      * up to the initial command.
      *
      * @param Command $command
-     * @param string $class
-     * @param string $function
-     * @param int $line
      * @return void
      */
     public function catch(
-        \Illuminate\Console\Command $command,
-        string $class,
-        string $function,
-        int $line
+        \Illuminate\Console\Command $command
     ): void {
+
+        // Validate the command
+        (new CommandValidator())->validate(
+            command: $command,
+            commandName: $command->argument('command')
+        );
+
         $exceptionCaught = null;
         try {
             (new CommandInformer())
@@ -63,10 +64,7 @@ class ExceptionCatcher
         if ($exceptionCaught) {
             (new ExceptionInformer())->warn(
                 command: $command,
-                e: $exceptionCaught,
-                class: $class,
-                function: $function,
-                line: $line
+                e: $exceptionCaught
             );
         }
     }
