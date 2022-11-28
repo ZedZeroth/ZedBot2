@@ -66,6 +66,84 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 ]
             );
 
+            // Validate $result['transactionCurrency']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: $result['transactionCurrency'],
+                stringName: 'transactionCurrency',
+                shortestLength: 3,
+                longestLength: 3,
+                mustHaveUppercase: true,
+                canHaveUppercase: true,
+                mustHaveLowercase: false,
+                canHaveLowercase: false,
+                isAlphabetical: true,
+                isNumeric: false,
+                isAlphanumeric: true
+            );
+
+            // Validate $result['counterparty']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: str_replace([
+                    ',', ' ', '(', ')', '-', '.', '/', '&', '+'
+                ], '', $result['counterparty']),
+                stringName: 'counterparty',
+                shortestLength: 25,
+                longestLength: pow(10, 2),
+                mustHaveUppercase: false,
+                canHaveUppercase: true,
+                mustHaveLowercase: false,
+                canHaveLowercase: true,
+                isAlphabetical: false,
+                isNumeric: false,
+                isAlphanumeric: true
+            );
+
+            // Validate $result['accno']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: $result['accno'],
+                stringName: 'accno',
+                shortestLength: 22,
+                longestLength: 22,
+                mustHaveUppercase: true,
+                canHaveUppercase: true,
+                mustHaveLowercase: false,
+                canHaveLowercase: false,
+                isAlphabetical: false,
+                isNumeric: false,
+                isAlphanumeric: true
+            );
+
+            // Validate $result['transactionAmount']
+            (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+                integer: (int) round(pow(10, 2) * $result['transactionAmount']),
+                integerName: 'transactionAmount',
+                lowestValue: -1 * pow(10, 7),
+                highestValue: pow(10, 7)
+            );
+
+            // Validate $result['paymentReference']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: str_replace(['-', '.', ' ', '/'], '', $result['paymentReference']),
+                stringName: 'paymentReference',
+                shortestLength: 0,
+                longestLength: 20,
+                mustHaveUppercase: false,
+                canHaveUppercase: true,
+                mustHaveLowercase: false,
+                canHaveLowercase: true,
+                isAlphabetical: false,
+                isNumeric: false,
+                isAlphanumeric: true
+            );
+
+            // Validate $result['transactionTimeLocal']
+            (new \App\Http\Controllers\MultiDomain\Validators\TimestampValidator())->validate(
+                timestamp: $result['transactionTimeLocal'],
+                timestampName: 'transactionTimeLocal',
+                after: '2017-01-01T00:00:00.0000000+00:00',
+                before: '2027-01-01T00:00:00.0000000+00:00',
+            );
+
             // Determine the currency
             $currency = \App\Models\Currency::
                     where(
@@ -74,36 +152,38 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                     )->firstOrFail();
 
             // Determine beneficiary / originator
-            $beneficiary = explode(', ', $result['counterparty']);
-            $beneficiarylabel = $beneficiary[0];
-            $beneficiaryAccountIdentifier =
-                $this->convertIbanToAccountIdentifier($beneficiary[1]);
-
-            if ($beneficiarylabel == env('ZED_ENM0_ACCOUNT_NAME')) {
-                $originator = explode(', ', $result['counterparty']);
-                $originatorNetworkAccountName = $originator[0];
-                $originatorLabel = '';
-                $originatorAccountIdentifier =
-                    $this->convertIbanToAccountIdentifier($originator[1]);
-            } else {
-                $originatorNetworkAccountName = '';
+            $counterparty = explode(', ', $result['counterparty']);
+            $beneficiary = explode(', ', $result['beneficiary']);
+            if ($result['transactionAmount'] < 0) {
+                $originatorNetworkAccountName = env('ZED_ENM0_ACCOUNT_NAME');
                 $originatorLabel = env('ZED_ENM0_ACCOUNT_NAME');
-                $originatorAccountIdentifier =
-                    $this->convertIbanToAccountIdentifier($result['accno']);
+                $originatorAccountIdentifier = $this->convertIbanToAccountIdentifier($result['accno']);
+
+                $beneficiaryNetworkAccountName = '';
+                $beneficiaryLabel = $beneficiary[0];
+                $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
+            } else {
+                $originatorNetworkAccountName = $counterparty[0];
+                $originatorLabel = $counterparty[0];
+                $originatorAccountIdentifier = $this->convertIbanToAccountIdentifier($counterparty[1]);
+
+                $beneficiaryNetworkAccountName = $beneficiary[0];
+                $beneficiaryLabel = $beneficiary[0];
+                $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
             }
 
-            $accountDTOs = [];
             // Create the originator DTO
+            $accountDTOs = [];
             array_push(
                 $accountDTOs,
                 new AccountDTO(
                     network: (string) 'FPS',
                     identifier: (string) $originatorAccountIdentifier,
-                    customer_id: 0,
-                    networkAccountName: $originatorNetworkAccountName,
-                    label: $originatorLabel,
-                    currency_id: $currency->id,
-                    balance: 0
+                    customer_id: (int) 0,
+                    networkAccountName: (string) $originatorNetworkAccountName,
+                    label: (string) $originatorLabel,
+                    currency_id: (int) $currency->id,
+                    balance: (int) 0
                 )
             );
 
@@ -113,22 +193,25 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 new AccountDTO(
                     network: (string) 'FPS',
                     identifier: (string) $beneficiaryAccountIdentifier,
-                    customer_id: 0,
-                    networkAccountName: '',
-                    label: $beneficiarylabel,
-                    currency_id: $currency->id,
-                    balance: 0
+                    customer_id: (int) 0,
+                    networkAccountName: (string) $beneficiaryNetworkAccountName,
+                    label: (string) $beneficiaryLabel,
+                    currency_id: (int) $currency->id,
+                    balance: (int) 0
                 )
             );
 
             // Sync accounts
             (new \App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer())
-                ->sync(DTOs: $accountDTOs);
+                ->sync(modelDTOs: $accountDTOs);
 
             // Convert amount to base units
             $amount = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
             ->convert(
-                amount: abs($result['transactionAmount']),
+                amount: round(
+                    abs($result['transactionAmount']),
+                    $currency->decimalPlaces
+                ),
                 currency: $currency
             );
 

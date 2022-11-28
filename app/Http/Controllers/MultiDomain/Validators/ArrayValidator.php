@@ -19,6 +19,21 @@ class ArrayValidator
         string $arrayName,
         array $requiredKeys
     ): bool {
+        // Validate $adapterName
+        (new StringValidator())->validate(
+            string: $arrayName,
+            stringName: 'arrayName',
+            shortestLength: 4,
+            longestLength: pow(10, 2),
+            mustHaveUppercase: false,
+            canHaveUppercase: true,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: true,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
         $prefix = '"' . $arrayName . '" array ';
         if (
             count(array_intersect(array_keys($array), $requiredKeys))

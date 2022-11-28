@@ -21,6 +21,8 @@ class IntegerValidator
         int $lowestValue,
         int $highestValue
     ): bool {
+        /* Validating $integerName string results in code loop */
+
         $prefix = '"' . $integerName . '" integer ';
         if ($integer < $lowestValue) {
             throw new IntegerValidationException(

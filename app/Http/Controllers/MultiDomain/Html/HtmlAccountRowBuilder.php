@@ -10,7 +10,7 @@ namespace App\Http\Controllers\MultiDomain\Html;
  * accounts.
  */
 class HtmlAccountRowBuilder implements
-    HtmlCollectionRowBuilderInterface
+    HtmlModelRowBuilderInterface
 {
     /**
      * @param Collection $models

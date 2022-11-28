@@ -39,7 +39,7 @@ class SyncAccountsCommand extends \Illuminate\Console\Command
      */
     public function runThisCommand(): void
     {
-        // Validate 'Number to fetch' with lower highestValue
+        // Validate 'Number to fetch'
         (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: (int) $this->argument('Number to fetch'),
             integerName: 'Number to fetch',

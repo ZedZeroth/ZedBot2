@@ -12,15 +12,35 @@ class AdapterValidator
      * @param AdapterInterface $adapter
      * @param string $adapterName
      * @param array $requiredMethods
-     * @param string $platformSuffix
+     * @param string $apiSuffix
      * @return bool
      */
     public function validate(
         \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface $adapter,
         string $adapterName,
         array $requiredMethods,
-        string $platformSuffix
+        string $apiSuffix
     ): bool {
+        // Validate $adapterName
+        (new StringValidator())->validate(
+            string: $adapterName,
+            stringName: 'adapterName',
+            shortestLength: pow(10, 1),
+            longestLength: pow(10, 2),
+            mustHaveUppercase: true,
+            canHaveUppercase: true,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: false,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
+        // Validate $apiSuffix
+        (new APIValidator())->validate(
+            apiCode: $apiSuffix
+        );
+
         $prefix = '"' . $adapterName . '" adapter ';
         if (
             count(array_intersect(get_class_methods($adapter), $requiredMethods))
@@ -31,9 +51,9 @@ class AdapterValidator
             throw new AdapterValidationException(
                 message: $prefix . 'does not contain these methods: ' . implode(',', $requiredMethods)
             );
-        } elseif (substr(get_class($adapter), -1*strlen($platformSuffix)) != $platformSuffix) {
+        } elseif (substr(get_class($adapter), -1 * strlen($apiSuffix)) != $apiSuffix) {
             throw new AdapterValidationException(
-                message: $prefix . 'is not an adapter for the ' . $platformSuffix. ' platform'
+                message: $prefix . 'is not an adapter for the ' . $apiSuffix . ' platform'
             );
         } else {
             return true;

@@ -11,10 +11,24 @@ class AccountSynchronizerComponent extends \Livewire\Component
 
     /**
      * Calls the 'accounts:sync' command.
-     *
+     * @param string $api
      */
     public function sync(string $api): void
     {
+
+        // Validate $api
+        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+                ->validate(apiCode: $api);
+
+        // Validate $this->numberToFetch
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $this->numberToFetch,
+            integerName: '$this->numberToFetch',
+            lowestValue: 1,
+            highestValue: pow(10, 5)
+        );
+
+        // Run the command
         \Illuminate\Support\Facades\Artisan::call(
             'accounts:sync browser '
             . $api

@@ -27,6 +27,15 @@ class PaymentSynchronizerRequestAdapterForENM0 implements
     public function buildPostParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
+
+        // Validate numberToFetch
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $numberToFetch,
+            integerName: 'numberToFetch',
+            lowestValue: 1,
+            highestValue: pow(10, 6)
+        );
+
         $this->postParameters = [
             'accountCode' => env('ZED_ENM0_ACCOUNT_CODE'),
             'take' => $numberToFetch,
@@ -50,9 +59,9 @@ class PaymentSynchronizerRequestAdapterForENM0 implements
             adapter: $getOrPostAdapter,
             adapterName: 'getOrPostAdapter',
             requiredMethods: ['post'],
-            platformSuffix: 'ENM0'
+            apiSuffix: 'ENM0'
         );
-        
+
         return ($getOrPostAdapter)
             ->post(
                 endpoint: env('ZED_ENM0_TRANSACTIONS_ENDPOINT'),

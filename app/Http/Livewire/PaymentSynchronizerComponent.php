@@ -17,16 +17,25 @@ class PaymentSynchronizerComponent extends \Livewire\Component
      */
     public function sync(string $api): void
     {
-        try {
-            \Illuminate\Support\Facades\Artisan::call(
-                'payments:sync browser '
-                . $api
-                . ' '
-                . $this->numberToFetch
-            );
-        } catch (\Symfony\Component\Console\Exception\RuntimeException $e) {
-            Log::error(__METHOD__ . ' [' . __LINE__ . '] ' . $e->getMessage());
-        }
+        // Validate $api
+        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+                ->validate(apiCode: $api);
+
+        // Validate $this->numberToFetch
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: (int) $this->numberToFetch,
+            integerName: '$this->numberToFetch',
+            lowestValue: 1,
+            highestValue: pow(10, 5)
+        );
+
+        // Run the command
+        \Illuminate\Support\Facades\Artisan::call(
+            'payments:sync browser '
+            . $api
+            . ' '
+            . $this->numberToFetch
+        );
     }
 
     /**

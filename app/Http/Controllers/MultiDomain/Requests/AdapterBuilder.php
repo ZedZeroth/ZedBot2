@@ -21,6 +21,40 @@ class AdapterBuilder
         string $api
     ): AdapterDTO {
 
+        // Validate $model
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: $model,
+            stringName: 'model',
+            shortestLength: 7,
+            longestLength: 7,
+            mustHaveUppercase: true,
+            canHaveUppercase: true,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: true,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
+        // Validate $action
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: $action,
+            stringName: 'action',
+            shortestLength: 12,
+            longestLength: 12,
+            mustHaveUppercase: true,
+            canHaveUppercase: true,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: true,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
+        // Validate $api
+        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+                ->validate(apiCode: $api);
+
         // Specific request/response path
         $modelActionPath =
             'App\Http\Controllers'

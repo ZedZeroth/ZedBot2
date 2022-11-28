@@ -82,27 +82,27 @@ class AccountViewer implements
     public function showOnNetwork(
         string $network
     ): View {
+        // Sanitize string
+        $network = preg_replace("/[^A-Za-z0-9]/", '', $network);
 
         // Verify network
-        if (!in_array($network, explode(',', env('ZED_NETWORK_API_LIST')))) {
-            throw new \Exception(
-                message: $network . 'is not in the NETWORK list',
-                code: 404
-            );
+        if (!in_array($network, explode(',', env('ZED_NETWORK_LIST')))) {
+            $html = 'No such network exists.';
+        } else {
+            $accounts = Account::where('network', $network)->get();
+            if ($accounts->count() == 0) {
+                $html = 'No accounts exist on this network.';
+            } else {
+                $html = (new HtmlAccountRowBuilder())->build($accounts);
+            }
         }
 
-        $accounts = Account::where('network', $network)->get();
-        // Abort if no matches found (equivalent to firstOrFail)
-        if (empty($accounts->count())) {
-            abort(404);
-        }
+        // Return the View
         return view(
             'network-accounts',
             [
                 'network' => $network,
-                'accountsTable' =>
-                    (new HtmlAccountRowBuilder())
-                        ->build($accounts)
+                'accountsTable' => $html
             ]
         );
     }

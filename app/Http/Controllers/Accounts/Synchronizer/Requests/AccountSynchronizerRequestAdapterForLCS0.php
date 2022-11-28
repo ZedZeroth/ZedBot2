@@ -39,7 +39,7 @@ class AccountSynchronizerRequestAdapterForLCS0 implements
             adapter: $getOrPostAdapter,
             adapterName: 'getOrPostAdapter',
             requiredMethods: ['get'],
-            platformSuffix: 'LCS0'
+            apiSuffix: 'LCS0'
         );
 
         return (new $getOrPostAdapter())

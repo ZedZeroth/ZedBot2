@@ -81,18 +81,27 @@ class PaymentViewer implements
     public function showOnNetwork(
         string $network
     ): View {
-        $payments = Payment::where('network', $network)->get();
-        // Abort if no matches found
-        if (empty($payments->count())) {
-            abort(404);
+        // Sanitize string
+        $network = preg_replace("/[^A-Za-z0-9]/", '', $network);
+
+        // Verify network
+        if (!in_array($network, explode(',', env('ZED_NETWORK_LIST')))) {
+            $html = 'No such network exists.';
+        } else {
+            $payments = Account::where('network', $network)->get();
+            if ($payments->count() == 0) {
+                $html = 'No payments exist on this network.';
+            } else {
+                $html = (new HtmlAccountRowBuilder())->build($payments);
+            }
         }
+
+        // Return the View
         return view(
             'network-payments',
             [
                 'network' => $network,
-                'paymentsTable' =>
-                    (new HtmlPaymentRowBuilder())
-                        ->build($payments)
+                'paymentsTable' => $html
             ]
         );
     }

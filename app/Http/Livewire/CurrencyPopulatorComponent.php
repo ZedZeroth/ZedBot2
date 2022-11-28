@@ -15,7 +15,9 @@ class CurrencyPopulatorComponent extends \Livewire\Component
      */
     public function populate(): void
     {
-        \Illuminate\Support\Facades\Artisan::call('currencies:populate browser');
+        \Illuminate\Support\Facades\Artisan::call(
+            'currencies:populate browser'
+        );
     }
 
     /**

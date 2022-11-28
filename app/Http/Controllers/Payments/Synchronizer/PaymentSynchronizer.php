@@ -14,9 +14,9 @@ class PaymentSynchronizer implements
      * @param array $DTOs
      */
     public function sync(
-        array $DTOs
+        array $modelDTOs
     ): void {
-        foreach ($DTOs as $paymentDTO) {
+        foreach ($modelDTOs as $paymentDTO) {
             //Validate DTOs
             (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
                 ->validate(

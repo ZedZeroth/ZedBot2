@@ -46,7 +46,7 @@ class ExceptionInformer
             string: str_replace(['/', '.'], '', $e->getFile()),
             stringName: $e->getFile(),
             shortestLength: 1,
-            longestLength: pow(10, 2),
+            longestLength: pow(10, 3),
             mustHaveUppercase: false,
             canHaveUppercase: true,
             mustHaveLowercase: false,

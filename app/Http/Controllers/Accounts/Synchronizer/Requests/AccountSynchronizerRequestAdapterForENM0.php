@@ -28,7 +28,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
         int $numberToFetch
     ): RequestAdapterInterface {
 
-        // Validate the argument
+        // Validate numberToFetch
         (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: $numberToFetch,
             integerName: 'numberToFetch',
@@ -58,7 +58,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
             adapter: $getOrPostAdapter,
             adapterName: 'getOrPostAdapter',
             requiredMethods: ['post'],
-            platformSuffix: 'ENM0'
+            apiSuffix: 'ENM0'
         );
 
         return ($getOrPostAdapter)

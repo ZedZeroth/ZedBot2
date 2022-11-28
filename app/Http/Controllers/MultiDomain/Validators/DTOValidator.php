@@ -19,6 +19,20 @@ class DTOValidator
         string $dtoName,
         array $requiredProperties
     ): bool {
+        // Validate $dtoName
+        (new StringValidator())->validate(
+            string: $dtoName,
+            stringName: 'dtoName',
+            shortestLength: 6,
+            longestLength: 20,
+            mustHaveUppercase: false,
+            canHaveUppercase: true,
+            mustHaveLowercase: true,
+            canHaveLowercase: true,
+            isAlphabetical: true,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
 
         $prefix = '"' . $dtoName . '" DTO ';
         if (

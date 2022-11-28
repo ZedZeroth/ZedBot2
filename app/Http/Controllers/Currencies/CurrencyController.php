@@ -30,6 +30,7 @@ class CurrencyController extends Controller
     public function showByIdentifier(
         string $identifier
     ): View {
+        /* Validated in Viewer */
         return (new CurrencyViewer())->showByIdentifier(
             identifier: $identifier
         );

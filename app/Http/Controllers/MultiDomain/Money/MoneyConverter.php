@@ -19,12 +19,15 @@ class MoneyConverter
         \App\Models\Currency $currency
     ): int {
 
-        $inBaseDenomination = $amount * pow(10, $currency->decimalPlaces);
+        $inBaseDenomination = round(
+            $amount * pow(10, $currency->decimalPlaces)
+        );
 
         if ($inBaseDenomination != round($inBaseDenomination)) {
+            var_dump($inBaseDenomination);
             throw new \Exception('"' . $inBaseDenomination . '" should be an integer after conversion');
         }
 
-        return (int) $inBaseDenomination; 
+        return (int) $inBaseDenomination;
     }
 }

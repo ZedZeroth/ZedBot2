@@ -59,7 +59,7 @@ class CommandValidator
                 integer: (int) $command->argument('Number to fetch'),
                 integerName: 'Number to fetch',
                 lowestValue: 1,
-                highestValue: pow(10, 6) // Maximum accounts for payments
+                highestValue: pow(10, 6) // Maximum for payments
             );
         }
     }

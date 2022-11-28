@@ -29,6 +29,8 @@ class AccountController extends \App\Http\Controllers\Controller implements
     public function showByIdentifier(
         string $identifier
     ): View {
+
+        /* Validated in Viewer */
         return (new AccountViewer())
             ->showByIdentifier(
                 identifier: $identifier
@@ -54,6 +56,7 @@ class AccountController extends \App\Http\Controllers\Controller implements
     public function showOnNetwork(
         string $network
     ): View {
+        /* Validated in Viewer */
         return (new AccountViewer())
             ->showOnNetwork(
                 network: $network
@@ -72,37 +75,43 @@ class AccountController extends \App\Http\Controllers\Controller implements
     ): void {
 
         // Validate DTO property names
-        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())->validate(
-            dto: $syncCommandDTO,
-            dtoName: 'syncCommandDTO',
-            requiredProperties: ['api','numberToFetch']
-        );
+        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+            ->validate(
+                dto: $syncCommandDTO,
+                dtoName: 'syncCommandDTO',
+                requiredProperties: ['api','numberToFetch']
+            );
 
         // Validate API code
-        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())->validate(apiCode: $syncCommandDTO->api);
+        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+            ->validate(apiCode: $syncCommandDTO->api);
 
         // Validate number to fetch
-        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
-            integer: $syncCommandDTO->numberToFetch,
-            integerName: 'Number to fetch',
-            lowestValue: 1,
-            highestValue: pow(10, 5)
-        );
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())
+            ->validate(
+                integer: $syncCommandDTO->numberToFetch,
+                integerName: 'Number to fetch',
+                lowestValue: 1,
+                highestValue: pow(10, 5)
+            );
 
         // ↖️ Creat accounts from the AccountDTOs
         (new \App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer())
             ->sync(
+                modelDTOs:
                 // ↖️ Array of AccountDTOs
-                (new \App\Http\Controllers\MultiDomain\Requests\Requester())->request(
-                    adapterDTO:
-                        // ↖️ AdapterDTO
-                        (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())->build(
-                            model: 'Account',
-                            action: 'Synchronizer',
-                            api: $syncCommandDTO->api
-                        ),
-                    numberToFetch: $syncCommandDTO->numberToFetch
-                )
+                (new \App\Http\Controllers\MultiDomain\Requests\Requester())
+                    ->request(
+                        adapterDTO:
+                            // ↖️ AdapterDTO
+                            (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())
+                                ->build(
+                                    model: 'Account',
+                                    action: 'Synchronizer',
+                                    api: $syncCommandDTO->api
+                                ),
+                        numberToFetch: $syncCommandDTO->numberToFetch
+                    )
             );
         return;
     }

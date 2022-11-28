@@ -18,6 +18,16 @@ class MoneyFormatter
         int $amount,
         \App\Models\Currency $currency
     ): string {
+
+        // Validate amount
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $amount,
+            integerName: 'amount',
+            lowestValue: (int) 0,
+            highestValue: (int) pow(10, 20)
+        );
+
+        // Return formatted value
         return number_format(
             $amount / pow(10, $currency->decimalPlaces),
             $currency->decimalPlaces,

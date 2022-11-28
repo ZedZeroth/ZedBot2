@@ -10,7 +10,7 @@ namespace App\Http\Controllers\MultiDomain\Html;
  * payments.
  */
 class HtmlPaymentRowBuilder implements
-    HtmlCollectionRowBuilderInterface
+    HtmlModelRowBuilderInterface
 {
     /**
      * @param Collection $models

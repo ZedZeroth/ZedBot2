@@ -35,6 +35,17 @@ class AccountSynchronizerResponseAdapterForENM0 implements
             /*💬*/ //print_r($result);
 
             // Validate the injected array
+
+            // Remove optional elements
+            unset($result['modifiedDate']);
+            unset($result['bankName']);
+
+            // Skip non-UK accounts
+            if (array_key_exists('swift', $result)) {
+                continue;
+            }
+
+            // Proceed with array validation
             (new ArrayValidator())->validate(
                 array: $result,
                 arrayName: 'result',
@@ -51,6 +62,53 @@ class AccountSynchronizerResponseAdapterForENM0 implements
                     'owners',
                     'hasOwners'
                 ]
+            );
+
+            // Validate $result['sortCode']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: $result['sortCode'],
+                stringName: 'sortCode',
+                shortestLength: 6,
+                longestLength: 6,
+                mustHaveUppercase: false,
+                canHaveUppercase: false,
+                mustHaveLowercase: false,
+                canHaveLowercase: false,
+                isAlphabetical: false,
+                isNumeric: true,
+                isAlphanumeric: true
+            );
+
+            // Validate $result['accountNumber']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: $result['accountNumber'],
+                stringName: 'accountNumber',
+                shortestLength: 8,
+                longestLength: 8,
+                mustHaveUppercase: false,
+                canHaveUppercase: false,
+                mustHaveLowercase: false,
+                canHaveLowercase: false,
+                isAlphabetical: false,
+                isNumeric: true,
+                isAlphanumeric: true
+            );
+
+            // Validate $result['accountName']
+            (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                string: str_replace([
+                    ' ', '/', '-', '&', '(', ')', '\'', '.'
+                ], '', $result['accountName']),
+                stringName: 'accountName',
+                shortestLength: 3,
+                longestLength: pow(10, 2),
+                mustHaveUppercase: false,
+                canHaveUppercase: true,
+                mustHaveLowercase: false,
+                canHaveLowercase: true,
+                isAlphabetical: false,
+                isNumeric: false,
+                isAlphanumeric: true
             );
 
             // Determine the currency

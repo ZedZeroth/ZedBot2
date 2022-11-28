@@ -16,9 +16,9 @@ class AccountSynchronizer implements
      * @param array $DTOs
      */
     public function sync(
-        array $DTOs
+        array $modelDTOs
     ): void {
-        foreach ($DTOs as $accountDTO) {
+        foreach ($modelDTOs as $accountDTO) {
             //Validate DTOs
             (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
                 ->validate(

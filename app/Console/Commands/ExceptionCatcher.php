@@ -51,6 +51,8 @@ class ExceptionCatcher
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\ArrayValidationException $e) {
             $exceptionCaught = $e;
+        } catch (\App\Http\Controllers\MultiDomain\Validators\TimestampValidationException $e) {
+            $exceptionCaught = $e;
         } catch (CommandValidationException $e) {
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException $e) {

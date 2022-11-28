@@ -7,9 +7,8 @@ namespace App\Http\Controllers\Payments;
 use Illuminate\View\View;
 use App\Http\Controllers\Payments\Viewer\PaymentViewer;
 
-class PaymentController
-    extends \App\Http\Controllers\Controller
-    implements \App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface
+class PaymentController extends \App\Http\Controllers\Controller implements
+    \App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface
 {
     /**
      * Show all payments (on every network).
@@ -30,6 +29,7 @@ class PaymentController
     public function showByIdentifier(
         string $identifier
     ): View {
+        /* Validated in Viewer */
         return (new PaymentViewer())
             ->showByIdentifier(
                 identifier: $identifier
@@ -55,6 +55,7 @@ class PaymentController
     public function showOnNetwork(
         string $network
     ): View {
+        /* Validated by Viewer */
         return (new PaymentViewer())
             ->showOnNetwork(
                 network: $network
@@ -73,37 +74,43 @@ class PaymentController
     ): void {
 
         // Validate DTO property names
-        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())->validate(
-            dto: $syncCommandDTO,
-            dtoName: 'syncCommandDTO',
-            requiredProperties: ['api','numberToFetch']
-        );
+        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+            ->validate(
+                dto: $syncCommandDTO,
+                dtoName: 'syncCommandDTO',
+                requiredProperties: ['api','numberToFetch']
+            );
 
         // Validate API code
-        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())->validate(apiCode: $syncCommandDTO->api);
+        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+            ->validate(apiCode: $syncCommandDTO->api);
 
         // Validate number to fetch
-        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
-            integer: $syncCommandDTO->numberToFetch,
-            integerName: 'Number to fetch',
-            lowestValue: 1,
-            highestValue: pow(10, 6)
-        );
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())
+            ->validate(
+                integer: $syncCommandDTO->numberToFetch,
+                integerName: 'Number to fetch',
+                lowestValue: 1,
+                highestValue: pow(10, 6)
+            );
 
         // ↖️ Creat payments from the DTOs
         (new \App\Http\Controllers\Payments\Synchronizer\PaymentSynchronizer())
             ->sync(
+                modelDTOs:
                 // ↖️ Build DTOs from the request
-                (new \App\Http\Controllers\MultiDomain\Requests\Requester())->request(
-                    adapterDTO:
-                        // ↖️ Build the required adapters
-                        (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())->build(
-                            model: 'Payment',
-                            action: 'Synchronizer',
-                            api: $syncCommandDTO->api
-                        ),
-                    numberToFetch: $syncCommandDTO->numberToFetch
-                )
+                (new \App\Http\Controllers\MultiDomain\Requests\Requester())
+                    ->request(
+                        adapterDTO:
+                            // ↖️ Build the required adapters
+                            (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())
+                                ->build(
+                                    model: 'Payment',
+                                    action: 'Synchronizer',
+                                    api: $syncCommandDTO->api
+                                ),
+                        numberToFetch: $syncCommandDTO->numberToFetch
+                    )
             );
         return;
     }

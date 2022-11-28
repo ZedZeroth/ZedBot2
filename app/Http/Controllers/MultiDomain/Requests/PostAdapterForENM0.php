@@ -20,6 +20,21 @@ class PostAdapterForENM0 implements
         string $endpoint,
         array $postParameters
     ): array {
+        // Validate $endpoint
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+            string: str_replace(['/'], '', $endpoint),
+            stringName: 'endpoint',
+            shortestLength: pow(10, 1),
+            longestLength: pow(10, 2),
+            mustHaveUppercase: false,
+            canHaveUppercase: true,
+            mustHaveLowercase: false,
+            canHaveLowercase: true,
+            isAlphabetical: false,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
         // Build the URL
         $url = env('ZED_ENM0_DOMAIN')
             . env('ZED_ENM0_PATH')
@@ -35,8 +50,9 @@ class PostAdapterForENM0 implements
 
         // Execute the request
         $response = \Illuminate\Support\Facades\Http::withHeaders($headers)
-            ->connectTimeout(10)
-            ->retry(3, 100)
+            ->connectTimeout((int) env('ZED_CONNECT_SINGLE_TIMEOUT'))
+            ->retry((int) env('ZED_CONNECT_RETRY'), 1000)
+            ->connectTimeout((int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'))
             ->post($url, $postParameters);
 
         // Decode the response

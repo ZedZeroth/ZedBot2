@@ -9,7 +9,7 @@ namespace App\Http\Controllers\MultiDomain\Html;
  * information about a collection of
  * models.
  */
-interface HtmlCollectionRowBuilderInterface
+interface HtmlModelRowBuilderInterface
 {
     /**
      * @param Collection $models

@@ -36,7 +36,7 @@ class APIValidator
         $apiCodes =
             env('ZED_EXCHANGE_API_LIST') . ',' .
             env('ZED_MARKET_API_LIST') . ',' .
-            env('ZED_NETWORK_API_LIST');
+            env('ZED_PAYMENT_API_LIST');
         if (!in_array($apiCode, explode(',', $apiCodes))) {
             throw new APIValidationException(
                 message: $prefix . 'is not in the API list'

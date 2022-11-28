@@ -18,6 +18,26 @@ class Requester
         int $numberToFetch,
     ): array {
 
+        // Validate DTO property names
+        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+            ->validate(
+                dto: $adapterDTO,
+                dtoName: 'adapterDTO',
+                requiredProperties: [
+                    'requestAdapter',
+                    'responseAdapter',
+                    'getOrPostAdapter'
+                ]
+            );
+
+        // Validate number to fetch
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $numberToFetch,
+            integerName: 'numberToFetch',
+            lowestValue: 1,
+            highestValue: pow(10, 6) // Maximum for payments
+        );
+
         //Fetch the response
         $responseBody =
             $adapterDTO->requestAdapter

@@ -35,6 +35,22 @@ class StringValidator
         bool $isNumeric,
         bool $isAlphanumeric
     ): bool {
+        // Validate shortestLength
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $shortestLength,
+            integerName: 'shortestLength',
+            lowestValue: 0,
+            highestValue: pow(10, 2)
+        );
+
+        // Validate longestLength
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $longestLength,
+            integerName: 'longestLength',
+            lowestValue: 0,
+            highestValue: pow(10, 3)
+        );
+
         $prefix = '"' . $stringName . '" string ';
         if (strlen($string) < $shortestLength) {
             throw new StringValidationException(
@@ -54,7 +70,7 @@ class StringValidator
         } elseif (
             !$canHaveUppercase and
             $string != strtolower($string)
-            ) {
+        ) {
             throw new StringValidationException(
                 message: $prefix . 'cannot have uppercase characters'
             );
@@ -68,16 +84,18 @@ class StringValidator
         } elseif (
             !$canHaveLowercase and
             $string != strtoupper($string)
-            ) {
+        ) {
             throw new StringValidationException(
                 message: $prefix . 'cannot have lowercase characters'
             );
-        } elseif ($isAlphabetical and !ctype_alpha($string)) {
+        } elseif ($string and $isAlphabetical and !ctype_alpha($string)) {
             throw new StringValidationException(message: $prefix . 'is not alphabetical');
-        } elseif ($isNumeric and !is_numeric($string)) {
+        } elseif ($string and $isNumeric and !is_numeric($string)) {
             throw new StringValidationException(message: $prefix . 'is not numerical');
-        } elseif ($isAlphanumeric and !ctype_alnum($string)) {
-            throw new StringValidationException(message: $prefix . 'is not alphanumeric');
+        } elseif ($string and $isAlphanumeric and !ctype_alnum($string)) {
+            throw new StringValidationException(
+                message: $prefix . '"' . $string . '" is not alphanumeric'
+            );
         } else {
             return true;
         }
