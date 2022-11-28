@@ -2,22 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Synchronizer\Requests;
+namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
 
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
 
-class PaymentsSynchronizerRequestAdapterForENMF implements
+class AccountSynchronizerRequestAdapterForLCS0 implements
     RequestAdapterInterface
 {
-    /**
-     * Properties required to perform the request.
-     *
-     * @var array $postParameters
-     */
-    private array $postParameters;
-
-    /**
+     /**
      * Build the post parameters.
      *
      * @param int $numberToFetch
@@ -26,11 +19,7 @@ class PaymentsSynchronizerRequestAdapterForENMF implements
     public function buildPostParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
-        $this->postParameters = [
-            'accountCode' => env('ZED_ENM_ACCOUNT_CODE'),
-            'take' => $numberToFetch,
-            'goFast' => true
-        ];
+        // No post parameters for LCS0
         return $this;
     }
 
@@ -43,10 +32,9 @@ class PaymentsSynchronizerRequestAdapterForENMF implements
     public function fetchResponse(
         GeneralAdapterInterface $getOrPostAdapter
     ): array {
-        return ($getOrPostAdapter)
-            ->post(
-                endpoint: env('ZED_ENM_TRANSACTIONS_ENDPOINT'),
-                postParameters: $this->postParameters
+        return (new $getOrPostAdapter())
+            ->get(
+                endpoint: env('ZED_LCS0_WALLETS_ENDPOINT')
             );
     }
 }

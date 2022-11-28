@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Accounts\AccountController;
 use App\Http\Controllers\MultiDomain\Validators\StringValidator;
+use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
 
 class SyncAccountsCommand extends Command
 {
@@ -24,7 +25,7 @@ class SyncAccountsCommand extends Command
      * @var string
      */
     protected /* Do not define */ $description =
-        'Synchronizes the account table with accounts from account providers.';
+        'Synchronizes the account table with accounts from payment networks.';
 
     /**
      * Executes the command via the
@@ -52,13 +53,20 @@ class SyncAccountsCommand extends Command
         (new StringValidator())->validate(
             string: $this->argument('API'),
             stringName: 'API',
-            shortestLength: 3,
+            shortestLength: 4,
             longestLength: 4,
             containsUppercase: true,
             containsLowercase: false,
-            isAlphabetical: true,
+            isAlphabetical: false,
             isNumeric: false,
             isAlphanumeric: true
+        );
+
+        (new IntegerValidator())->validate(
+            integer: (int) $this->argument('Number to fetch'),
+            integerName: 'Number to fetch',
+            lowestValue: 1,
+            highestValue: pow(10, 6)
         );
 
         // Build the DTO

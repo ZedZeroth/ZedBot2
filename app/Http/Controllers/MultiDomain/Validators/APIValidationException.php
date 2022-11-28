@@ -6,6 +6,6 @@ namespace App\Http\Controllers\MultiDomain\Validators;
 
 use Exception;
 
-class DTOValidationException extends Exception
+class APIValidationException extends Exception
 {
 }

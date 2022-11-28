@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\Currencies\CurrencyController;
 use App\Http\Controllers\Currencies\CurrencyPopulator;
 
 class PopulateCurrenciesCommand extends Command

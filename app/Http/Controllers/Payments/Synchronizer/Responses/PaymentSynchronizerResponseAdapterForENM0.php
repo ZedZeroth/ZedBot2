@@ -7,13 +7,13 @@ namespace App\Http\Controllers\Payments\Synchronizer\Responses;
 use Illuminate\Support\Facades\Log;
 use App\Models\Account;
 use App\Http\Controllers\Accounts\AccountDTO;
-use App\Http\Controllers\Accounts\AccountSynchronizer;
+use App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer;
 use App\Http\Controllers\Payments\PaymentDTO;
 use App\Models\Currency;
 use App\Http\Controllers\MultiDomain\Money\MoneyConverter;
 use App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface;
 
-class PaymentsSynchronizerResponseAdapterForENMF implements
+class PaymentSynchronizerResponseAdapterForENM0 implements
     ResponseAdapterInterface
 {
     /**
@@ -46,7 +46,7 @@ class PaymentsSynchronizerResponseAdapterForENMF implements
             $beneficiaryAccountIdentifier =
                 $this->convertIbanToAccountIdentifier($beneficiary[1]);
 
-            if ($beneficiarylabel == env('ZED_ENM_ACCOUNT_NAME')) {
+            if ($beneficiarylabel == env('ZED_ENM0_ACCOUNT_NAME')) {
                 $originator = explode(', ', $result['counterparty']);
                 $originatorNetworkAccountName = $originator[0];
                 $originatorLabel = '';
@@ -54,7 +54,7 @@ class PaymentsSynchronizerResponseAdapterForENMF implements
                     $this->convertIbanToAccountIdentifier($originator[1]);
             } else {
                 $originatorNetworkAccountName = '';
-                $originatorLabel = env('ZED_ENM_ACCOUNT_NAME');
+                $originatorLabel = env('ZED_ENM0_ACCOUNT_NAME');
                 $originatorAccountIdentifier =
                     $this->convertIbanToAccountIdentifier($result['accno']);
             }

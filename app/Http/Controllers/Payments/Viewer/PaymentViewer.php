@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments;
+namespace App\Http\Controllers\Payments\Viewer;
 
 use Illuminate\View\View;
 use App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\NetworkViewerInterface;
 use App\Models\Payment;
-use App\Http\Controllers\Html\HtmlModelTableBuilder;
-use App\Http\Controllers\Html\HtmlPaymentRowBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder;
 
 class PaymentViewer implements
     ViewerInterface,

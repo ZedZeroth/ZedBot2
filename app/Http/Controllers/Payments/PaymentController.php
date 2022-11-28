@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Payments;
 
+use App\Http\Controllers\Controller;
 use Illuminate\View\View;
-use App\Http\Controllers\Payments\PaymentViewer;
 use App\Console\Commands\SyncCommandDTO;
-use App\Http\Controllers\Payments\PaymentSynchronizer;
+use App\Http\Controllers\Payments\Viewer\PaymentViewer;
+use App\Http\Controllers\Payments\Synchronizer\PaymentSynchronizer;
 use App\Http\Controllers\MultiDomain\Adapters\AdapterBuilder;
 use App\Http\Controllers\MultiDomain\Adapters\Requester;
 use App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface;
+use App\Http\Controllers\MultiDomain\Validators\APIValidator;
+use App\Http\Controllers\MultiDomain\Validators\DTOValidator;
+use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
 
 class PaymentController extends Controller implements ControllerInterface
 {
@@ -64,10 +68,8 @@ class PaymentController extends Controller implements ControllerInterface
             );
     }
 
-
-    declare(strict_types=1);
     /**
-     * Fetches recent payments from external providers
+     * Fetches recent payments from external APIs
      * and creates any new ones that do not exist.
      *
      * @param SyncCommandDTO $syncCommandDTO
@@ -76,6 +78,25 @@ class PaymentController extends Controller implements ControllerInterface
     public function sync(
         SyncCommandDTO $syncCommandDTO
     ): void {
+
+        // Validate DTO property names
+        (new DTOValidator())->validate(
+            dto: $syncCommandDTO,
+            dtoName: 'syncCommandDTO',
+            requiredProperties: ['api','numberToFetch']
+        );
+
+        // Validate API code
+        (new APIValidator())->validate(apiCode: $syncCommandDTO->api);
+
+        // Validate number to fetch
+        (new IntegerValidator())->validate(
+            integer: $syncCommandDTO->numberToFetch,
+            integerName: 'Number to fetch',
+            lowestValue: 1,
+            highestValue: pow(10, 6)
+        );
+
         // ↖️ Creat payments from the DTOs
         (new PaymentSynchronizer())
             ->sync(
@@ -84,9 +105,9 @@ class PaymentController extends Controller implements ControllerInterface
                     adapterDTO:
                         // ↖️ Build the required adapters
                         (new AdapterBuilder())->build(
-                            models: 'Payments',
+                            model: 'Payment',
                             action: 'Synchronizer',
-                            provider: $syncCommandDTO->provider
+                            api: $syncCommandDTO->api
                         ),
                     numberToFetch: $syncCommandDTO->numberToFetch
                 )

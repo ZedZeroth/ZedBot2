@@ -44,7 +44,7 @@ interface ControllerInterface
     ): View;
 
     /**
-     * Fetches models from external providers
+     * Fetches models from external APIs
      * and creates any new ones that do not exist.
      *
      * @param SyncCommandDTO $dto

@@ -20,6 +20,13 @@ class MoneyConverter
         float $amount,
         Currency $currency
     ): int {
-        return $amount * pow(10, $currency->decimalPlaces);
+
+        $inBaseDenomination = $amount * pow(10, $currency->decimalPlaces);
+
+        if ($inBaseDenomination != round($inBaseDenomination)) {
+            throw new \Exception('"' . $inBaseDenomination . '" should be an integer after conversion');
+        }
+
+        return (int) $inBaseDenomination; 
     }
 }

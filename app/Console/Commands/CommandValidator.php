@@ -7,6 +7,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\MultiDomain\Validators\StringValidator;
 use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
+use App\Http\Controllers\MultiDomain\Validators\APIValidator;
 
 class CommandValidator
 {
@@ -23,25 +24,31 @@ class CommandValidator
     ): bool {
         $prefix = '"' . $commandName . '" command\'s';
 
+        // Validate the command arguments
         (new StringValidator())->validate(
             string: $command->argument('API'),
             stringName: 'API',
-            shortestLength: 3,
+            shortestLength: 4,
             longestLength: 4,
             containsUppercase: true,
             containsLowercase: false,
-            isAlphabetical: true,
+            isAlphabetical: false,
             isNumeric: false,
             isAlphanumeric: true
         );
 
+        // Validate API code exists
+        (new APIValidator())->validate(apiCode: $command->argument('API'));
+
+        // Validate number to fetch
         (new IntegerValidator())->validate(
-            integer: $command->argument('Number to fetch'),
+            integer: (int) $command->argument('Number to fetch'),
             integerName: 'Number to fetch',
             lowestValue: 1,
             highestValue: pow(10, 6)
         );
 
+        // Validate command source
         if (
             !$this->getEmojiFromCommandSource(
                 $command->argument('source')

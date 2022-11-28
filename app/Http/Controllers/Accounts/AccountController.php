@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Accounts;
 
+use App\Http\Controllers\Controller;
 use Illuminate\View\View;
-use App\Http\Controllers\Accounts\AccountViewer;
 use App\Console\Commands\SyncCommandDTO;
-use App\Http\Controllers\Accounts\AccountSynchronizer;
+use App\Http\Controllers\Accounts\Viewer\AccountViewer;
+use App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer;
 use App\Http\Controllers\MultiDomain\Adapters\AdapterBuilder;
 use App\Http\Controllers\MultiDomain\Adapters\Requester;
 use App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface;
+use App\Http\Controllers\MultiDomain\Validators\APIValidator;
+use App\Http\Controllers\MultiDomain\Validators\DTOValidator;
+use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
 
 class AccountController extends Controller implements
     ControllerInterface
@@ -66,7 +70,7 @@ class AccountController extends Controller implements
     }
 
     /**
-     * Fetches accounts from external providers
+     * Fetches accounts from external APIs
      * and creates any new ones that do not exist.
      *
      * @param SyncCommandDTO $syncCommandDTO
@@ -75,6 +79,25 @@ class AccountController extends Controller implements
     public function sync(
         SyncCommandDTO $syncCommandDTO
     ): void {
+
+        // Validate DTO property names
+        (new DTOValidator())->validate(
+            dto: $syncCommandDTO,
+            dtoName: 'syncCommandDTO',
+            requiredProperties: ['api','numberToFetch']
+        );
+
+        // Validate API code
+        (new APIValidator())->validate(apiCode: $syncCommandDTO->api);
+
+        // Validate number to fetch
+        (new IntegerValidator())->validate(
+            integer: $syncCommandDTO->numberToFetch,
+            integerName: 'Number to fetch',
+            lowestValue: 1,
+            highestValue: pow(10, 5)
+        );
+
         // ↖️ Creat accounts from the AccountDTOs
         (new AccountSynchronizer())
             ->sync(
@@ -83,9 +106,9 @@ class AccountController extends Controller implements
                     adapterDTO:
                         // ↖️ AdapterDTO
                         (new AdapterBuilder())->build(
-                            models: 'Accounts',
+                            model: 'Account',
                             action: 'Synchronizer',
-                            provider: $syncCommandDTO->provider
+                            api: $syncCommandDTO->api
                         ),
                     numberToFetch: $syncCommandDTO->numberToFetch
                 )

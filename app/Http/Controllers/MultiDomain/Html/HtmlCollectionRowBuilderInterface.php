@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Html;
+namespace App\Http\Controllers\Html\MultiDomain;
 
 use Illuminate\Database\Eloquent\Collection;
 

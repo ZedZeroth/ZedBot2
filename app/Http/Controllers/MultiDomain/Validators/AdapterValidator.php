@@ -9,7 +9,7 @@ use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
 class AdapterValidator
 {
     /**
-     * Checks an based on various conditions.
+     * Checks an adapter based on various conditions.
      *
      * @param GeneralAdapterInterface $adapter
      * @param string $adapterName

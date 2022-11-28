@@ -7,45 +7,46 @@ namespace App\Http\Controllers\MultiDomain\Adapters;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
-use App\Http\Controllers\MultiDomain\Interfaces\GetAdapterInterface;
+use App\Http\Controllers\MultiDomain\Interfaces\PostAdapterInterface;
 
-class GetAdapterForLCS implements
+class PostAdapterForENM0 implements
     GeneralAdapterInterface,
-    GetAdapterInterface
+    PostAdapterInterface
 {
     /**
-     * Makes a GET request to the LCS API
+     * Makes a POST request to the ENM0 API
      *
      * @param string $endpoint
+     * @param array $postParameters
      * @return array
      */
-    public function get(
+    public function post(
         string $endpoint,
+        array $postParameters
     ): array {
         // Build the URL
-        $url = env('ZED_LCS_DOMAIN')
-            . env('ZED_LCS_PATH')
+        $url = env('ZED_ENM0_DOMAIN')
+            . env('ZED_ENM0_PATH')
             . $endpoint;
 
         // Build the headers
         $headers = [
-            'Authorization' => 'Token '
+            'Authorization' => 'Bearer '
                 . DB::table('keys')
-                    ->where('service', 'LCS')
-                    ->first()->key,
-            'Content-Type' => 'application/json'
+                    ->where('service', 'ENM0')
+                    ->first()->key
         ];
 
         // Execute the request
         $response = Http::withHeaders($headers)
             ->connectTimeout(10)
             ->retry(3, 100)
-            ->get($url);
+            ->post($url, $postParameters);
 
         // Decode the response
         $statusCode = $response->status();
         $responseBody = json_decode(
-            $response->getBody(),
+            (string) $response->getBody(),
             true
         );
 

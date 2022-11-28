@@ -19,11 +19,11 @@ class AccountSynchronizerComponent extends Component
      * Calls the 'accounts:sync' command.
      *
      */
-    public function sync(string $provider): void
+    public function sync(string $api): void
     {
         Artisan::call(
             'accounts:sync browser '
-            . $provider
+            . $api
             . ' '
             . $this->numberToFetch
         );

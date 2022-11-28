@@ -18,15 +18,15 @@ class PaymentSynchronizerComponent extends Component
     /**
      * Calls the 'payments:sync' command.
      *
-     * @param string $provider
+     * @param string $api
      * @return void
      */
-    public function sync(string $provider): void
+    public function sync(string $api): void
     {
         try {
             Artisan::call(
                 'payments:sync browser '
-                . $provider
+                . $api
                 . ' '
                 . $this->numberToFetch
             );

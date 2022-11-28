@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Payments\PaymentController;
+use App\Http\Controllers\MultiDomain\Validators\StringValidator;
+use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
 
 class SyncPaymentsCommand extends Command
 {
@@ -23,7 +25,7 @@ class SyncPaymentsCommand extends Command
      * @var string
      */
     protected /* Do not define */ $description =
-        'Synchronizes the payment table with new payments from payment providers.';
+        'Synchronizes the payment table with new payments from payment networks.';
 
     /**
      * Executes the command via the
@@ -46,6 +48,26 @@ class SyncPaymentsCommand extends Command
      */
     public function runThisCommand(): void
     {
+        // Validate the command arguments
+        (new StringValidator())->validate(
+            string: $this->argument('API'),
+            stringName: 'API',
+            shortestLength: 4,
+            longestLength: 4,
+            containsUppercase: true,
+            containsLowercase: false,
+            isAlphabetical: false,
+            isNumeric: false,
+            isAlphanumeric: true
+        );
+
+        (new IntegerValidator())->validate(
+            integer: (int) $this->argument('Number to fetch'),
+            integerName: 'Number to fetch',
+            lowestValue: 1,
+            highestValue: pow(10, 6)
+        );
+
         // Build the DTO
         $syncCommandDTO = new SyncCommandDTO(
             api: $this->argument('API'),

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments;
+namespace App\Http\Controllers\Payments\Synchronizer;
 
 use App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface;
 use App\Models\Payment;

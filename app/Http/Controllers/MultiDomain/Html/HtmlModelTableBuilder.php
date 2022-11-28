@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Html;
+namespace App\Http\Controllers\Html\MultiDomain;
 
 /**
  * Builds an HTML table to display

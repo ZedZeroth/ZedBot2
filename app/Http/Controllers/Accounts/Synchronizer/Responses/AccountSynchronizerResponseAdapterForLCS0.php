@@ -10,7 +10,7 @@ use App\Models\Currency;
 use App\Http\Controllers\Accounts\AccountDTO;
 use App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface;
 
-class AccountsSynchronizerResponseAdapterForLCS implements
+class AccountSynchronizerResponseAdapterForLCS0 implements
     ResponseAdapterInterface
 {
     /**

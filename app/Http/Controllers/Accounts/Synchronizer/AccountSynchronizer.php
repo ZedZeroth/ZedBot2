@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts;
+namespace App\Http\Controllers\Accounts\Synchronizer;
 
 use App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface;
 use App\Models\Account;

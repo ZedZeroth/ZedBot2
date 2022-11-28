@@ -50,6 +50,14 @@ class ExceptionCatcher
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException $e) {
             $exceptionCaught = $e;
+        } catch (CommandValidationException $e) {
+            $exceptionCaught = $e;
+        } catch (\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException $e) {
+            $exceptionCaught = $e;
+        } catch (\App\Http\Controllers\MultiDomain\Validators\APIValidationException $e) {
+            $exceptionCaught = $e;
+        } catch (\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException $e) {
+            $exceptionCaught = $e;
         }
 
         if ($exceptionCaught) {

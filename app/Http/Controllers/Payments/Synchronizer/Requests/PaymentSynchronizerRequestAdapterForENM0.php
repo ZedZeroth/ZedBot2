@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
+namespace App\Http\Controllers\Payments\Synchronizer\Requests;
 
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
-use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
-use App\Http\Controllers\MultiDomain\Validators\AdapterValidator;
 
-class AccountsSynchronizerRequestAdapterForENM implements
+class PaymentSynchronizerRequestAdapterForENM0 implements
     RequestAdapterInterface
 {
     /**
@@ -28,18 +26,10 @@ class AccountsSynchronizerRequestAdapterForENM implements
     public function buildPostParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
-
-        // Validate the argument
-        (new IntegerValidator())->validate(
-            integer: $numberToFetch,
-            integerName: 'numberToFetch',
-            lowestValue: 1,
-            highestValue: pow(10, 5)
-        );
-
         $this->postParameters = [
-            'accountERN' => env('ZED_ENM_ACCOUNT_ERN'),
-            'take' => $numberToFetch
+            'accountCode' => env('ZED_ENM0_ACCOUNT_CODE'),
+            'take' => $numberToFetch,
+            'goFast' => true
         ];
         return $this;
     }
@@ -53,18 +43,9 @@ class AccountsSynchronizerRequestAdapterForENM implements
     public function fetchResponse(
         GeneralAdapterInterface $getOrPostAdapter
     ): array {
-
-        // Validate the argument
-        (new AdapterValidator())->validate(
-            adapter: $getOrPostAdapter,
-            adapterName: 'getOrPostAdapter',
-            requiredMethods: ['post'],
-            platformSuffix: 'ENM'
-        );
-
         return ($getOrPostAdapter)
             ->post(
-                endpoint: env('ZED_ENM_BENEFICIARIES_ENDPOINT'),
+                endpoint: env('ZED_ENM0_TRANSACTIONS_ENDPOINT'),
                 postParameters: $this->postParameters
             );
     }

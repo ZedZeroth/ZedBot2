@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts;
+namespace App\Http\Controllers\Accounts\Viewer;
 
 use Illuminate\View\View;
 use App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\NetworkViewerInterface;
 use App\Models\Account;
-use App\Http\Controllers\Html\HtmlModelTableBuilder;
-use App\Http\Controllers\Html\HtmlPaymentRowBuilder;
-use App\Http\Controllers\Html\HtmlAccountRowBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlAccountRowBuilder;
 
 class AccountViewer implements
     ViewerInterface,

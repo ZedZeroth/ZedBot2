@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Currencies;
+namespace App\Http\Controllers\Currencies\Viewer;
 
 use Illuminate\View\View;
 use App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface;
 use App\Models\Currency;
-use App\Http\Controllers\Html\HtmlModelTableBuilder;
-use App\Http\Controllers\Html\HtmlPaymentRowBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder;
 use App\Http\Controllers\MultiDomain\Money\MoneyConverter;
 
 class CurrencyViewer implements ViewerInterface

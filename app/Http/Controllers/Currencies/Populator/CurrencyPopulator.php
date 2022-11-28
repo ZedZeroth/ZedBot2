@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Currencies;
+namespace App\Http\Controllers\Currencies\Populator;
 
 use App\Models\Currency;
 use App\Http\Livewire\CurrencyPopulatorComponent;

@@ -10,57 +10,57 @@ class AdapterBuilder
      * Builds the correct adapters for
      * the specified API platform.
      *
-     * @param string $models
+     * @param string $model
      * @param string $action
-     * @param string $provider
+     * @param string $api
      * @return AdapterDTO
      */
     public function build(
-        string $models,
+        string $model,
         string $action,
-        string $provider
+        string $api
     ): AdapterDTO {
 
         // Specific request/response path
         $modelActionPath =
             'App\Http\Controllers'
-            . '\\' . $models
+            . '\\' . $model . 's'
             . '\\' . $action;
 
         // Build the request adaper
         $requestAdapterClass = $modelActionPath
             . '\\Requests\\'
-            . $models
+            . $model
             . $action
             . 'RequestAdapterFor'
-            . strtoupper($provider);
+            . strtoupper($api);
 
         $requestAdapter = new $requestAdapterClass();
 
         // Build the response adaper
         $responseAdapterClass = $modelActionPath
             . '\\Responses\\'
-            . $models
+            . $model
             . $action
             . 'ResponseAdapterFor'
-            . strtoupper($provider);
+            . strtoupper($api);
         $responseAdapter = new $responseAdapterClass();
 
         // Build the general get/post adapter
         $generalPath = 'App\Http\Controllers\MultiDomain\Adapters';
         if (
             in_array(
-                strtoupper($provider),
+                strtoupper($api),
                 explode(',', env('ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING'))
             )
         ) {
             $getOrPostAdapterClass = $generalPath
                 . '\PostAdapterFor'
-                . strtoupper($provider);
+                . strtoupper($api);
         } else {
             $getOrPostAdapterClass = $generalPath
                 . '\GetAdapterFor'
-                . strtoupper($provider);
+                . strtoupper($api);
         }
         $getOrPostAdapter = new $getOrPostAdapterClass();
 

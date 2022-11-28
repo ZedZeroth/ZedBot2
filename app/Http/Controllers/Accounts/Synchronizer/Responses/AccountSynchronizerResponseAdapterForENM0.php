@@ -8,7 +8,7 @@ use App\Models\Currency;
 use App\Http\Controllers\Accounts\AccountDTO;
 use App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface;
 
-class AccountsSynchronizerResponseAdapterForENM implements
+class AccountSynchronizerResponseAdapterForENM0 implements
     ResponseAdapterInterface
 {
     /**
