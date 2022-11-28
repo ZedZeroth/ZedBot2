@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Payments\Synchronizer\Responses;
 
 use Illuminate\Support\Facades\Log;
@@ -25,7 +27,7 @@ class PaymentsSynchronizerResponseAdapterForENM implements
         array $responseBody
     ): array {
         $paymentDTOs = [];
-        /*💬*/ print_r($responseBody);
+        /*💬*/ //print_r($responseBody);
 
         foreach (
             $responseBody['results'] as $result

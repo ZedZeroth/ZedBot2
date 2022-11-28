@@ -16,7 +16,7 @@ class SyncAccountsCommand extends Command
      * @var string
      */
     protected /* Do not define */ $signature =
-        'accounts:sync {source} {Provider} {Number to fetch}';
+        'accounts:sync {source} {API} {Number to fetch}';
 
     /**
      * The console command description.
@@ -50,8 +50,8 @@ class SyncAccountsCommand extends Command
     {
         // Validate the command arguments
         (new StringValidator())->validate(
-            string: $this->argument('Provider'),
-            stringName: 'Provider',
+            string: $this->argument('API'),
+            stringName: 'API',
             shortestLength: 3,
             longestLength: 4,
             containsUppercase: true,
@@ -63,7 +63,7 @@ class SyncAccountsCommand extends Command
 
         // Build the DTO
         $syncCommandDTO = new SyncCommandDTO(
-            provider: $this->argument('Provider'),
+            api: $this->argument('API'),
             numberToFetch: (int) $this->argument('Number to fetch')
         );
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\MultiDomain\Adapters;
 
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;

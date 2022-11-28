@@ -34,11 +34,18 @@ class CommandInformer
     public function run(
         Command $command
     ): void {
+
+        // Validate the command
+        (new CommandValidator())->validate(
+            command: $command,
+            commandName: $command->argument('command')
+        );
+
         // Assign command property
         $this->command = $command;
 
         // Build and output the title
-        $sourceEmoji = $this->getEmojiFromCommandSource(
+        $sourceEmoji = (new CommandValidator())->getEmojiFromCommandSource(
             source: $this->command->argument('source')
         );
 
@@ -124,22 +131,5 @@ class CommandInformer
     ): void {
         $this->command->info($string);
         Log::info($string);
-    }
-
-    /**
-     * Converts the command's source input interface
-     * into a more concise emoji
-     *
-     * @param string $source
-     */
-    private function getEmojiFromCommandSource(string $source): string
-    {
-        return match ($source) {
-            'cli'       => '📟',
-            'browser'   => '🖱️ ',
-            'scheduler' => '🕑',
-            'auto'      => '🤖',
-            default     => '❓'
-        };
     }
 }

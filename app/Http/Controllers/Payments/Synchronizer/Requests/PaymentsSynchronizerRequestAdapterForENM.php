@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Payments\Synchronizer\Requests;
 
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;

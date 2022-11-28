@@ -15,7 +15,7 @@ class SyncPaymentsCommand extends Command
      * @var string
      */
     protected /* Do not define */ $signature =
-        'payments:sync {source} {Provider} {Number to fetch}';
+        'payments:sync {source} {API} {Number to fetch}';
 
     /**
      * The console command description.
@@ -48,7 +48,7 @@ class SyncPaymentsCommand extends Command
     {
         // Build the DTO
         $syncCommandDTO = new SyncCommandDTO(
-            provider: $this->argument('Provider'),
+            api: $this->argument('API'),
             numberToFetch: (int) $this->argument('Number to fetch')
         );
 

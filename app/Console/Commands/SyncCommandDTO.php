@@ -13,7 +13,7 @@ namespace App\Console\Commands;
 class SyncCommandDTO implements CommandDTOInterface
 {
     public function __construct(
-        public string $provider,
+        public string $api,
         public int $numberToFetch
     ) {
     }

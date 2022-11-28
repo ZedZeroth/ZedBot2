@@ -39,7 +39,7 @@ class HtmlAccountRowBuilder implements
                 . '</a></td>'
 
                 . '<td style="font-weight: bold;">'
-                . 'HOLDER'
+                . '{HOLDER}'
                 . '</td>'
 
                 . '<td>“' . $accountName . '”</td>'
