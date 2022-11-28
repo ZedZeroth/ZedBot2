@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Accounts\Synchronizer\Responses;
 
-use App\Models\Currency;
-use App\Http\Controllers\Accounts\AccountDTO;
-use App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface;
+use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
 
 class AccountSynchronizerResponseAdapterForENM0 implements
-    ResponseAdapterInterface
+    \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
     /**
      * Builds an array of model DTOs
@@ -21,12 +20,41 @@ class AccountSynchronizerResponseAdapterForENM0 implements
     public function buildDTOs(
         array $responseBody
     ): array {
+        /*💬*/ //print_r($responseBody);
+
+        // Validate the injected array
+        (new ArrayValidator())->validate(
+            array: $responseBody,
+            arrayName: 'responseBody',
+            requiredKeys: ['count', 'results']
+        );
+
+        // Adapt each account
         $accountDTOs = [];
         foreach ($responseBody['results'] as $result) {
             /*💬*/ //print_r($result);
 
+            // Validate the injected array
+            (new ArrayValidator())->validate(
+                array: $result,
+                arrayName: 'result',
+                requiredKeys: [
+                    'ern',
+                    'nickName',
+                    'beneficiaryERN',
+                    'confidenceScore',
+                    'riskWeight',
+                    'sortCode',
+                    'accountNumber',
+                    'accountName',
+                    'createdDate',
+                    'owners',
+                    'hasOwners'
+                ]
+            );
+
             // Determine the currency
-            $currency = Currency::
+            $currency = \App\Models\Currency::
                     where(
                         'code',
                         'GBP'
@@ -35,7 +63,7 @@ class AccountSynchronizerResponseAdapterForENM0 implements
             // Create the DTO
             array_push(
                 $accountDTOs,
-                new AccountDTO(
+                new \App\Http\Controllers\Accounts\AccountDTO(
                     network: (string) 'FPS',
                     identifier: (string) 'fps'
                         . '::' . 'gbp'

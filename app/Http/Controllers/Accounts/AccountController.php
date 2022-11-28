@@ -4,20 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Accounts;
 
-use App\Http\Controllers\Controller;
 use Illuminate\View\View;
-use App\Console\Commands\SyncCommandDTO;
 use App\Http\Controllers\Accounts\Viewer\AccountViewer;
-use App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer;
-use App\Http\Controllers\MultiDomain\Adapters\AdapterBuilder;
-use App\Http\Controllers\MultiDomain\Adapters\Requester;
-use App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface;
-use App\Http\Controllers\MultiDomain\Validators\APIValidator;
-use App\Http\Controllers\MultiDomain\Validators\DTOValidator;
-use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
 
-class AccountController extends Controller implements
-    ControllerInterface
+class AccountController extends \App\Http\Controllers\Controller implements
+    \App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface
 {
     /**
      * Show all accounts (on every network).
@@ -77,21 +68,21 @@ class AccountController extends Controller implements
      * @return void
      */
     public function sync(
-        SyncCommandDTO $syncCommandDTO
+        \App\Console\Commands\SyncCommandDTO $syncCommandDTO
     ): void {
 
         // Validate DTO property names
-        (new DTOValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())->validate(
             dto: $syncCommandDTO,
             dtoName: 'syncCommandDTO',
             requiredProperties: ['api','numberToFetch']
         );
 
         // Validate API code
-        (new APIValidator())->validate(apiCode: $syncCommandDTO->api);
+        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())->validate(apiCode: $syncCommandDTO->api);
 
         // Validate number to fetch
-        (new IntegerValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: $syncCommandDTO->numberToFetch,
             integerName: 'Number to fetch',
             lowestValue: 1,
@@ -99,13 +90,13 @@ class AccountController extends Controller implements
         );
 
         // ↖️ Creat accounts from the AccountDTOs
-        (new AccountSynchronizer())
+        (new \App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer())
             ->sync(
                 // ↖️ Array of AccountDTOs
-                (new Requester())->request(
+                (new \App\Http\Controllers\MultiDomain\Requests\Requester())->request(
                     adapterDTO:
                         // ↖️ AdapterDTO
-                        (new AdapterBuilder())->build(
+                        (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())->build(
                             model: 'Account',
                             action: 'Synchronizer',
                             api: $syncCommandDTO->api

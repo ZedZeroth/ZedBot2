@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use App\Charts\ExchangeRateChart;
-use Illuminate\View\View;
-
 /**
  * NOTE: Charts are not yet functional.
  *
  */
-class RatesChartComponent extends Component
+class RatesChartComponent extends \Livewire\Component
 {
     protected ExchangeRateChart $chart;
 
@@ -21,9 +17,9 @@ class RatesChartComponent extends Component
      *
      * @return View
      */
-    public function render(): View
+    public function render(): \Illuminate\View\View
     {
-        $this->chart = new ExchangeRateChart();
+        $this->chart = new \App\Charts\ExchangeRateChart();
         $this->chart->labels(['A', 'B', 'C', 'D']);
         $this->chart->dataset('test', 'line', [1, 2, 3, rand(0, 5)]);
         return view('livewire.rates-chart-component', [

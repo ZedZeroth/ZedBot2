@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
-
-class SchedulerIsRunningCommand extends Command
+class SchedulerIsRunningCommand extends \Illuminate\Console\Command
 {
     /**
      * The name and signature of the console command.
@@ -35,6 +31,6 @@ class SchedulerIsRunningCommand extends Command
         /* Output messages */
         $output = 'The scheduler is running ...';
         $this->info($output);
-        Log::info($output);
+        \Illuminate\Support\Facades\Log::info($output);
     }
 }

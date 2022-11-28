@@ -4,27 +4,30 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MultiDomain\Validators;
 
-use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
-
 class AdapterValidator
 {
     /**
      * Checks an adapter based on various conditions.
      *
-     * @param GeneralAdapterInterface $adapter
+     * @param AdapterInterface $adapter
      * @param string $adapterName
      * @param array $requiredMethods
      * @param string $platformSuffix
      * @return bool
      */
     public function validate(
-        GeneralAdapterInterface $adapter,
+        \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface $adapter,
         string $adapterName,
         array $requiredMethods,
         string $platformSuffix
     ): bool {
         $prefix = '"' . $adapterName . '" adapter ';
-        if (count(array_intersect(get_class_methods($adapter), $requiredMethods)) != count($requiredMethods)) {
+        if (
+            count(array_intersect(get_class_methods($adapter), $requiredMethods))
+                != count($requiredMethods)
+            or
+            count(get_class_methods($adapter)) != count($requiredMethods)
+        ) {
             throw new AdapterValidationException(
                 message: $prefix . 'does not contain these methods: ' . implode(',', $requiredMethods)
             );

@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Payments\Synchronizer\Responses;
 
-use Illuminate\Support\Facades\Log;
-use App\Models\Account;
+use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
 use App\Http\Controllers\Accounts\AccountDTO;
-use App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer;
-use App\Http\Controllers\Payments\PaymentDTO;
-use App\Models\Currency;
-use App\Http\Controllers\MultiDomain\Money\MoneyConverter;
-use App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface;
+use App\Models\Account;
 
 class PaymentSynchronizerResponseAdapterForENM0 implements
-    ResponseAdapterInterface
+    \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
     /**
      * Builds an array of model DTOs
@@ -26,15 +22,52 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
     public function buildDTOs(
         array $responseBody
     ): array {
-        $paymentDTOs = [];
         /*💬*/ //print_r($responseBody);
+
+        // Validate the injected array
+        (new ArrayValidator())->validate(
+            array: $responseBody,
+            arrayName: 'responseBody',
+            requiredKeys: ['count', 'results']
+        );
+
+        // Adapt each payment
+        $paymentDTOs = [];
         foreach (
             $responseBody['results'] as $result
         ) {
             /*💬*/ //print_r($result);
 
+            // Validate the injected array
+            (new ArrayValidator())->validate(
+                array: $result,
+                arrayName: 'result',
+                requiredKeys: [
+                    'id',
+                    'transactionTime',
+                    'transactionTimeLocal',
+                    'transactionTimeSearch',
+                    'itemId',
+                    'accno',
+                    'productType',
+                    'vendorType',
+                    'txnCode',
+                    'transactionAmount',
+                    'transactionCurrency',
+                    'billedAmount',
+                    'billedCurrency',
+                    'accountBalance',
+                    'exchangeRate',
+                    'counterparty',
+                    'paymentReference',
+                    'beneficiary',
+                    'country',
+                    'hold'
+                ]
+            );
+
             // Determine the currency
-            $currency = Currency::
+            $currency = \App\Models\Currency::
                     where(
                         'code',
                         $result['transactionCurrency']
@@ -89,11 +122,11 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
             );
 
             // Sync accounts
-            (new AccountSynchronizer())
+            (new \App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer())
                 ->sync(DTOs: $accountDTOs);
 
             // Convert amount to base units
-            $amount = (new MoneyConverter())
+            $amount = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
             ->convert(
                 amount: abs($result['transactionAmount']),
                 currency: $currency
@@ -101,7 +134,7 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
 
             array_push(
                 $paymentDTOs,
-                new PaymentDTO(
+                new \App\Http\Controllers\Payments\PaymentDTO(
                     network: (string) 'FPS',
                     identifier: (string) 'enm::'
                         . $result['id'],

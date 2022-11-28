@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Facades\Artisan;
-use App\Models\Currency;
-use Illuminate\View\View;
-
-class CurrencyPopulatorComponent extends Component
+class CurrencyPopulatorComponent extends \Livewire\Component
 {
     public $currencies;
 
@@ -20,7 +15,7 @@ class CurrencyPopulatorComponent extends Component
      */
     public function populate(): void
     {
-        Artisan::call('currencies:populate browser');
+        \Illuminate\Support\Facades\Artisan::call('currencies:populate browser');
     }
 
     /**
@@ -28,9 +23,9 @@ class CurrencyPopulatorComponent extends Component
      *
      * @return View
      */
-    public function render(): View
+    public function render(): \Illuminate\View\View
     {
-        $this->currencies = Currency::all();
+        $this->currencies = \App\Models\Currency::all();
         return view('livewire.currency-populator-component');
     }
 }

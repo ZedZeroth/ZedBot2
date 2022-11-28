@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Http\Controllers\Payments\PaymentController;
-use App\Http\Controllers\MultiDomain\Validators\StringValidator;
-use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
-
-class SyncPaymentsCommand extends Command
+class SyncPaymentsCommand extends \Illuminate\Console\Command
 {
     /**
      * The name and signature of the console command.
@@ -49,7 +44,7 @@ class SyncPaymentsCommand extends Command
     public function runThisCommand(): void
     {
         // Validate the command arguments
-        (new StringValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $this->argument('API'),
             stringName: 'API',
             shortestLength: 4,
@@ -60,8 +55,7 @@ class SyncPaymentsCommand extends Command
             isNumeric: false,
             isAlphanumeric: true
         );
-
-        (new IntegerValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: (int) $this->argument('Number to fetch'),
             integerName: 'Number to fetch',
             lowestValue: 1,
@@ -75,7 +69,7 @@ class SyncPaymentsCommand extends Command
         );
 
         // Inject the DTO into the relevant controller method
-        (new PaymentController())
+        (new \App\Http\Controllers\Payments\PaymentController())
             ->sync(syncCommandDTO: $syncCommandDTO);
 
         return;

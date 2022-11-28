@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Payments\Synchronizer;
 
-use App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface;
-use App\Models\Payment;
-
-class PaymentSynchronizer implements SynchronizerInterface
+class PaymentSynchronizer
+    implements \App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface
 {
     /**
      * Uses the DTOs to create payments for
@@ -19,7 +17,7 @@ class PaymentSynchronizer implements SynchronizerInterface
         array $DTOs
     ): void {
         foreach ($DTOs as $dto) {
-            Payment::firstOrCreate(
+            \App\Models\Payment::firstOrCreate(
                 ['identifier' => $dto->identifier],
                 [
                     'network' => $dto->network,

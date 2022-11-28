@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MultiDomain\Money;
 
-use App\Models\Currency;
-
 class MoneyConverter
 {
     /**
@@ -18,7 +16,7 @@ class MoneyConverter
      */
     public function convert(
         float $amount,
-        Currency $currency
+        \App\Models\Currency $currency
     ): int {
 
         $inBaseDenomination = $amount * pow(10, $currency->decimalPlaces);

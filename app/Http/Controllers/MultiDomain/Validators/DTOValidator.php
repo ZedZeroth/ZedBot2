@@ -21,7 +21,12 @@ class DTOValidator
     ): bool {
 
         $prefix = '"' . $dtoName . '" DTO ';
-        if (count(array_intersect(array_keys(get_object_vars($dto)), $requiredProperties)) != count($requiredProperties)) {
+        if (
+            count(array_intersect(array_keys(get_object_vars($dto)), $requiredProperties))
+                != count($requiredProperties)
+            or
+            count(get_object_vars($dto)) != count($requiredProperties)
+        ) {
             throw new DTOValidationException(
                 message: $prefix . 'does not contain these properties: ' . implode(',', $requiredProperties)
             );

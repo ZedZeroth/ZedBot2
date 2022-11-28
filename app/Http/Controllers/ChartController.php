@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Charts\ExchangeRateChart;
-
 /**
  * NOTE: Charts are not yet functional.
  *
@@ -18,7 +16,7 @@ class ChartController extends Controller
      */
     public function view()
     {
-        $chart = new ExchangeRateChart();
+        $chart = new \App\Charts\ExchangeRateChart();
         $chart->labels(['One', 'Two', 'Three']);
         $chart->dataset('test', 'line', [1, 2, 3, 4]);
         return view('chart', compact('chart'));

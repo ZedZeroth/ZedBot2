@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\MultiDomain\Interfaces;
 
 use Illuminate\View\View;
-use App\Console\Commands\SyncCommandDTO;
 
 interface ControllerInterface
 {
@@ -51,6 +50,6 @@ interface ControllerInterface
      * @return void
      */
     public function sync(
-        SyncCommandDTO $commandDTO
+        \App\Console\Commands\SyncCommandDTO $commandDTO
     ): void;
 }

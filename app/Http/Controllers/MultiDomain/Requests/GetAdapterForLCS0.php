@@ -2,16 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\MultiDomain\Adapters;
-
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
-use App\Http\Controllers\MultiDomain\Interfaces\GetAdapterInterface;
+namespace App\Http\Controllers\MultiDomain\Requests;
 
 class GetAdapterForLCS0 implements
-    GeneralAdapterInterface,
-    GetAdapterInterface
+    \App\Http\Controllers\MultiDomain\Interfaces\GetAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\GetOrPostAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
     /**
      * Makes a GET request to the LCS0 API
@@ -30,14 +26,14 @@ class GetAdapterForLCS0 implements
         // Build the headers
         $headers = [
             'Authorization' => 'Token '
-                . DB::table('keys')
+                . \Illuminate\Support\Facades\DB::table('keys')
                     ->where('service', 'LCS0')
                     ->first()->key,
             'Content-Type' => 'application/json'
         ];
 
         // Execute the request
-        $response = Http::withHeaders($headers)
+        $response = \Illuminate\Support\Facades\Http::withHeaders($headers)
             ->connectTimeout(10)
             ->retry(3, 100)
             ->get($url);

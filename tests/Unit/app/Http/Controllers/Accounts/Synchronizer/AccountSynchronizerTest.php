@@ -7,8 +7,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Accounts\AccountSynchronizer;
-use App\Http\Controllers\MultiDomain\Adapters\Requester;
-use App\Http\Controllers\MultiDomain\Adapters\AdapterDTO;
+use App\Http\Controllers\MultiDomain\Requests\Requester;
+use App\Http\Controllers\MultiDomain\Requests\AdapterDTO;
 
 test('Even more mock testing...', function () {
     $object = new stdClass();

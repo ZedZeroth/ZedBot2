@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-
 class ExceptionCatcher
 {
     /**
@@ -19,7 +17,7 @@ class ExceptionCatcher
      * @return void
      */
     public function catch(
-        Command $command,
+        \Illuminate\Console\Command $command,
         string $class,
         string $function,
         int $line
@@ -50,13 +48,15 @@ class ExceptionCatcher
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException $e) {
             $exceptionCaught = $e;
+        } catch (\App\Http\Controllers\MultiDomain\Validators\ArrayValidationException $e) {
+            $exceptionCaught = $e;
         } catch (CommandValidationException $e) {
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException $e) {
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\APIValidationException $e) {
             $exceptionCaught = $e;
-        } catch (\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException $e) {
+        } catch (\App\Http\Controllers\MultiDomain\Validators\DTOValidationException $e) {
             $exceptionCaught = $e;
         }
 

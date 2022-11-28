@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\MultiDomain\Adapters;
+namespace App\Http\Controllers\MultiDomain\Requests;
 
 class AdapterBuilder
 {
@@ -47,7 +47,7 @@ class AdapterBuilder
         $responseAdapter = new $responseAdapterClass();
 
         // Build the general get/post adapter
-        $generalPath = 'App\Http\Controllers\MultiDomain\Adapters';
+        $generalPath = 'App\Http\Controllers\MultiDomain\Requests';
         if (
             in_array(
                 strtoupper($api),

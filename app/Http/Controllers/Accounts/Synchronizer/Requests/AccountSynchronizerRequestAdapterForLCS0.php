@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
 
+use App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
-use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
 
 class AccountSynchronizerRequestAdapterForLCS0 implements
-    RequestAdapterInterface
+    RequestAdapterInterface,
+    AdapterInterface
 {
      /**
      * Build the post parameters.
@@ -26,12 +27,21 @@ class AccountSynchronizerRequestAdapterForLCS0 implements
     /**
      * Fetch the response.
      *
-     * @param GeneralAdapterInterface $getOrPostAdapter
+     * @param GetOrPostAdapterInterface $getOrPostAdapter
      * @return array
      */
     public function fetchResponse(
-        GeneralAdapterInterface $getOrPostAdapter
+        \App\Http\Controllers\MultiDomain\Interfaces\GetOrPostAdapterInterface $getOrPostAdapter
     ): array {
+
+        // Validate the injected adapter
+        (new \App\Http\Controllers\MultiDomain\Validators\AdapterValidator())->validate(
+            adapter: $getOrPostAdapter,
+            adapterName: 'getOrPostAdapter',
+            requiredMethods: ['get'],
+            platformSuffix: 'LCS0'
+        );
+
         return (new $getOrPostAdapter())
             ->get(
                 endpoint: env('ZED_LCS0_WALLETS_ENDPOINT')

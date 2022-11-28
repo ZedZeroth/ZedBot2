@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Currencies\Viewer;
 
 use Illuminate\View\View;
-use App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface;
 use App\Models\Currency;
-use App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder;
-use App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder;
-use App\Http\Controllers\MultiDomain\Money\MoneyConverter;
 
-class CurrencyViewer implements ViewerInterface
+class CurrencyViewer implements
+    \App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface
 {
     /**
      * Show all currencies.
@@ -38,12 +35,13 @@ class CurrencyViewer implements ViewerInterface
         return view('currency', [
             'currency' => $currency,
             'modelTable' =>
-                (new HtmlModelTableBuilder())
+                (new \App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder())
                     ->build($currency),
             'paymentsTable' =>
-                (new HtmlPaymentRowBuilder())
+                (new \App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder())
                     ->build($currency->payments()->get()),
-            'moneyConverter' => new MoneyConverter()
+            'moneyConverter'
+                => new \App\Http\Controllers\MultiDomain\Money\MoneyConverter()
         ]);
     }
 }

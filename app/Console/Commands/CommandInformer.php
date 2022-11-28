@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use App\Models\Account;
-use App\Models\Currency;
-use App\Models\Payment;
 
 /**
  * When running a command this pushes
@@ -73,9 +69,9 @@ class CommandInformer
 
         //Count models and record current time
         $models = [
-            'Account' => Account::all()->count(),
-            'Currency' => Currency::all()->count(),
-            'Payment' => Payment::all()->count(),
+            'Account' => \App\Models\Account::all()->count(),
+            'Currency' => \App\Models\Currency::all()->count(),
+            'Payment' => \App\Models\Payment::all()->count(),
         ];
         $startTime = now();
 
@@ -130,6 +126,6 @@ class CommandInformer
         string $string
     ): void {
         $this->command->info($string);
-        Log::info($string);
+        \Illuminate\Support\Facades\Log::info($string);
     }
 }

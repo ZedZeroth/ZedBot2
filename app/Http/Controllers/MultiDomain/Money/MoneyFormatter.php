@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MultiDomain\Money;
 
-use App\Models\Currency;
-
 class MoneyFormatter
 {
     /**
@@ -18,7 +16,7 @@ class MoneyFormatter
      */
     public function format(
         int $amount,
-        Currency $currency
+        \App\Models\Currency $currency
     ): string {
         return number_format(
             $amount / pow(10, $currency->decimalPlaces),

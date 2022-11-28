@@ -19,10 +19,10 @@ interface RequestAdapterInterface
     /**
      * Fetch the response.
      *
-     * @param GeneralAdapterInterface $getOrPostAdapter
+     * @param GetOrPostAdapterInterface $getOrPostAdapter
      * @return array
      */
     public function fetchResponse(
-        GeneralAdapterInterface $getOrPostAdapter
+        GetOrPostAdapterInterface $getOrPostAdapter
     ): array;
 }

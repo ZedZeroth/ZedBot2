@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Http\Controllers\Currencies\CurrencyController;
-use App\Http\Controllers\Currencies\CurrencyPopulator;
-
-class PopulateCurrenciesCommand extends Command
+class PopulateCurrenciesCommand extends \Illuminate\Console\Command
 {
     /**
      * The name and signature of the console command.
@@ -48,7 +44,7 @@ class PopulateCurrenciesCommand extends Command
      */
     public function runThisCommand(): void
     {
-        (new CurrencyController())->populate();
+        (new \App\Http\Controllers\Currencies\CurrencyController())->populate();
         return;
     }
 }

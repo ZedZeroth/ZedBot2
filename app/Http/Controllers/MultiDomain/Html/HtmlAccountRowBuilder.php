@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Html\MultiDomain;
 
-use Illuminate\Support\Collection;
-
 /**
  * Builds HTML table rows to display
  * information about a collection of
@@ -19,7 +17,7 @@ class HtmlAccountRowBuilder implements
      * @return string
      */
     public function build(
-        Collection $models
+        \Illuminate\Support\Collection $models
     ): string {
         $html = '<table>';
         foreach ($models as $account) {

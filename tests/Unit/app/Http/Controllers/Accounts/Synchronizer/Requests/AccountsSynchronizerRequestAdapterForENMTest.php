@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Accounts\Synchronizer\Requests\AccountsSynchronizerRequestAdapterForENM;
 use App\Http\Controllers\MultiDomain\Validators\IntegerValidationException;
-use App\Http\Controllers\MultiDomain\Adapters\PostAdapterForENM;
-use App\Http\Controllers\MultiDomain\Adapters\PostAdapterForENMF;
-use App\Http\Controllers\MultiDomain\Adapters\GetAdapterForLCS;
+use App\Http\Controllers\MultiDomain\Requests\PostAdapterForENM;
+use App\Http\Controllers\MultiDomain\Requests\PostAdapterForENMF;
+use App\Http\Controllers\MultiDomain\Requests\GetAdapterForLCS;
 use App\Http\Controllers\MultiDomain\Validators\AdapterValidationException;
 
 /**

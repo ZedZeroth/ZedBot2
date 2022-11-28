@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
 
+use App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
-use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
-use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
-use App\Http\Controllers\MultiDomain\Validators\AdapterValidator;
 
 class AccountSynchronizerRequestAdapterForENM0 implements
-    RequestAdapterInterface
+    RequestAdapterInterface,
+    AdapterInterface
 {
     /**
      * Properties required to perform the request.
@@ -30,7 +29,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
     ): RequestAdapterInterface {
 
         // Validate the argument
-        (new IntegerValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: $numberToFetch,
             integerName: 'numberToFetch',
             lowestValue: 1,
@@ -47,15 +46,15 @@ class AccountSynchronizerRequestAdapterForENM0 implements
     /**
      * Fetch the response.
      *
-     * @param GeneralAdapterInterface $getOrPostAdapter
+     * @param GetOrPostAdapterInterface $getOrPostAdapter
      * @return array
      */
     public function fetchResponse(
-        GeneralAdapterInterface $getOrPostAdapter
+        \App\Http\Controllers\MultiDomain\Interfaces\GetOrPostAdapterInterface $getOrPostAdapter
     ): array {
 
-        // Validate the argument
-        (new AdapterValidator())->validate(
+        // Validate the injected adapter
+        (new \App\Http\Controllers\MultiDomain\Validators\AdapterValidator())->validate(
             adapter: $getOrPostAdapter,
             adapterName: 'getOrPostAdapter',
             requiredMethods: ['post'],

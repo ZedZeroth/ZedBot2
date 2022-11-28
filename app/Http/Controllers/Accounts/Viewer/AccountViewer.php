@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Accounts\Viewer;
 
 use Illuminate\View\View;
-use App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface;
-use App\Http\Controllers\MultiDomain\Interfaces\NetworkViewerInterface;
 use App\Models\Account;
-use App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder;
 use App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder;
 use App\Http\Controllers\MultiDomain\Html\HtmlAccountRowBuilder;
 
 class AccountViewer implements
-    ViewerInterface,
-    NetworkViewerInterface
+    \App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\NetworkViewerInterface
 {
     /**
      * Show all accounts (on every network).
@@ -45,7 +42,7 @@ class AccountViewer implements
         return view('account', [
             'account' => $account,
             'modelTable' =>
-            (new HtmlModelTableBuilder())
+            (new \App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder())
                 ->build($account),
             'creditsTable' =>
                 (new HtmlPaymentRowBuilder())

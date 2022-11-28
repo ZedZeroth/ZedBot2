@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Database\Eloquent\Collection;
-use App\Models\Account;
-use Illuminate\View\View;
-
-class AccountSynchronizerComponent extends Component
+class AccountSynchronizerComponent extends \Livewire\Component
 {
-    public Collection $accounts;
+    public \Illuminate\Database\Eloquent\Collection $accounts;
     public string $numberToFetch = '10';
 
     /**
@@ -21,7 +15,7 @@ class AccountSynchronizerComponent extends Component
      */
     public function sync(string $api): void
     {
-        Artisan::call(
+        \Illuminate\Support\Facades\Artisan::call(
             'accounts:sync browser '
             . $api
             . ' '
@@ -34,9 +28,9 @@ class AccountSynchronizerComponent extends Component
      *
      * @return View
      */
-    public function render(): View
+    public function render(): \Illuminate\View\View
     {
-        $this->accounts = Account::all();
+        $this->accounts = \App\Models\Account::all();
         return view('livewire.account-synchronizer-component');
     }
 }

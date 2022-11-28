@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Currencies\Populator;
 
 use App\Models\Currency;
-use App\Http\Livewire\CurrencyPopulatorComponent;
 
 class CurrencyPopulator
 {
@@ -188,7 +187,7 @@ class CurrencyPopulator
         );
 
         // Refresh the web component
-        (new CurrencyPopulatorComponent())->render();
+        (new \App\Http\Livewire\CurrencyPopulatorComponent())->render();
 
         return;
     }

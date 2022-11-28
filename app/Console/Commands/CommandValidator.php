@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Http\Controllers\MultiDomain\Validators\StringValidator;
-use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
-use App\Http\Controllers\MultiDomain\Validators\APIValidator;
-
 class CommandValidator
 {
     /**
@@ -19,34 +14,26 @@ class CommandValidator
      * @return bool
      */
     public function validate(
-        Command $command,
+        \Illuminate\Console\Command $command,
         string $commandName
     ): bool {
         $prefix = '"' . $commandName . '" command\'s';
 
-        // Validate the command arguments
-        (new StringValidator())->validate(
-            string: $command->argument('API'),
-            stringName: 'API',
-            shortestLength: 4,
-            longestLength: 4,
-            containsUppercase: true,
-            containsLowercase: false,
-            isAlphabetical: false,
-            isNumeric: false,
-            isAlphanumeric: true
-        );
-
-        // Validate API code exists
-        (new APIValidator())->validate(apiCode: $command->argument('API'));
+        // Validate API code is a valid string and exists in the list
+        if ($command->argument('API')) {
+            (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+                ->validate(apiCode: $command->argument('API'));
+        }
 
         // Validate number to fetch
-        (new IntegerValidator())->validate(
-            integer: (int) $command->argument('Number to fetch'),
-            integerName: 'Number to fetch',
-            lowestValue: 1,
-            highestValue: pow(10, 6)
-        );
+        if ($command->argument('Number to fetch')) {
+            (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+                integer: (int) $command->argument('Number to fetch'),
+                integerName: 'Number to fetch',
+                lowestValue: 1,
+                highestValue: pow(10, 6) // Maximum accounts for payments
+            );
+        }
 
         // Validate command source
         if (

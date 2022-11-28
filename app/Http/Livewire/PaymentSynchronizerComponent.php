@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Database\Eloquent\Collection;
-use App\Models\Payment;
-use Illuminate\View\View;
-
-class PaymentSynchronizerComponent extends Component
+class PaymentSynchronizerComponent extends \Livewire\Component
 {
-    public Collection $payments;
+    public \Illuminate\Database\Eloquent\Collection $payments;
     public string $numberToFetch = '10';
 
     /**
@@ -24,7 +18,7 @@ class PaymentSynchronizerComponent extends Component
     public function sync(string $api): void
     {
         try {
-            Artisan::call(
+            \Illuminate\Support\Facades\Artisan::call(
                 'payments:sync browser '
                 . $api
                 . ' '
@@ -40,9 +34,9 @@ class PaymentSynchronizerComponent extends Component
      *
      * @return View
      */
-    public function render(): View
+    public function render(): \Illuminate\View\View
     {
-        $this->payments = Payment::all();
+        $this->payments = \App\Models\Payment::all();
         return view('livewire.payment-synchronizer-component');
     }
 }

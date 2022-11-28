@@ -2,16 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\MultiDomain\Adapters;
-
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\MultiDomain\Interfaces\GeneralAdapterInterface;
-use App\Http\Controllers\MultiDomain\Interfaces\PostAdapterInterface;
+namespace App\Http\Controllers\MultiDomain\Requests;
 
 class PostAdapterForENM0 implements
-    GeneralAdapterInterface,
-    PostAdapterInterface
+    \App\Http\Controllers\MultiDomain\Interfaces\PostAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\GetOrPostAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
     /**
      * Makes a POST request to the ENM0 API
@@ -32,13 +28,13 @@ class PostAdapterForENM0 implements
         // Build the headers
         $headers = [
             'Authorization' => 'Bearer '
-                . DB::table('keys')
+                . \Illuminate\Support\Facades\DB::table('keys')
                     ->where('service', 'ENM0')
                     ->first()->key
         ];
 
         // Execute the request
-        $response = Http::withHeaders($headers)
+        $response = \Illuminate\Support\Facades\Http::withHeaders($headers)
             ->connectTimeout(10)
             ->retry(3, 100)
             ->post($url, $postParameters);

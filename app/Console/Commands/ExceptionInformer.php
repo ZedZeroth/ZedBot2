@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Console\Command;
-use Exception;
-use Error;
-
 class ExceptionInformer
 {
     /**
@@ -23,8 +18,8 @@ class ExceptionInformer
      * @return void
      */
     public function warn(
-        Command $command,
-        Exception|Error $e,
+        \Illuminate\Console\Command $command,
+        \Exception|\Error $e,
         string $class,
         string $function,
         int $line
@@ -53,7 +48,7 @@ class ExceptionInformer
         // Push each detail to CLI/log
         foreach ($errorDetails as $detail) {
             $command->warn($detail);
-            Log::error($detail);
+            \Illuminate\Support\Facades\Log::error($detail);
         }
     }
 }

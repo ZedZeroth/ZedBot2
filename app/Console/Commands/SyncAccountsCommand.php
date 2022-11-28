@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Http\Controllers\Accounts\AccountController;
-use App\Http\Controllers\MultiDomain\Validators\StringValidator;
-use App\Http\Controllers\MultiDomain\Validators\IntegerValidator;
-
-class SyncAccountsCommand extends Command
+class SyncAccountsCommand extends \Illuminate\Console\Command
 {
     /**
      * The name and signature of the console command.
@@ -50,7 +45,7 @@ class SyncAccountsCommand extends Command
     public function runThisCommand(): void
     {
         // Validate the command arguments
-        (new StringValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $this->argument('API'),
             stringName: 'API',
             shortestLength: 4,
@@ -61,8 +56,7 @@ class SyncAccountsCommand extends Command
             isNumeric: false,
             isAlphanumeric: true
         );
-
-        (new IntegerValidator())->validate(
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
             integer: (int) $this->argument('Number to fetch'),
             integerName: 'Number to fetch',
             lowestValue: 1,
@@ -76,7 +70,7 @@ class SyncAccountsCommand extends Command
         );
 
         // Inject the DTO into the relevant controller method
-        (new AccountController())
+        (new \App\Http\Controllers\Accounts\AccountController())
             ->sync(syncCommandDTO: $syncCommandDTO);
 
         return;

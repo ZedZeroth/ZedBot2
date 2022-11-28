@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Accounts\Synchronizer\Responses;
 
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\MultiDomain\Money\MoneyConverter;
-use App\Models\Currency;
-use App\Http\Controllers\Accounts\AccountDTO;
-use App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface;
+use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
 
 class AccountSynchronizerResponseAdapterForLCS0 implements
-    ResponseAdapterInterface
+    \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
+    \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
     /**
      * Builds an array of model DTOs
@@ -23,13 +20,49 @@ class AccountSynchronizerResponseAdapterForLCS0 implements
     public function buildDTOs(
         array $responseBody
     ): array {
-        $accountDTOs = [];
-        //Extract relevant data from the response
-        $walletsWithBalance = [];
         /*💬*/ //print_r($responseBody);
+
+        // Validate the injected array
+        (new ArrayValidator())->validate(
+            array: $responseBody,
+            arrayName: 'responseBody',
+            requiredKeys: ['count', 'results']
+        );
+
+        //Adapt accounts
+        $accountDTOs = [];
+        $walletsWithBalance = [];
         foreach (
             $responseBody['currencies'] as $currencyCode => $currencyArray
         ) {
+            // Validate the injected array
+            (new ArrayValidator())->validate(
+                array: $result,
+                arrayName: 'result',
+                requiredKeys: [
+                    'id',
+                    'transactionTime',
+                    'transactionTimeLocal',
+                    'transactionTimeSearch',
+                    'itemId',
+                    'accno',
+                    'productType',
+                    'vendorType',
+                    'txnCode',
+                    'transactionAmount',
+                    'transactionCurrency',
+                    'billedAmount',
+                    'billedCurrency',
+                    'accountBalance',
+                    'exchangeRate',
+                    'counterparty',
+                    'paymentReference',
+                    'beneficiary',
+                    'country',
+                    'hold'
+                ]
+            );
+
             /*💬*/ //echo $currency . PHP_EOL;
             foreach ($currencyArray as $address => $element) {
                 if (is_array($element)) {
@@ -52,18 +85,18 @@ class AccountSynchronizerResponseAdapterForLCS0 implements
                                 $network = 'BSC';
                             } else {
                                 $network = 'XXX';
-                                Log::warn("{$currencyCode} has no assigned network!");
+                                \Illuminate\Support\Facades\Log::warn("{$currencyCode} has no assigned network!");
                             }
 
                             // Determine the currency
-                            $currency = Currency::
+                            $currency = \App\Models\Currency::
                             where(
                                 'code',
                                 $currencyCode
                             )->firstOrFail();
 
                             // Convert amount to base units
-                            $balance = (new MoneyConverter())
+                            $balance = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
                             ->convert(
                                 amount: $element['balance'],
                                 currency: $currency
@@ -73,7 +106,7 @@ class AccountSynchronizerResponseAdapterForLCS0 implements
 
                             array_push(
                                 $accountDTOs,
-                                new AccountDTO(
+                                new \App\Http\Controllers\Accounts\AccountDTO(
                                     network: (string) $network,
                                     identifier: (string) 'fps'
                                         . '::' . strtolower($currencyCode)
