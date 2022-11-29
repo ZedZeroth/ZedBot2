@@ -17,10 +17,10 @@ class AccountSynchronizerRequestAdapterForLCS0 implements
      * @param int $numberToFetch
      * @return RequestAdapterInterface
      */
-    public function buildPostParameters(
+    public function buildRequestParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
-        // No post parameters for LCS0
+        // No request parameters
         return $this;
     }
 

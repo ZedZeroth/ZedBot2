@@ -11,6 +11,7 @@ class StringValidator
      *
      * @param string $string
      * @param string $stringName
+     * @param array $charactersToRemove
      * @param int $shortestLength
      * @param int $longestLength
      * @param bool $mustHaveUppercase
@@ -25,6 +26,7 @@ class StringValidator
     public function validate(
         string $string,
         string $stringName,
+        array $charactersToRemove,
         int $shortestLength,
         int $longestLength,
         bool $mustHaveUppercase,
@@ -51,42 +53,50 @@ class StringValidator
             highestValue: pow(10, 3)
         );
 
+        // Set prefix
         $prefix = '"' . $stringName . '" string ';
+
+        // Remove unwated characters
+        $string = str_replace($charactersToRemove, '', $string);
+
+        // Run validation
         if (strlen($string) < $shortestLength) {
             throw new StringValidationException(
-                message: $prefix . 'is shorter than ' . $shortestLength . ' characters'
+                message: $prefix . '"' . $string . '(' . strlen($string) . ')'
+                . '" is shorter than ' . $shortestLength . ' characters'
             );
         } elseif (strlen($string) > $longestLength) {
             throw new StringValidationException(
-                message: $prefix . 'is longer than ' . $longestLength . ' characters'
+                message: $prefix . '"' . $string . '(' . strlen($string) . ')'
+                . '" is longer than ' . $longestLength . ' characters'
             );
         } elseif (
             $mustHaveUppercase and
             $string == strtolower($string)
         ) {
             throw new StringValidationException(
-                message: $prefix . 'must have uppercase characters'
+                message: $prefix . '"' . $string . '" must have uppercase characters'
             );
         } elseif (
             !$canHaveUppercase and
             $string != strtolower($string)
         ) {
             throw new StringValidationException(
-                message: $prefix . 'cannot have uppercase characters'
+                message: $prefix . '"' . $string . '" cannot have uppercase characters'
             );
         } elseif (
             $mustHaveLowercase and
             $string == strtoupper($string)
         ) {
             throw new StringValidationException(
-                message: $prefix . 'must have lowercase characters'
+                message: $prefix . '"' . $string . '" must have lowercase characters'
             );
         } elseif (
             !$canHaveLowercase and
             $string != strtoupper($string)
         ) {
             throw new StringValidationException(
-                message: $prefix . 'cannot have lowercase characters'
+                message: $prefix . '"' . $string . '" cannot have lowercase characters'
             );
         } elseif ($string and $isAlphabetical and !ctype_alpha($string)) {
             throw new StringValidationException(message: $prefix . 'is not alphabetical');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MultiDomain\Validators;
 
-class DTOValidator
+class DtoValidator
 {
     /**
      * Checks a DTO based on various conditions.
@@ -23,6 +23,7 @@ class DTOValidator
         (new StringValidator())->validate(
             string: $dtoName,
             stringName: 'dtoName',
+            charactersToRemove: [],
             shortestLength: 6,
             longestLength: 20,
             mustHaveUppercase: false,
@@ -41,7 +42,7 @@ class DTOValidator
             or
             count(get_object_vars($dto)) != count($requiredProperties)
         ) {
-            throw new DTOValidationException(
+            throw new DtoValidationException(
                 message: $prefix . 'does not contain these properties: ' . implode(',', $requiredProperties)
             );
         } else {

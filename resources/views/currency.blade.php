@@ -22,7 +22,7 @@
         <h2><anchor id="denominations">Denominations</h2>
         <p>
             {{ $currency->symbol }} 1 =
-            {{ $moneyConverter->convert(1, $currency) }}
+            {{ number_format($moneyConverter->convert(1, $currency), ) }}
             {{ $currency->baseUnitNamePlural }}
         </p>
 

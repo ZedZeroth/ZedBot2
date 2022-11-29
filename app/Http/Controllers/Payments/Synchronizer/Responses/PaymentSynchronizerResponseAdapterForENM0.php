@@ -14,27 +14,28 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
 {
     /**
      * Builds an array of model DTOs
-     * from the responseBody.
+     * from the responseArray.
      *
-     * @param array $responseBody
+     * @param array $responseArray
      * @return array
      */
     public function buildDTOs(
-        array $responseBody
+        array $responseArray
     ): array {
-        /*💬*/ //print_r($responseBody);
+        /*💬*/ //print_r($responseArray);
 
         // Validate the injected array
         (new ArrayValidator())->validate(
-            array: $responseBody,
-            arrayName: 'responseBody',
-            requiredKeys: ['count', 'results']
+            array: $responseArray,
+            arrayName: 'responseArray',
+            requiredKeys: ['count', 'results'],
+            keysToIgnore: []
         );
 
         // Adapt each payment
         $paymentDTOs = [];
         foreach (
-            $responseBody['results'] as $result
+            $responseArray['results'] as $result
         ) {
             /*💬*/ //print_r($result);
 
@@ -63,13 +64,15 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                     'beneficiary',
                     'country',
                     'hold'
-                ]
+                ],
+                keysToIgnore: []
             );
 
             // Validate $result['transactionCurrency']
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['transactionCurrency'],
                 stringName: 'transactionCurrency',
+                charactersToRemove: [],
                 shortestLength: 3,
                 longestLength: 3,
                 mustHaveUppercase: true,
@@ -83,10 +86,9 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
 
             // Validate $result['counterparty']
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-                string: str_replace([
-                    ',', ' ', '(', ')', '-', '.', '/', '&', '+'
-                ], '', $result['counterparty']),
+                string: $result['counterparty'],
                 stringName: 'counterparty',
+                charactersToRemove: [',', ' ', '(', ')', '-', '.', '/', '&', '+'],
                 shortestLength: 25,
                 longestLength: pow(10, 2),
                 mustHaveUppercase: false,
@@ -102,6 +104,7 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['accno'],
                 stringName: 'accno',
+                charactersToRemove: [],
                 shortestLength: 22,
                 longestLength: 22,
                 mustHaveUppercase: true,
@@ -123,8 +126,9 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
 
             // Validate $result['paymentReference']
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-                string: str_replace(['-', '.', ' ', '/'], '', $result['paymentReference']),
+                string: $result['paymentReference'],
                 stringName: 'paymentReference',
+                charactersToRemove: ['-', '.', ' ', '/'],
                 shortestLength: 0,
                 longestLength: 20,
                 mustHaveUppercase: false,

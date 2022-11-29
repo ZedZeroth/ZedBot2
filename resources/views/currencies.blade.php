@@ -11,9 +11,7 @@
         <h1>Currencies</h1>
 
         <ul>
-        @if ($currencies->count() == 0)
-            No currencies exist.
-        @else
+        @if ($currencies->count())
             @foreach($currencies->sortBy('code') as $currency)
                 <li>
                     <a href='currency/{{ $currency->code }}'>
@@ -22,6 +20,8 @@
                     </a>
                 </li>
             @endforeach
+        @else
+            No currencies exist.
         @endif
 </ul>
 

@@ -21,12 +21,6 @@ class HtmlAccountRowBuilder implements
     ): string {
         $html = '<table>';
         foreach ($models as $account) {
-            if ($account->networkAccountName) {
-                $accountName = $account->networkAccountName;
-            } else {
-                $accountName = $account->label;
-            }
-
             $html .= '<tr>';
 
             $html = $html
@@ -40,7 +34,9 @@ class HtmlAccountRowBuilder implements
                 . '{HOLDER}'
                 . '</td>'
 
-                . '<td>“' . $accountName . '”</td>'
+                . '<td>“' . $account->label . '”</td>'
+
+                . '<td>' . $account->networkAccountName . '</td>'
 
                 . '<td><a href="/account/'
                 . $account->identifier

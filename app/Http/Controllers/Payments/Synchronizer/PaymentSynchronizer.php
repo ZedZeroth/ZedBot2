@@ -18,7 +18,7 @@ class PaymentSynchronizer implements
     ): void {
         foreach ($modelDTOs as $paymentDTO) {
             //Validate DTOs
-            (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+            (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
                 ->validate(
                     dto: $paymentDTO,
                     dtoName: 'paymentDTO',

@@ -20,7 +20,7 @@ class AccountSynchronizer implements
     ): void {
         foreach ($modelDTOs as $accountDTO) {
             //Validate DTOs
-            (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+            (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
                 ->validate(
                     dto: $accountDTO,
                     dtoName: 'accountDTO',

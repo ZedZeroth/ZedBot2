@@ -17,7 +17,7 @@ class AccountSynchronizerComponent extends \Livewire\Component
     {
 
         // Validate $api
-        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+        (new \App\Http\Controllers\MultiDomain\Validators\ApiValidator())
                 ->validate(apiCode: $api);
 
         // Validate $this->numberToFetch

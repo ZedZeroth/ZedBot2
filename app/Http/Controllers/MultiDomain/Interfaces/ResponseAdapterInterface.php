@@ -8,12 +8,12 @@ interface ResponseAdapterInterface
 {
      /**
      * Builds an array of model DTOs
-     * from the responseBody.
+     * from the responseArray.
      *
-     * @param array $responseBody
+     * @param array $responseArray
      * @return array
      */
     public function buildDTOs(
-        array $responseBody
+        array $responseArray
     ): array;
 }

@@ -25,6 +25,7 @@ class AdapterBuilder
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $model,
             stringName: 'model',
+            charactersToRemove: [],
             shortestLength: 7,
             longestLength: 7,
             mustHaveUppercase: true,
@@ -40,6 +41,7 @@ class AdapterBuilder
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $action,
             stringName: 'action',
+            charactersToRemove: [],
             shortestLength: 12,
             longestLength: 12,
             mustHaveUppercase: true,
@@ -52,7 +54,7 @@ class AdapterBuilder
         );
 
         // Validate $api
-        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+        (new \App\Http\Controllers\MultiDomain\Validators\ApiValidator())
                 ->validate(apiCode: $api);
 
         // Specific request/response path

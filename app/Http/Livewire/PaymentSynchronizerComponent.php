@@ -18,7 +18,7 @@ class PaymentSynchronizerComponent extends \Livewire\Component
     public function sync(string $api): void
     {
         // Validate $api
-        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+        (new \App\Http\Controllers\MultiDomain\Validators\ApiValidator())
                 ->validate(apiCode: $api);
 
         // Validate $this->numberToFetch

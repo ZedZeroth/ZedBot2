@@ -14,27 +14,27 @@ use App\Http\Controllers\MultiDomain\Requests\GetAdapterForLCS;
 use App\Http\Controllers\MultiDomain\Validators\AdapterValidationException;
 
 /**
- * Testing the buildPostParameters() method
+ * Testing the buildRequestParameters() method
  */
 
 test('GIVEN numberToFetch: 1
-    WHEN calling buildPostParameters()
+    WHEN calling buildRequestParameters()
     THEN an AccountsSynchronizerRequestAdapterForENM is returned
     ')
     ->expect(fn() => (
         new AccountsSynchronizerRequestAdapterForENM())
-            ->buildPostParameters(numberToFetch: 1)
+            ->buildRequestParameters(numberToFetch: 1)
     )
     ->toBeInstanceOf(AccountsSynchronizerRequestAdapterForENM::class);
 
 test('GIVEN numberToFetch: 1
-    WHEN calling buildPostParameters()
+    WHEN calling buildRequestParameters()
     THEN the returned AccountsSynchronizerRequestAdapterForENM holds the correct postParameters
     ', function () {
 
     // Build the RequestAdapter's postParameters property
     $builtRequestAdapter = (new AccountsSynchronizerRequestAdapterForENM())
-            ->buildPostParameters(numberToFetch: 1);
+            ->buildRequestParameters(numberToFetch: 1);
 
     // Create a reflection in order to access its private postParameters property
     $property = (new \ReflectionClass($builtRequestAdapter))->getProperty('postParameters');
@@ -53,13 +53,13 @@ test('GIVEN numberToFetch: 1
 });
 
 test('GIVEN numberToFetch: 0
-    WHEN calling buildPostParameters()
+    WHEN calling buildRequestParameters()
     THEN an IntegerValidationException is thrown
     ')
     ->expectException(IntegerValidationException::class)
     ->expect(fn() => (
         new AccountsSynchronizerRequestAdapterForENM())
-            ->buildPostParameters(numberToFetch: 0)
+            ->buildRequestParameters(numberToFetch: 0)
     )
     ->toBeInstanceOf(AccountsSynchronizerRequestAdapterForENM::class);
 
@@ -74,7 +74,7 @@ test('GIVEN a PostAdapterForENM with a mocked post() method
 
     // Build the RequestAdapter's postParameters property
     $builtRequestAdapter = (new AccountsSynchronizerRequestAdapterForENM())
-        ->buildPostParameters(numberToFetch: 1);
+        ->buildRequestParameters(numberToFetch: 1);
 
     // Mock a PostAdapter to return a fake request response array
     $postAdapterMock = mock(PostAdapterForENM::class)
@@ -115,7 +115,7 @@ test('GIVEN a PostAdapterForENMF with a mocked post() method
 
     // Build the RequestAdapter's postParameters property
     $builtRequestAdapter = (new AccountsSynchronizerRequestAdapterForENM())
-        ->buildPostParameters(numberToFetch: 1);
+        ->buildRequestParameters(numberToFetch: 1);
 
     // Mock an incorrect PostAdapter to return a fake request response array
     $postAdapterMock = mock(PostAdapterForENMF::class)
@@ -156,7 +156,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
 
     // Build the RequestAdapter's postParameters property
     $builtRequestAdapter = (new AccountsSynchronizerRequestAdapterForENM())
-        ->buildPostParameters(numberToFetch: 1);
+        ->buildRequestParameters(numberToFetch: 1);
 
     // Mock an incorrect GetAdapter to return a fake request response array
     $postAdapterMock = mock(GetAdapterForLCS::class)

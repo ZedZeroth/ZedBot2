@@ -30,6 +30,7 @@ class ExceptionInformer
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $e->getMessage(),
             stringName: '$e->getMessage()',
+            charactersToRemove: [],
             shortestLength: 1,
             longestLength: pow(10, 3),
             mustHaveUppercase: false,
@@ -45,6 +46,7 @@ class ExceptionInformer
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: str_replace(['/', '.'], '', $e->getFile()),
             stringName: $e->getFile(),
+            charactersToRemove: [],
             shortestLength: 1,
             longestLength: pow(10, 3),
             mustHaveUppercase: false,

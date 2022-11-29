@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\MultiDomain\Requests;
 
-class PostAdapterForENM0 implements
-    \App\Http\Controllers\MultiDomain\Interfaces\PostAdapterInterface,
+class GetAdapterForMMP0 implements
+    \App\Http\Controllers\MultiDomain\Interfaces\GetAdapterInterface,
     \App\Http\Controllers\MultiDomain\Interfaces\GetOrPostAdapterInterface,
     \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
     /**
-     * Makes a POST request to the ENM0 API
+     * Makes a GET request to the MMP0 API
      *
      * @param string $endpoint
-     * @param array $requestParameters
      * @return array
      */
-    public function post(
+    public function get(
         string $endpoint,
-        array $requestParameters
     ): array {
         // Validate $endpoint
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
@@ -37,24 +35,26 @@ class PostAdapterForENM0 implements
         );
 
         // Build the URL
-        $url = env('ZED_ENM0_DOMAIN')
-            . env('ZED_ENM0_PATH')
+        $url = env('ZED_MMP0_DOMAIN')
+            . env('ZED_MMP0_PATH')
             . $endpoint;
-
+/*
         // Build the headers
         $headers = [
-            'Authorization' => 'Bearer '
+            'Authorization' => 'Token '
                 . \Illuminate\Support\Facades\DB::table('keys')
-                    ->where('service', 'ENM0')
-                    ->first()->key
+                    ->where('service', 'LCS0')
+                    ->first()->key,
+            'Content-Type' => 'application/json'
         ];
-
+*/
         // Execute the request
-        $response = \Illuminate\Support\Facades\Http::withHeaders($headers)
-            ->connectTimeout((int) env('ZED_CONNECT_SINGLE_TIMEOUT'))
+        $response = \Illuminate\Support\Facades\Http::connectTimeout(
+            (int) env('ZED_CONNECT_SINGLE_TIMEOUT')
+        )
             ->retry((int) env('ZED_CONNECT_RETRY'), 1000)
             ->timeout((int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'))
-            ->post($url, $requestParameters);
+            ->get($url);
 
         // Decode the response
         $statusCode = $response->status();

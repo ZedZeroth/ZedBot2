@@ -25,6 +25,7 @@ class AdapterValidator
         (new StringValidator())->validate(
             string: $adapterName,
             stringName: 'adapterName',
+            charactersToRemove: [],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),
             mustHaveUppercase: true,
@@ -37,7 +38,7 @@ class AdapterValidator
         );
 
         // Validate $apiSuffix
-        (new APIValidator())->validate(
+        (new ApiValidator())->validate(
             apiCode: $apiSuffix
         );
 

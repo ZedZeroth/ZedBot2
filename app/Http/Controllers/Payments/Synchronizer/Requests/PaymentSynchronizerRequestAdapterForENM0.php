@@ -14,9 +14,9 @@ class PaymentSynchronizerRequestAdapterForENM0 implements
     /**
      * Properties required to perform the request.
      *
-     * @var array $postParameters
+     * @var array $requestParameters
      */
-    private array $postParameters;
+    private array $requestParameters;
 
     /**
      * Build the post parameters.
@@ -24,7 +24,7 @@ class PaymentSynchronizerRequestAdapterForENM0 implements
      * @param int $numberToFetch
      * @return RequestAdapterInterface
      */
-    public function buildPostParameters(
+    public function buildRequestParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
 
@@ -36,7 +36,7 @@ class PaymentSynchronizerRequestAdapterForENM0 implements
             highestValue: pow(10, 6)
         );
 
-        $this->postParameters = [
+        $this->requestParameters = [
             'accountCode' => env('ZED_ENM0_ACCOUNT_CODE'),
             'take' => $numberToFetch,
             'goFast' => true
@@ -65,7 +65,7 @@ class PaymentSynchronizerRequestAdapterForENM0 implements
         return ($getOrPostAdapter)
             ->post(
                 endpoint: env('ZED_ENM0_TRANSACTIONS_ENDPOINT'),
-                postParameters: $this->postParameters
+                requestParameters: $this->requestParameters
             );
     }
 }

@@ -23,8 +23,9 @@ class TimestampValidator
     ): bool {
         // Validate $timestamp
         (new StringValidator())->validate(
-            string: str_replace(['-', 'T', ':', '.', '+'], '', $timestamp),
+            string: $timestamp,
             stringName: 'timestamp',
+            charactersToRemove: ['-', 'T', ':', '.', '+'],
             shortestLength: 25,
             longestLength: 25,
             mustHaveUppercase: false,
@@ -40,6 +41,7 @@ class TimestampValidator
         (new StringValidator())->validate(
             string: $timestampName,
             stringName: 'timestampName',
+            charactersToRemove: [],
             shortestLength: 3,
             longestLength: 20,
             mustHaveUppercase: false,
@@ -53,8 +55,9 @@ class TimestampValidator
 
         // Validate $after
         (new StringValidator())->validate(
-            string: str_replace(['-', 'T', ':', '.', '+'], '', $after),
+            string: $after,
             stringName: 'after',
+            charactersToRemove: ['-', 'T', ':', '.', '+'],
             shortestLength: 25,
             longestLength: 25,
             mustHaveUppercase: false,
@@ -68,8 +71,9 @@ class TimestampValidator
 
         // Validate $before
         (new StringValidator())->validate(
-            string: str_replace(['-', 'T', ':', '.', '+'], '', $before),
+            string: $before,
             stringName: 'before',
+            charactersToRemove: ['-', 'T', ':', '.', '+'],
             shortestLength: 25,
             longestLength: 25,
             mustHaveUppercase: false,

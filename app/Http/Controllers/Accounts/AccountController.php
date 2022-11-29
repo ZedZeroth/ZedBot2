@@ -75,7 +75,7 @@ class AccountController extends \App\Http\Controllers\Controller implements
     ): void {
 
         // Validate DTO property names
-        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+        (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
             ->validate(
                 dto: $syncCommandDTO,
                 dtoName: 'syncCommandDTO',
@@ -83,7 +83,7 @@ class AccountController extends \App\Http\Controllers\Controller implements
             );
 
         // Validate API code
-        (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+        (new \App\Http\Controllers\MultiDomain\Validators\ApiValidator())
             ->validate(apiCode: $syncCommandDTO->api);
 
         // Validate number to fetch

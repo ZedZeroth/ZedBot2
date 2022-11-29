@@ -19,7 +19,7 @@ class Requester
     ): array {
 
         // Validate DTO property names
-        (new \App\Http\Controllers\MultiDomain\Validators\DTOValidator())
+        (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
             ->validate(
                 dto: $adapterDTO,
                 dtoName: 'adapterDTO',
@@ -39,9 +39,9 @@ class Requester
         );
 
         //Fetch the response
-        $responseBody =
+        $responseArray =
             $adapterDTO->requestAdapter
-                ->buildPostParameters(
+                ->buildRequestParameters(
                     numberToFetch: $numberToFetch
                 )
                 ->fetchResponse(
@@ -49,10 +49,10 @@ class Requester
                 );
 
         //Adapt a valid response and return the DTOs
-        if ($responseBody) {
+        if ($responseArray) {
             return $adapterDTO->responseAdapter
                 ->buildDTOs(
-                    responseBody: $responseBody
+                    responseArray: $responseArray
                 );
         }
     }

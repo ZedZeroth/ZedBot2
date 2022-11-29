@@ -130,6 +130,7 @@ class CommandInformer
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $string,
             stringName: 'string',
+            charactersToRemove: [],
             shortestLength: 0,
             longestLength: pow(10, 2),
             mustHaveUppercase: false,

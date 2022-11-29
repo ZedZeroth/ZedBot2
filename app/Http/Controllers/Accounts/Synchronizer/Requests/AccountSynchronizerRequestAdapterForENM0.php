@@ -14,9 +14,9 @@ class AccountSynchronizerRequestAdapterForENM0 implements
     /**
      * Properties required to perform the request.
      *
-     * @var array $postParameters
+     * @var array $requestParameters
      */
-    private array $postParameters;
+    private array $requestParameters;
 
     /**
      * Build the post parameters.
@@ -24,7 +24,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
      * @param int $numberToFetch
      * @return RequestAdapterInterface
      */
-    public function buildPostParameters(
+    public function buildRequestParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
 
@@ -36,7 +36,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
             highestValue: pow(10, 5)
         );
 
-        $this->postParameters = [
+        $this->requestParameters = [
             'accountERN' => env('ZED_ENM0_ACCOUNT_ERN'),
             'take' => $numberToFetch
         ];
@@ -64,7 +64,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
         return ($getOrPostAdapter)
             ->post(
                 endpoint: env('ZED_ENM0_BENEFICIARIES_ENDPOINT'),
-                postParameters: $this->postParameters
+                requestParameters: $this->requestParameters
             );
     }
 }

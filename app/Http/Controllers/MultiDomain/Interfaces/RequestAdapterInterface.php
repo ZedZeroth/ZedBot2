@@ -12,7 +12,7 @@ interface RequestAdapterInterface
      * @param int $numberToFetch
      * @return RequestAdapterInterface
      */
-    public function buildPostParameters(
+    public function buildRequestParameters(
         int $numberToFetch
     ): RequestAdapterInterface;
 

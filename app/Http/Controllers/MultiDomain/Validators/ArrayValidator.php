@@ -12,17 +12,20 @@ class ArrayValidator
      * @param array $array
      * @param string $arrayName
      * @param array $requiredKeys
+     * @param array $keysToIgnore
      * @return bool
      */
     public function validate(
         array $array,
         string $arrayName,
-        array $requiredKeys
+        array $requiredKeys,
+        array $keysToIgnore
     ): bool {
         // Validate $adapterName
         (new StringValidator())->validate(
             string: $arrayName,
             stringName: 'arrayName',
+            charactersToRemove: [],
             shortestLength: 4,
             longestLength: pow(10, 2),
             mustHaveUppercase: false,
@@ -34,7 +37,15 @@ class ArrayValidator
             isAlphanumeric: true
         );
 
+        // Set prefix
         $prefix = '"' . $arrayName . '" array ';
+
+        // Remove keys to ignore
+        foreach ($keysToIgnore as $key) {
+            unset($array[$key]);
+        }
+
+        // Check for required keys
         if (
             count(array_intersect(array_keys($array), $requiredKeys))
                 != count($requiredKeys)

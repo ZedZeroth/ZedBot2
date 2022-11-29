@@ -23,6 +23,7 @@ class CommandValidator
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: str_replace(':', '', $commandName),
             stringName: 'commandName',
+            charactersToRemove: [],
             shortestLength: 12,
             longestLength: 18,
             mustHaveUppercase: false,
@@ -49,7 +50,7 @@ class CommandValidator
 
         // Validate API code is a valid string and exists in the list
         if ($command->argument('API')) {
-            (new \App\Http\Controllers\MultiDomain\Validators\APIValidator())
+            (new \App\Http\Controllers\MultiDomain\Validators\ApiValidator())
                 ->validate(apiCode: $command->argument('API'));
         }
 
@@ -77,6 +78,7 @@ class CommandValidator
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $source,
             stringName: 'source',
+            charactersToRemove: [],
             shortestLength: 3,
             longestLength: 9,
             mustHaveUppercase: false,

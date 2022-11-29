@@ -22,6 +22,7 @@ class GetAdapterForLCS0 implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: str_replace(['/'], '', $endpoint),
             stringName: 'endpoint',
+            charactersToRemove: [],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),
             mustHaveUppercase: false,
@@ -51,21 +52,21 @@ class GetAdapterForLCS0 implements
         $response = \Illuminate\Support\Facades\Http::withHeaders($headers)
             ->connectTimeout((int) env('ZED_CONNECT_SINGLE_TIMEOUT'))
             ->retry((int) env('ZED_CONNECT_RETRY'), 1000)
-            ->connectTimeout((int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'))
+            ->timeout((int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'))
             ->get($url);
 
         // Decode the response
         $statusCode = $response->status();
-        $responseBody = json_decode(
-            $response->getBody(),
+        $responseArray = json_decode(
+            (string) $response->getBody(),
             true
         );
 
-        /*💬*/ //print_r($responseBody);
+        /*💬*/ //print_r($responseArray);
 
         //If valid then return response
         if ($statusCode == 200) {
-            return $responseBody;
+            return $responseArray;
         // If invalid then return an empty array
         } else {
             return [];

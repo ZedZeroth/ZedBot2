@@ -57,9 +57,9 @@ class ExceptionCatcher
             $exceptionCaught = $e;
         } catch (\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException $e) {
             $exceptionCaught = $e;
-        } catch (\App\Http\Controllers\MultiDomain\Validators\APIValidationException $e) {
+        } catch (\App\Http\Controllers\MultiDomain\Validators\ApiValidationException $e) {
             $exceptionCaught = $e;
-        } catch (\App\Http\Controllers\MultiDomain\Validators\DTOValidationException $e) {
+        } catch (\App\Http\Controllers\MultiDomain\Validators\DtoValidationException $e) {
             $exceptionCaught = $e;
         }
 

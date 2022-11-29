@@ -12,33 +12,30 @@ class AccountSynchronizerResponseAdapterForENM0 implements
 {
     /**
      * Builds an array of model DTOs
-     * from the responseBody.
+     * from the responseArray.
      *
-     * @param array $responseBody
+     * @param array $responseArray
      * @return array
      */
     public function buildDTOs(
-        array $responseBody
+        array $responseArray
     ): array {
-        /*💬*/ //print_r($responseBody);
+        /*💬*/ //print_r($responseArray);
 
         // Validate the injected array
         (new ArrayValidator())->validate(
-            array: $responseBody,
-            arrayName: 'responseBody',
-            requiredKeys: ['count', 'results']
+            array: $responseArray,
+            arrayName: 'responseArray',
+            requiredKeys: ['count', 'results'],
+            keysToIgnore: []
         );
 
         // Adapt each account
         $accountDTOs = [];
-        foreach ($responseBody['results'] as $result) {
+        foreach ($responseArray['results'] as $result) {
             /*💬*/ //print_r($result);
 
             // Validate the injected array
-
-            // Remove optional elements
-            unset($result['modifiedDate']);
-            unset($result['bankName']);
 
             // Skip non-UK accounts
             if (array_key_exists('swift', $result)) {
@@ -61,13 +58,15 @@ class AccountSynchronizerResponseAdapterForENM0 implements
                     'createdDate',
                     'owners',
                     'hasOwners'
-                ]
+                ],
+                keysToIgnore: ['modifiedDate', 'bankName']
             );
 
             // Validate $result['sortCode']
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['sortCode'],
                 stringName: 'sortCode',
+                charactersToRemove: [],
                 shortestLength: 6,
                 longestLength: 6,
                 mustHaveUppercase: false,
@@ -83,6 +82,7 @@ class AccountSynchronizerResponseAdapterForENM0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['accountNumber'],
                 stringName: 'accountNumber',
+                charactersToRemove: [],
                 shortestLength: 8,
                 longestLength: 8,
                 mustHaveUppercase: false,
@@ -96,10 +96,9 @@ class AccountSynchronizerResponseAdapterForENM0 implements
 
             // Validate $result['accountName']
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-                string: str_replace([
-                    ' ', '/', '-', '&', '(', ')', '\'', '.'
-                ], '', $result['accountName']),
+                string: $result['accountName'],
                 stringName: 'accountName',
+                charactersToRemove: [' ', '/', '-', '&', '(', ')', '\'', '.'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),
                 mustHaveUppercase: false,
@@ -118,7 +117,7 @@ class AccountSynchronizerResponseAdapterForENM0 implements
                         'GBP'
                     )->firstOrFail();
 
-            // Create the DTO
+            // Build the DTO
             array_push(
                 $accountDTOs,
                 new \App\Http\Controllers\Accounts\AccountDTO(

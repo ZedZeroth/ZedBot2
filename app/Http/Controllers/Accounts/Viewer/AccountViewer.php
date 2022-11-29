@@ -21,11 +21,18 @@ class AccountViewer implements
     public function showAll(): View
     {
         $accounts = Account::all()->sortBy('identifier');
+
+        if ($accounts->count()) {
+            $accountsTable =
+                (new HtmlAccountRowBuilder())
+                    ->build($accounts);
+        } else {
+            $accountsTable = 'No accounts exist.';
+        }
+
         return view('accounts', [
             'accounts' => $accounts,
-            'accountsTable' =>
-                (new HtmlAccountRowBuilder())
-                    ->build($accounts)
+            'accountsTable' => $accountsTable
         ]);
     }
 
@@ -90,10 +97,10 @@ class AccountViewer implements
             $html = 'No such network exists.';
         } else {
             $accounts = Account::where('network', $network)->get();
-            if ($accounts->count() == 0) {
-                $html = 'No accounts exist on this network.';
-            } else {
+            if ($accounts->count()) {
                 $html = (new HtmlAccountRowBuilder())->build($accounts);
+            } else {
+                $html = 'No accounts exist on this network.';
             }
         }
 

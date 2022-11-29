@@ -12,118 +12,81 @@ class AccountSynchronizerResponseAdapterForLCS0 implements
 {
     /**
      * Builds an array of model DTOs
-     * from the responseBody.
+     * from the responseArray.
      *
-     * @param array $responseBody
+     * @param array $responseArray
      * @return array
      */
     public function buildDTOs(
-        array $responseBody
+        array $responseArray
     ): array {
-        /*💬*/ //print_r($responseBody);
+        /*💬*/ //print_r($responseArray);
 
         // Validate the injected array
         (new ArrayValidator())->validate(
-            array: $responseBody,
-            arrayName: 'responseBody',
-            requiredKeys: ['count', 'results']
+            array: $responseArray,
+            arrayName: 'responseArray',
+            requiredKeys: [
+                'currency',
+                'wallets',
+                'currency_balance',
+                'local_currency_symbol',
+                'unit_amount_in_local_currency',
+                'nc_currency',
+                'fee_currency',
+                'gas_price',
+                'network_fees',
+                'fees_info',
+                'nc_currency_balance',
+                'nc_unit_amount_in_local_currency',
+                'nc_wallets',
+                'hdaddresses'
+            ],
+            keysToIgnore: []
         );
 
-        //Adapt accounts
-        $accountDTOs = [];
-        $walletsWithBalance = [];
-        foreach (
-            $responseBody['currencies'] as $currencyCode => $currencyArray
-        ) {
-            // Validate the injected array
-            (new ArrayValidator())->validate(
-                array: $result,
-                arrayName: 'result',
-                requiredKeys: [
-                    'id',
-                    'transactionTime',
-                    'transactionTimeLocal',
-                    'transactionTimeSearch',
-                    'itemId',
-                    'accno',
-                    'productType',
-                    'vendorType',
-                    'txnCode',
-                    'transactionAmount',
-                    'transactionCurrency',
-                    'billedAmount',
-                    'billedCurrency',
-                    'accountBalance',
-                    'exchangeRate',
-                    'counterparty',
-                    'paymentReference',
-                    'beneficiary',
-                    'country',
-                    'hold'
-                ]
-            );
+        // Validate $responseArray['currency_balance']['total_balance']
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: (int) round(pow(10, 8) * $responseArray['currency_balance']['total_balance']),
+            integerName: 'total_balance',
+            lowestValue: 0,
+            highestValue: pow(10, 9)
+        );
 
-            /*💬*/ //echo $currency . PHP_EOL;
-            foreach ($currencyArray as $address => $element) {
-                if (is_array($element)) {
-                    if (array_key_exists('balance', $element)) {
-                        if ($element['balance'] > 0) {
-                            /*💬*/ //echo $currencyCode . PHP_EOL;
-                            /*💬*/ //echo $key . PHP_EOL;
-                            /*💬*/ //echo 'Balance: ' . $element['balance'] . PHP_EOL . PHP_EOL;
+        //Adapt account
 
-                            if ($currencyCode == 'BTC') {
-                                $network = 'Bitcoin';
-                            } elseif (
-                                $currencyCode == 'ETH' or
-                                str_contains($currencyCode, 'ERC20')
-                            ) {
-                                $network = 'Ethereum';
-                            } elseif (
-                                str_contains($currencyCode, 'BEP20')
-                            ) {
-                                $network = 'BSC';
-                            } else {
-                                $network = 'XXX';
-                                \Illuminate\Support\Facades\Log::warn("{$currencyCode} has no assigned network!");
-                            }
+        // Determine the currency
+        $currency = \App\Models\Currency::
+        where(
+            'code',
+            'BTC'
+        )->firstOrFail();
 
-                            // Determine the currency
-                            $currency = \App\Models\Currency::
-                            where(
-                                'code',
-                                $currencyCode
-                            )->firstOrFail();
+        // Convert amount to base units
+        $balance = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
+        ->convert(
+            amount: $responseArray['currency_balance']['total_balance'],
+            currency: $currency
+        );
 
-                            // Convert amount to base units
-                            $balance = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
-                            ->convert(
-                                amount: $element['balance'],
-                                currency: $currency
-                            );
+        // Unique labeling
+        $username = env('ZED_LCS0_USERNAME');
+        $walletType = 'CustodialWallet';
 
-                            // ADAPT CURRENCY FOR SECOND BTC WALLET!
+        // Build DTO
+        $accountDTO = new \App\Http\Controllers\Accounts\AccountDTO(
+            network: (string) 'LCS',
+            identifier: (string) 'lcs'
+                . '::' . strtolower($currency->code)
+                . '::' . $username
+                . '::' . $walletType,
+            customer_id: (int) 0,
+            networkAccountName: '',
+            label: (string) $username . ' ' . $currency->code . ' ' . $walletType,
+            currency_id: (int) $currency->id,
+            balance: (int) $balance,
+        );
 
-                            array_push(
-                                $accountDTOs,
-                                new \App\Http\Controllers\Accounts\AccountDTO(
-                                    network: (string) $network,
-                                    identifier: (string) 'fps'
-                                        . '::' . strtolower($currencyCode)
-                                        . '::' . $address,
-                                    customer_id: (int) 0,
-                                    networkAccountName: (string) '',
-                                    label: (string) 'LCS ' . $currencyCode . ' wallet',
-                                    currency_id: (int) $currency->id,
-                                    balance: (int) $balance,
-                                ),
-                            );
-                        }
-                    }
-                }
-            }
-        }
-
-        return $accountDTOs;
+        return [$accountDTO];
     }
 }

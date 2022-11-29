@@ -23,11 +23,18 @@ class PaymentViewer implements
     public function showAll(): View
     {
         $payments = Payment::all()->sortByDesc('timestamp');
+
+        if ($payments->count()) {
+            $paymentsTable =
+                (new HtmlPaymentRowBuilder())
+                    ->build($payments);
+        } else {
+            $paymentsTable = 'No payments exist.';
+        }
+
         return view('payments', [
             'payments' => $payments,
-            'paymentsTable' =>
-                (new HtmlPaymentRowBuilder())
-                    ->build($payments)
+            'paymentsTable' => $paymentsTable
         ]);
     }
 
@@ -89,10 +96,11 @@ class PaymentViewer implements
             $html = 'No such network exists.';
         } else {
             $payments = Account::where('network', $network)->get();
-            if ($payments->count() == 0) {
-                $html = 'No payments exist on this network.';
+            if ($payments->count()) {
+                $html = (new HtmlAccountRowBuilder())
+                    ->build($payments);
             } else {
-                $html = (new HtmlAccountRowBuilder())->build($payments);
+                $html = 'No payments exist on this network.';
             }
         }
 
