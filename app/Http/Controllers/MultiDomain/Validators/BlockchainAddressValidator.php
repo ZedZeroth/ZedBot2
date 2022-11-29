@@ -32,7 +32,8 @@ class BlockchainAddressValidator
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $address as a string
@@ -48,7 +49,8 @@ class BlockchainAddressValidator
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Set prefix
@@ -57,7 +59,7 @@ class BlockchainAddressValidator
         // Run further validation
 
         // Validate the network is listed
-        if (!in_array($network, explode(',', env('ZED_NETWORK_LIST')))) {
+        if (!in_array($network, config('app.ZED_NETWORK_LIST'))) {
             throw new BlockchainAddressValidationException(
                 message: $prefix . 'is not in the network list'
             );

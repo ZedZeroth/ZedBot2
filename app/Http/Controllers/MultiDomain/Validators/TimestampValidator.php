@@ -34,7 +34,8 @@ class TimestampValidator
             canHaveLowercase: false,
             isAlphabetical: false,
             isNumeric: true,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $timestampName
@@ -50,7 +51,8 @@ class TimestampValidator
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $after
@@ -66,7 +68,8 @@ class TimestampValidator
             canHaveLowercase: false,
             isAlphabetical: false,
             isNumeric: true,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $before
@@ -82,7 +85,8 @@ class TimestampValidator
             canHaveLowercase: false,
             isAlphabetical: false,
             isNumeric: true,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         $prefix = '"' . $timestampName . '" timestamp ';

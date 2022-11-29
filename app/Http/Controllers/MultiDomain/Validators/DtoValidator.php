@@ -32,7 +32,8 @@ class DtoValidator
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         $prefix = '"' . $dtoName . '" DTO ';

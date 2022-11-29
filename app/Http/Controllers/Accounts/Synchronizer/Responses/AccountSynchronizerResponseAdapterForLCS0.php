@@ -70,7 +70,7 @@ class AccountSynchronizerResponseAdapterForLCS0 implements
         );
 
         // Unique labeling
-        $username = env('ZED_LCS0_USERNAME');
+        $username = config('app.ZED_LCS0_USERNAME');
         $walletType = 'CustodialWallet';
 
         // Build DTO

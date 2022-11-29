@@ -34,7 +34,8 @@ class AdapterValidator
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $apiSuffix

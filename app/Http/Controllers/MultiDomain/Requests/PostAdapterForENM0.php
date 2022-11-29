@@ -33,12 +33,13 @@ class PostAdapterForENM0 implements
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Build the URL
-        $url = env('ZED_ENM0_DOMAIN')
-            . env('ZED_ENM0_PATH')
+        $url = config('app.ZED_ENM0_DOMAIN')
+            . config('app.ZED_ENM0_PATH')
             . $endpoint;
 
         // Build the headers
@@ -51,9 +52,9 @@ class PostAdapterForENM0 implements
 
         // Execute the request
         $response = \Illuminate\Support\Facades\Http::withHeaders($headers)
-            ->connectTimeout((int) env('ZED_CONNECT_SINGLE_TIMEOUT'))
-            ->retry((int) env('ZED_CONNECT_RETRY'), 1000)
-            ->timeout((int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'))
+            ->connectTimeout((int) config('app.ZED_CONNECT_SINGLE_TIMEOUT'))
+            ->retry((int) config('app.ZED_CONNECT_RETRY'), 1000)
+            ->timeout((int) config('app.ZED_CONNECT_ABSOLUTE_TIMEOUT'))
             ->post($url, $requestParameters);
 
         // Decode the response

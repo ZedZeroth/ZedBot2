@@ -48,7 +48,8 @@ class AccountSynchronizerResponseAdapterForMMP0 implements
                 canHaveLowercase: true,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate the $addressDetails['response'] array

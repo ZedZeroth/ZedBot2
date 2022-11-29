@@ -47,7 +47,7 @@ test('GIVEN numberToFetch: 1
     expect(
         $property->getValue($builtRequestAdapter)
     )->toMatchArray([
-        'accountERN' => env('ZED_ENM_ACCOUNT_ERN'),
+        'accountERN' => config('app.ZED_ENM_ACCOUNT_ERN'),
         'take' => 1
     ]);
 });
@@ -80,9 +80,9 @@ test('GIVEN a PostAdapterForENM with a mocked post() method
     $postAdapterMock = mock(PostAdapterForENM::class)
         ->shouldReceive('post')
         ->with(
-            env('ZED_ENM_BENEFICIARIES_ENDPOINT'),
+            config('app.ZED_ENM_BENEFICIARIES_ENDPOINT'),
             [
-                'accountERN' => env('ZED_ENM_ACCOUNT_ERN'),
+                'accountERN' => config('app.ZED_ENM_ACCOUNT_ERN'),
                 'take' => 1
             ]
         )
@@ -121,9 +121,9 @@ test('GIVEN a PostAdapterForENMF with a mocked post() method
     $postAdapterMock = mock(PostAdapterForENMF::class)
         ->shouldReceive('post')
         ->with(
-            env('ZED_ENM_BENEFICIARIES_ENDPOINT'),
+            config('app.ZED_ENM_BENEFICIARIES_ENDPOINT'),
             [
-                'accountERN' => env('ZED_ENM_ACCOUNT_ERN'),
+                'accountERN' => config('app.ZED_ENM_ACCOUNT_ERN'),
                 'take' => 1
             ]
         )
@@ -162,9 +162,9 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
     $postAdapterMock = mock(GetAdapterForLCS::class)
         ->shouldReceive('post')
         ->with(
-            env('ZED_ENM_BENEFICIARIES_ENDPOINT'),
+            config('app.ZED_ENM_BENEFICIARIES_ENDPOINT'),
             [
-                'accountERN' => env('ZED_ENM_ACCOUNT_ERN'),
+                'accountERN' => config('app.ZED_ENM_ACCOUNT_ERN'),
                 'take' => 1
             ]
         )

@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
+namespace App\Http\Controllers\Payments\Synchronizer\Requests;
 
 use App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 
-class AccountSynchronizerRequestAdapterForMMP0 implements
+class PaymentSynchronizerRequestAdapterForMMP0 implements
     RequestAdapterInterface,
     AdapterInterface
 {
     /**
-     * Build the post parameters.
+     * Properties required to perform the request.
+     *
+     * @var int $numberToFetch
+     */
+    private int $numberToFetch;
+
+    /**
+     * Build the request parameters.
      *
      * @param int $numberToFetch
      * @return RequestAdapterInterface
@@ -20,7 +27,15 @@ class AccountSynchronizerRequestAdapterForMMP0 implements
     public function buildRequestParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
-        // No request parameters
+        // Validate numberToFetch
+        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
+            integer: $numberToFetch,
+            integerName: 'numberToFetch',
+            lowestValue: 1,
+            highestValue: pow(10, 3)
+        );
+
+        $this->numberToFetch = $numberToFetch;
         return $this;
     }
 
@@ -81,11 +96,14 @@ class AccountSynchronizerRequestAdapterForMMP0 implements
             array_push(
                 $responseArray,
                 [
+                    'address' => $addressDetails->address,
                     'label' => $addressDetails->label,
+                    'numberToFetch' => $this->numberToFetch,
                     'response' => (new $getOrPostAdapter())
                         ->get(
                             endpoint: config('app.ZED_MMP0_ADDRESS_ENDPOINT')
                             . $addressDetails->address
+                            . config('app.ZED_MMP0_ADDRESS_TRANSACTIONS_ENDPOINT_SUFFIX')
                         )
                 ]
             );

@@ -55,5 +55,6 @@ class Requester
                     responseArray: $responseArray
                 );
         }
+        return [];
     }
 }

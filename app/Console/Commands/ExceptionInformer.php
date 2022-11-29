@@ -39,7 +39,8 @@ class ExceptionInformer
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: false
+            isAlphanumeric: false,
+            isHexadecimal: false
         );
 
         // Validate $e->getFile()
@@ -55,7 +56,8 @@ class ExceptionInformer
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $e->getLine()

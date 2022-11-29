@@ -21,6 +21,7 @@ class StringValidator
      * @param bool $isAlphabetical
      * @param bool $isNumeric
      * @param bool $isAlphanumeric
+     * @param bool $isHexadecimal
      * @return bool
      */
     public function validate(
@@ -35,7 +36,8 @@ class StringValidator
         bool $canHaveLowercase,
         bool $isAlphabetical,
         bool $isNumeric,
-        bool $isAlphanumeric
+        bool $isAlphanumeric,
+        bool $isHexadecimal
     ): bool {
         // Validate shortestLength
         (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
@@ -105,6 +107,10 @@ class StringValidator
         } elseif ($string and $isAlphanumeric and !ctype_alnum($string)) {
             throw new StringValidationException(
                 message: $prefix . '"' . $string . '" is not alphanumeric'
+            );
+        } elseif ($string and $isHexadecimal and !ctype_xdigit($string)) {
+            throw new StringValidationException(
+                message: $prefix . '"' . $string . '" is not hexadecimal'
             );
         } else {
             return true;

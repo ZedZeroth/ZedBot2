@@ -139,7 +139,8 @@ class CommandInformer
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: false
+            isAlphanumeric: false,
+            isHexadecimal: false
         );
 
         $this->command->info($string);

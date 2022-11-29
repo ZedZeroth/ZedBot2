@@ -212,4 +212,52 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | ZedBot
+    |--------------------------------------------------------------------------
+    |
+    | ZedBot-specific configuration variables
+    |
+    */
+
+    # Testing
+    'ZED_TEST_ACCOUNT_IDENTIFIER' => (string) env('ZED_TEST_ACCOUNT_IDENTIFIER'),
+
+    # Connections
+    'ZED_CONNECT_SINGLE_TIMEOUT' => (int) env('ZED_CONNECT_SINGLE_TIMEOUT'),
+    'ZED_CONNECT_RETRY' => (int) env('ZED_CONNECT_RETRY'),
+    'ZED_CONNECT_ABSOLUTE_TIMEOUT' => (int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'),
+
+    # Payment NETWORKs
+    'ZED_NETWORK_LIST' => (array) explode(',', env('ZED_NETWORK_LIST')),
+
+    # APIs
+    'ZED_EXCHANGE_API_LIST' => (array) explode(',', env('ZED_EXCHANGE_API_LIST')),
+    'ZED_MARKET_API_LIST' => (array) explode(',', env('ZED_MARKET_API_LIST')),
+    'ZED_PAYMENT_API_LIST' => (array) explode(',', env('ZED_PAYMENT_API_LIST')),
+    'ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING' => (array) explode(',', env('ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING')),
+
+    # MMP
+    'ZED_MMP0_DOMAIN' => (string) env('ZED_MMP0_DOMAIN'),
+    'ZED_MMP0_PATH' => (string) env('ZED_MMP0_PATH'),
+    'ZED_MMP0_ADDRESS_ENDPOINT' => (string) env('ZED_MMP0_ADDRESS_ENDPOINT'),
+    'ZED_MMP0_ADDRESS_TRANSACTIONS_ENDPOINT_SUFFIX' => (string) env('ZED_MMP0_ADDRESS_TRANSACTIONS_ENDPOINT_SUFFIX'),
+
+    # LCS
+    'ZED_LCS0_USERNAME' => (string) env('ZED_LCS0_USERNAME'),
+    'ZED_LCS0_DOMAIN' => (string) env('ZED_LCS0_DOMAIN'),
+    'ZED_LCS0_PATH' => (string) env('ZED_LCS0_PATH'),
+    'ZED_LCS0_WALLETS_ENDPOINT' => (string) env('ZED_LCS0_WALLETS_ENDPOINT'),
+
+    # ENM
+    'ZED_ENM0_ACCOUNT_NAME' => (string) env('ZED_ENM0_ACCOUNT_NAME'),
+    'ZED_ENM0_ACCOUNT_ERN' => (string) env('ZED_ENM0_ACCOUNT_ERN'),
+    'ZED_ENM0_ACCOUNT_CODE' => (string) env('ZED_ENM0_ACCOUNT_CODE'),
+    'ZED_ENM0_DOMAIN' => (string) env('ZED_ENM0_DOMAIN'),
+    'ZED_ENM0_PATH' => (string) env('ZED_ENM0_PATH'),
+    'ZED_ENM0_TRANSACTIONS_ENDPOINT' => (string) env('ZED_ENM0_TRANSACTIONS_ENDPOINT'),
+    'ZED_ENM0_TRANSACTIONS_BATCH_ENDPOINT' => (string) env('ZED_ENM0_TRANSACTIONS_BATCH_ENDPOINT'),
+    'ZED_ENM0_BENEFICIARIES_ENDPOINT' => (string) env('ZED_ENM0_BENEFICIARIES_ENDPOINT'),
+
 ];

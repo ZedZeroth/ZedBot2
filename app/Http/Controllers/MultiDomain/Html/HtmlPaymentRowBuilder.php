@@ -33,7 +33,7 @@ class HtmlPaymentRowBuilder implements
                 $beneficiaryName = $payment->beneficiary->label;
             }
 
-            $html .= '<tr>';
+            $html .= '<tr style="white-space: nowrap;">';
 
             $html = $html
                 . '<td><a href="/'
@@ -51,7 +51,7 @@ class HtmlPaymentRowBuilder implements
                 . '<td style="text-align: right;"><a href="/account/'
                 . $payment->originator->identifier
                 . '">'
-                . $originatorName
+                . (new HtmlStringShortener())->shorten($originatorName, 23)
                 . '</a></td>'
 
                 . '<td style="text-align: center;">━┫<a href="/payment/'
@@ -65,7 +65,7 @@ class HtmlPaymentRowBuilder implements
                 . '<td><a href="/account/'
                 . $payment->beneficiary->identifier
                 . '">'
-                . $beneficiaryName
+                . (new HtmlStringShortener())->shorten($beneficiaryName, 23)
                 . '</a></td>';
 
             $html .= '</tr>';

@@ -93,7 +93,7 @@ class AccountViewer implements
         $network = preg_replace("/[^A-Za-z0-9]/", '', $network);
 
         // Verify network
-        if (!in_array($network, explode(',', env('ZED_NETWORK_LIST')))) {
+        if (!in_array($network, config('app.ZED_NETWORK_LIST'))) {
             $html = 'No such network exists.';
         } else {
             $accounts = Account::where('network', $network)->get();

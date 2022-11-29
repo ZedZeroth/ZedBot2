@@ -44,7 +44,7 @@ class AccountSynchronizerRequestAdapterForLCS0 implements
 
         return (new $getOrPostAdapter())
             ->get(
-                endpoint: env('ZED_LCS0_WALLETS_ENDPOINT')
+                endpoint: config('app.ZED_LCS0_WALLETS_ENDPOINT')
             );
     }
 }

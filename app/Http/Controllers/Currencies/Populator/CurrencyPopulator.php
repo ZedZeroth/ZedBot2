@@ -214,7 +214,8 @@ class CurrencyPopulator
                 canHaveLowercase: false,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate symbol
@@ -230,7 +231,8 @@ class CurrencyPopulator
                 canHaveLowercase: false,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: false
+                isAlphanumeric: false,
+                isHexadecimal: false
             );
 
             // Validate names
@@ -254,7 +256,8 @@ class CurrencyPopulator
                     canHaveLowercase: true,
                     isAlphabetical: false,
                     isNumeric: false,
-                    isAlphanumeric: true
+                    isAlphanumeric: true,
+                    isHexadecimal: false
                 );
             }
 

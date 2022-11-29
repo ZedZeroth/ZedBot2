@@ -75,7 +75,8 @@ class AccountSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: false,
                 isAlphabetical: false,
                 isNumeric: true,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate $result['accountNumber']
@@ -91,7 +92,8 @@ class AccountSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: false,
                 isAlphabetical: false,
                 isNumeric: true,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate $result['accountName']
@@ -107,7 +109,8 @@ class AccountSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: true,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Determine the currency

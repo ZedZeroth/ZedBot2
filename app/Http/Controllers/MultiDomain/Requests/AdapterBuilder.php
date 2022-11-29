@@ -34,7 +34,8 @@ class AdapterBuilder
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $action
@@ -50,7 +51,8 @@ class AdapterBuilder
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Validate $api
@@ -87,7 +89,7 @@ class AdapterBuilder
         if (
             in_array(
                 strtoupper($api),
-                explode(',', env('ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING'))
+                config('app.ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING')
             )
         ) {
             $getOrPostAdapterClass = $generalPath

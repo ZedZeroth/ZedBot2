@@ -31,29 +31,21 @@ class GetAdapterForMMP0 implements
             canHaveLowercase: true,
             isAlphabetical: false,
             isNumeric: false,
-            isAlphanumeric: true
+            isAlphanumeric: true,
+            isHexadecimal: false
         );
 
         // Build the URL
-        $url = env('ZED_MMP0_DOMAIN')
-            . env('ZED_MMP0_PATH')
+        $url = config('app.ZED_MMP0_DOMAIN')
+            . config('app.ZED_MMP0_PATH')
             . $endpoint;
-/*
-        // Build the headers
-        $headers = [
-            'Authorization' => 'Token '
-                . \Illuminate\Support\Facades\DB::table('keys')
-                    ->where('service', 'LCS0')
-                    ->first()->key,
-            'Content-Type' => 'application/json'
-        ];
-*/
+
         // Execute the request
         $response = \Illuminate\Support\Facades\Http::connectTimeout(
-            (int) env('ZED_CONNECT_SINGLE_TIMEOUT')
+            (int) config('app.ZED_CONNECT_SINGLE_TIMEOUT')
         )
-            ->retry((int) env('ZED_CONNECT_RETRY'), 1000)
-            ->timeout((int) env('ZED_CONNECT_ABSOLUTE_TIMEOUT'))
+            ->retry((int) config('app.ZED_CONNECT_RETRY'), 1000)
+            ->timeout((int) config('app.ZED_CONNECT_ABSOLUTE_TIMEOUT'))
             ->get($url);
 
         // Decode the response

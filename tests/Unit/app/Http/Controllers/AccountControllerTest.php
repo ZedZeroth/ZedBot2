@@ -65,7 +65,7 @@ test('Expect a general Error, when AccountController\'s "showAll" method has nam
  */
 test('Expect AccountController\'s "showByIdentifier" method, with identifier=env(\'ZED_TEST_ACCOUNT_IDENTIFIER\'), to return a View')
     ->expect(fn() => (new AccountController())->showByIdentifier(
-        identifier: env('ZED_TEST_ACCOUNT_IDENTIFIER')
+        identifier: config('app.ZED_TEST_ACCOUNT_IDENTIFIER')
     ))
     ->toBeInstanceOf(View::class);
 

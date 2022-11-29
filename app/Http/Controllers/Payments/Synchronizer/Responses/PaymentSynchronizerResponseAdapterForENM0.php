@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Payments\Synchronizer\Responses;
 
 use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
-use App\Http\Controllers\Accounts\AccountDTO;
 use App\Models\Account;
+use App\Http\Controllers\Accounts\AccountDTO;
 
 class PaymentSynchronizerResponseAdapterForENM0 implements
     \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
@@ -81,7 +81,8 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: false,
                 isAlphabetical: true,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate $result['counterparty']
@@ -97,7 +98,8 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: true,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate $result['accno']
@@ -113,7 +115,8 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: false,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate $result['transactionAmount']
@@ -137,7 +140,8 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 canHaveLowercase: true,
                 isAlphabetical: false,
                 isNumeric: false,
-                isAlphanumeric: true
+                isAlphanumeric: true,
+                isHexadecimal: false
             );
 
             // Validate $result['transactionTimeLocal']
@@ -159,8 +163,8 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
             $counterparty = explode(', ', $result['counterparty']);
             $beneficiary = explode(', ', $result['beneficiary']);
             if ($result['transactionAmount'] < 0) {
-                $originatorNetworkAccountName = env('ZED_ENM0_ACCOUNT_NAME');
-                $originatorLabel = env('ZED_ENM0_ACCOUNT_NAME');
+                $originatorNetworkAccountName = config('app.ZED_ENM0_ACCOUNT_NAME');
+                $originatorLabel = config('app.ZED_ENM0_ACCOUNT_NAME');
                 $originatorAccountIdentifier = $this->convertIbanToAccountIdentifier($result['accno']);
 
                 $beneficiaryNetworkAccountName = '';
@@ -176,8 +180,8 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
             }
 
-            // Create the originator DTO
             $accountDTOs = [];
+            // Create the originator DTO
             array_push(
                 $accountDTOs,
                 new AccountDTO(

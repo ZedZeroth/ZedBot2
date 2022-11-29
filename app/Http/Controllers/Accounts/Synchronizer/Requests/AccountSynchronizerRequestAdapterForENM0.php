@@ -37,7 +37,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
         );
 
         $this->requestParameters = [
-            'accountERN' => env('ZED_ENM0_ACCOUNT_ERN'),
+            'accountERN' => config('app.ZED_ENM0_ACCOUNT_ERN'),
             'take' => $numberToFetch
         ];
         return $this;
@@ -63,7 +63,7 @@ class AccountSynchronizerRequestAdapterForENM0 implements
 
         return ($getOrPostAdapter)
             ->post(
-                endpoint: env('ZED_ENM0_BENEFICIARIES_ENDPOINT'),
+                endpoint: config('app.ZED_ENM0_BENEFICIARIES_ENDPOINT'),
                 requestParameters: $this->requestParameters
             );
     }

@@ -151,7 +151,7 @@ Eloquent models can be grouped into the following five categories.
 
 ## Model identifiers
 
-All models have a unique incrementing integer "id" property used in the Eloquent database as their primary key, and as a foreign key for defining their relationships. In addition to this "id" property, each model has other unique identifier properties used for identification either on ZedBot's internal system, on **NETWORK**s/**EXHANGE**s, or in communication with **Customers**. Such identifiers force the consideration of uniqueness in the real-world in order to avoid potential collisions (more than one real-world entity being represented by the same Eloquent model).
+All models have a unique incrementing integer "id" property used in the Eloquent database as their primary key, and as a foreign key for defining their relationships. In addition to this "id" property, each model has other unique identifier properties used for identification either on ZedBot's internal system, on **NETWORK**s/**EXHANGE**s, or in communication with **Customers**. Such identifiers allow a single real-world entity to be mapped to a single model despite originating from different API calls, while ensuring that collisions do not occur (more than one real-world entity being mapped to the same model).
 
 ### Customer Identifier
 

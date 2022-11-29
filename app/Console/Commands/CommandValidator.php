@@ -32,7 +32,8 @@ class CommandValidator
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: false
+            isAlphanumeric: false,
+            isHexadecimal: false
         );
 
         // Validate command source
@@ -87,7 +88,8 @@ class CommandValidator
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
-            isAlphanumeric: false
+            isAlphanumeric: false,
+            isHexadecimal: false
         );
 
         return match ($source) {
