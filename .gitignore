@@ -3,7 +3,7 @@
 /public/hot
 /public/storage
 /storage/*.key
-/storage/*.csv
+/storage/csv/*.csv
 /vendor
 .env
 .env.backup
