@@ -47,7 +47,7 @@ class ExceptionInformer
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $e->getFile(),
             stringName: $e->getFile(),
-            charactersToRemove: ['/', '.', '-'],
+            charactersToRemove: ['/', '.', '-', '(', ')', ' ', ':', '\''],
             shortestLength: 1,
             longestLength: pow(10, 3),
             mustHaveUppercase: false,

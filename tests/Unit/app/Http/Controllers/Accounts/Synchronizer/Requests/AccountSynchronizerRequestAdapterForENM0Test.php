@@ -43,7 +43,7 @@ test('GIVEN numberToFetch: 1
      */
     expect(
         $property->getValue($builtRequestAdapter)
-    )->toMatchArray([
+    )->toBe([
         'accountERN' => config('app.ZED_ENM0_ACCOUNT_ERN'),
         'take' => 1
     ]);
@@ -99,7 +99,7 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
      */
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
-    )->toMatchArray(['results' =>
+    )->toBe(['results' =>
         [
             'accountNumber' => '00000000',
             'etc' => 'etc'
@@ -139,7 +139,7 @@ test('GIVEN a POST_ADAPTER with a mocked post() method
     // to check if the response array is passed back successfully.
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
-    )->toMatchArray(['results' =>
+    )->toBe(['results' =>
         [
             'accountNumber' => '00000000',
             'etc' => 'etc'
@@ -183,7 +183,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
      */
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
-    )->toMatchArray(['results' =>
+    )->toBe(['results' =>
         [
             'accountNumber' => '00000000',
             'etc' => 'etc'
