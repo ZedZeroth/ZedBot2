@@ -64,13 +64,13 @@ class StringValidator
         // Run validation
         if (strlen($string) < $shortestLength) {
             throw new StringValidationException(
-                message: $prefix . '"' . $string . '(' . strlen($string) . ')'
-                . '" is shorter than ' . $shortestLength . ' characters'
+                message: $prefix . '"' . $string . '" (' . strlen($string) . ')'
+                . ' is shorter than ' . $shortestLength . ' characters'
             );
         } elseif (strlen($string) > $longestLength) {
             throw new StringValidationException(
-                message: $prefix . '"' . $string . '(' . strlen($string) . ')'
-                . '" is longer than ' . $longestLength . ' characters'
+                message: $prefix . '"' . $string . '" (' . strlen($string) . ')'
+                . ' is longer than ' . $longestLength . ' characters'
             );
         } elseif (
             $mustHaveUppercase and

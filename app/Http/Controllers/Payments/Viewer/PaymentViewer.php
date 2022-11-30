@@ -95,9 +95,9 @@ class PaymentViewer implements
         if (!in_array($network, config('app.ZED_NETWORK_LIST'))) {
             $html = 'No such network exists.';
         } else {
-            $payments = Account::where('network', $network)->get();
+            $payments = Payment::where('network', $network)->get();
             if ($payments->count()) {
-                $html = (new HtmlAccountRowBuilder())
+                $html = (new HtmlPaymentRowBuilder())
                     ->build($payments);
             } else {
                 $html = 'No payments exist on this network.';

@@ -23,7 +23,7 @@ class HtmlStringShortener
             string: $string,
             stringName: 'string',
             charactersToRemove: [],
-            shortestLength: 5,
+            shortestLength: 0,
             longestLength: pow(10, 3),
             mustHaveUppercase: false,
             canHaveUppercase: true,

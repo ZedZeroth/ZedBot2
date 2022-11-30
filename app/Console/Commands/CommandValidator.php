@@ -21,9 +21,9 @@ class CommandValidator
 
         // Validate command name
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-            string: str_replace(':', '', $commandName),
+            string: $commandName,
             stringName: 'commandName',
-            charactersToRemove: [],
+            charactersToRemove: [':'],
             shortestLength: 12,
             longestLength: 18,
             mustHaveUppercase: false,
@@ -77,19 +77,19 @@ class CommandValidator
     {
         // Validate source name
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-            string: $source,
-            stringName: 'source',
+            string:             $source,
+            stringName:         'source',
             charactersToRemove: [],
-            shortestLength: 3,
-            longestLength: 9,
-            mustHaveUppercase: false,
-            canHaveUppercase: false,
-            mustHaveLowercase: true,
-            canHaveLowercase: true,
-            isAlphabetical: true,
-            isNumeric: false,
-            isAlphanumeric: false,
-            isHexadecimal: false
+            shortestLength:     3,
+            longestLength:      9,
+            mustHaveUppercase:  false,
+            canHaveUppercase:   false,
+            mustHaveLowercase:  true,
+            canHaveLowercase:   true,
+            isAlphabetical:     true,
+            isNumeric:          false,
+            isAlphanumeric:     false,
+            isHexadecimal:      false
         );
 
         return match ($source) {

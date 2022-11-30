@@ -56,6 +56,9 @@ class AccountSynchronizer implements
             if ($accountDTO->label) {
                 Account::where('identifier', $accountDTO->identifier)
                 ->update(['label' => $accountDTO->label]);
+            } else {
+                Account::where('identifier', $accountDTO->identifier)
+                ->update(['label' => '[NO LABEL FOUND]']);
             }
         }
 

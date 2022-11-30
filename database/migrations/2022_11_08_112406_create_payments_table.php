@@ -20,6 +20,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             // Identifiable
             $table->id(); // Laravel
+            $table->string('state'); // Spatie's state system
             $table->string('network'); // e.g. FPS, ethereum, LBC...
             $table->string('identifier'); // For FPS this is currently ENM-specific
             $table->bigInteger('amount'); // Wei amounts make exceed 2^63...?

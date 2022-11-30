@@ -45,9 +45,9 @@ class ExceptionInformer
 
         // Validate $e->getFile()
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-            string: str_replace(['/', '.'], '', $e->getFile()),
+            string: $e->getFile(),
             stringName: $e->getFile(),
-            charactersToRemove: [],
+            charactersToRemove: ['/', '.', '-'],
             shortestLength: 1,
             longestLength: pow(10, 3),
             mustHaveUppercase: false,
@@ -65,7 +65,7 @@ class ExceptionInformer
             integer: (int) $e->getLine(),
             integerName: '$e->getLine()',
             lowestValue: 1,
-            highestValue: pow(10, 3)
+            highestValue: pow(10, 4)
         );
 
         // Explode exception path

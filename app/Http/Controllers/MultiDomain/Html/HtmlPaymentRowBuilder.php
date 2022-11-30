@@ -21,6 +21,7 @@ class HtmlPaymentRowBuilder implements
     ): string {
         $html = '<table>';
         foreach ($models->sortByDesc('timestamp') as $payment) {
+            // Determine originator/beneficiary details
             if ($payment->originator->networkAccountName) {
                 $originatorName = $payment->originator->networkAccountName;
             } else {
@@ -32,6 +33,13 @@ class HtmlPaymentRowBuilder implements
             } else {
                 $beneficiaryName = $payment->beneficiary->label;
             }
+
+            // Center/pad payment money
+            $money = $payment->currency->code
+                . ' ' . $payment->formatAmount();
+            //$money = str_pad($money, 10 - (int) round(strlen($money) / 2), ' ', STR_PAD_LEFT);
+            $money = str_pad($money, 20, ' ', STR_PAD_BOTH);
+            $money = str_replace(' ', '&nbsp;', $money);
 
             $html .= '<tr style="white-space: nowrap;">';
 
@@ -54,13 +62,15 @@ class HtmlPaymentRowBuilder implements
                 . (new HtmlStringShortener())->shorten($originatorName, 23)
                 . '</a></td>'
 
-                . '<td style="text-align: center;">━┫<a href="/payment/'
+                . '<td style="text-align: center; color: '
+                . $payment->state->getColor()
+                . '; font-family: monospace, monospace;">━┫<a href="/payment/'
                 . $payment->id
                 . '">'
-                . $payment->currency->code
-                . ' '
-                . $payment->formatAmount()
-                . '</a>┣━▶</td>'
+                . $money
+                . '</a>'
+                . $payment->state->getEmoji()
+                . '</td>'
 
                 . '<td><a href="/account/'
                 . $payment->beneficiary->identifier

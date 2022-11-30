@@ -12,6 +12,7 @@ class PaymentDTO
      * an adapter and the synchronizer.
      */
     public function __construct(
+        public string $state,
         public string $network,
         public string $identifier,
         public int $amount,

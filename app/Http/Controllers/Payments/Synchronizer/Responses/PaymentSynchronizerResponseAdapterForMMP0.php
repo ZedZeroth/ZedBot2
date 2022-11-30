@@ -207,6 +207,7 @@ class PaymentSynchronizerResponseAdapterForMMP0 implements
                         array_push(
                             $paymentDTOs,
                             new \App\Http\Controllers\Payments\PaymentDTO(
+                                state: (string) \App\Models\Payments\States\Unconfirmed::class,
                                 network: (string) 'Bitcoin',
                                 identifier: (string) 'bitcoin::btc'
                                 . '::' . $addressDetails['address']
@@ -267,6 +268,7 @@ class PaymentSynchronizerResponseAdapterForMMP0 implements
                         array_push(
                             $paymentDTOs,
                             new \App\Http\Controllers\Payments\PaymentDTO(
+                                state: (string) \App\Models\Payments\States\Unconfirmed::class,
                                 network: (string) 'Bitcoin',
                                 identifier: (string) 'bitcoin::btc'
                                 . '::' . $input['prevout']['scriptpubkey_address']

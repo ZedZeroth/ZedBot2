@@ -168,7 +168,12 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 $originatorAccountIdentifier = $this->convertIbanToAccountIdentifier($result['accno']);
 
                 $beneficiaryNetworkAccountName = '';
-                $beneficiaryLabel = $beneficiary[0];
+                // Enumis missing beneficiary account name
+                if ($beneficiary[0]) {
+                    $beneficiaryLabel = $beneficiary[0];
+                } else {
+                    $beneficiaryLabel = $counterparty[0];
+                }
                 $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
             } else {
                 $originatorNetworkAccountName = $counterparty[0];
@@ -223,9 +228,40 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
                 currency: $currency
             );
 
+            // Process the payment state
+            // Validate boolean string
+            if ($result['hold'] != '' and $result['hold'] != 'true') {
+                throw new \Exception('"hold" element is neither empty nor true');
+            }
+
+            // Assume held
+            $state = \App\Models\Payments\States\Held::class;
+            // If anything other than no (empty) hold element
+            if ($result['hold']) {
+                // Set amount to zero to prevent release of held funds
+                $amount = 0;
+            } else {
+                // Else mark as Confirmed
+                $state = \App\Models\Payments\States\Settled::class;
+            }
+
+            // Random states for testing
+            /*
+            $state = '\App\Models\Payments\States\\' . match (rand(0, 6)) {
+                0 => 'Unconfirmed',
+                1 => 'Held',
+                2 => 'Settled',
+                3 => 'OriginatorError',
+                4 => 'AmountError',
+                5 => 'Matched',
+                6 => 'Reciprocated'
+            };
+            */
+
             array_push(
                 $paymentDTOs,
                 new \App\Http\Controllers\Payments\PaymentDTO(
+                    state: (string) $state,
                     network: (string) 'FPS',
                     identifier: (string) 'enm::'
                         . $result['id'],

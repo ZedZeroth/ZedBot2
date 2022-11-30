@@ -4,11 +4,28 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Http\Controllers\MultiDomain\Money\MoneyFormatter;
-
-class Payment extends Model
+class Payment extends \Illuminate\Database\Eloquent\Model
 {
+    use \Spatie\ModelStates\HasStates;
+
+    /**
+     * The default attributes.
+     *
+     * @var array<int, string>
+     */
+    protected /* Do not define */ $attributes = [
+        //'state' => \App\Models\Payments\States\Unconfirmed::class
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'state' => \App\Models\Payments\States\PaymentState::class
+    ];
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -48,7 +65,8 @@ class Payment extends Model
      */
     public function formatAmount(): string
     {
-        return (new MoneyFormatter())->format(
+        return (new \App\Http\Controllers\MultiDomain\Money\MoneyFormatter())
+        ->format(
             amount: $this->amount,
             currency: $this->currency()->first()
         );

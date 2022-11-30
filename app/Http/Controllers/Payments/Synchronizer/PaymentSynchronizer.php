@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Payments\Synchronizer;
 
+use App\Models\Payment;
+
 class PaymentSynchronizer implements
     \App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface
 {
@@ -23,6 +25,7 @@ class PaymentSynchronizer implements
                     dto: $paymentDTO,
                     dtoName: 'paymentDTO',
                     requiredProperties: [
+                        'state',
                         'network',
                         'identifier',
                         'amount',
@@ -35,18 +38,26 @@ class PaymentSynchronizer implements
                 );
 
             // Create payments
-            \App\Models\Payment::firstOrCreate(
+            Payment::firstOrCreate(
                 ['identifier' => $paymentDTO->identifier],
                 [
-                    'network' => $paymentDTO->network,
-                    'amount' => $paymentDTO->amount,
-                    'currency_id' => $paymentDTO->currency_id,
-                    'originator_id' => $paymentDTO->originator_id,
-                    'beneficiary_id' => $paymentDTO->beneficiary_id,
-                    'memo' => $paymentDTO->memo,
-                    'timestamp' => $paymentDTO->timestamp,
+                    //'state'             => $paymentDTO->state, // Testing
+                    'network'           => $paymentDTO->network,
+                    'amount'            => $paymentDTO->amount,
+                    'currency_id'       => $paymentDTO->currency_id,
+                    'originator_id'     => $paymentDTO->originator_id,
+                    'beneficiary_id'    => $paymentDTO->beneficiary_id,
+                    'memo'              => $paymentDTO->memo,
+                    'timestamp'         => $paymentDTO->timestamp,
                 ]
             );
+
+            // Find the model
+            $payment = Payment::where('identifier', $paymentDTO->identifier)->first();
+            // Cast the most recent state to the model
+            $payment->state->transitionTo($paymentDTO->state);
+            // Save the model and its new state to the database
+            $payment->save();
         }
 
         return;

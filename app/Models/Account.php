@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Http\Controllers\MultiDomain\Money\MoneyFormatter;
-
-class Account extends Model
+class Account extends \Illuminate\Database\Eloquent\Model
 {
     /**
      * The default attributes.
@@ -58,7 +55,8 @@ class Account extends Model
      */
     public function formatBalance()
     {
-        return (new MoneyFormatter())->format(
+        return (new \App\Http\Controllers\MultiDomain\Money\MoneyFormatter())
+        ->format(
             amount: $this->balance,
             currency: $this->currency()->first()
         );

@@ -22,9 +22,9 @@ class PostAdapterForENM0 implements
     ): array {
         // Validate $endpoint
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
-            string: str_replace(['/'], '', $endpoint),
+            string: $endpoint,
             stringName: 'endpoint',
-            charactersToRemove: [],
+            charactersToRemove: ['/'],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),
             mustHaveUppercase: false,
