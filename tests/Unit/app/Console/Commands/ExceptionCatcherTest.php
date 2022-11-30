@@ -12,87 +12,92 @@ use App\Console\Commands\ExceptionCatcher;
  * Testing the catch() method
  */
 
-test('GIVEN a correctly mocked Command
+test('GIVEN a Command mocked to throw an Exception
     WHEN calling catch()
-    THEN it returns true
+    THEN it returns null
     ', function () {
+
+    $exceptionType = \Exception::class;
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
         ->shouldReceive('argument')->with('command')->andReturn('test:test')
         ->shouldReceive('argument')->with('source')->andReturn('cli')
         ->shouldReceive('argument')->with()->andReturn([])
+        ->shouldReceive('runThisCommand')->with()->andThrow(new $exceptionType('test'))
+        ->shouldReceive('warn')->with('')->andReturn()
+        ->shouldReceive('warn')->with('[💀] Exception')->andReturn()
+        ->shouldReceive('warn')->with('Message:   test')->andReturn()
+        ->shouldReceive('warn')->with('Exception: ' . $exceptionType)->andReturn()
+        ->shouldReceive('warn')->with('File:      ' . __FILE__)->andReturn()
+        ->shouldReceive('warn')->with('Line:      27')->andReturn() // Line exception thrown above
+        ->shouldReceive('warn')->with('---------------------------------')->andReturn()
+        ->shouldReceive('info')->andReturn()
         ->getMock();
 
-    // Inject the mock into a new ExceptionCatcher's validate() method
     expect(
         (new ExceptionCatcher())->catch(
             $commandMock
         )
-    )->toThrow(\Exception::class);
+    )->toBeNull();
 });
 
-/*
-test('GIVEN an invalid source
-    WHEN calling validate()
-    THEN a CommandValidationException is thrown
+test('GIVEN a Command mocked to throw a StringValidationException
+    WHEN calling catch()
+    THEN it returns null
     ', function () {
+
+    $exceptionType = \App\Http\Controllers\MultiDomain\Validators\StringValidationException::class;
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('test')
+        ->shouldReceive('argument')->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->with('source')->andReturn('cli')
+        ->shouldReceive('argument')->with()->andReturn([])
+        ->shouldReceive('runThisCommand')->with()->andThrow(new $exceptionType('test'))
+        ->shouldReceive('warn')->with('')->andReturn()
+        ->shouldReceive('warn')->with('[💀] StringValidationException')->andReturn()
+        ->shouldReceive('warn')->with('Message:   test')->andReturn()
+        ->shouldReceive('warn')->with('Exception: ' . $exceptionType)->andReturn()
+        ->shouldReceive('warn')->with('File:      ' . __FILE__)->andReturn()
+        ->shouldReceive('warn')->with('Line:      57')->andReturn() // Line exception thrown above
+        ->shouldReceive('warn')->with('---------------------------------')->andReturn()
+        ->shouldReceive('info')->andReturn()
         ->getMock();
 
-    // Inject the mock into a new CommandInformer's run() method
     expect(
-        (new CommandValidator())->validate(
-            $commandMock,
-            'test:test'
+        (new ExceptionCatcher())->catch(
+            $commandMock
         )
-    )->toBeTrue();
-})
-->expectException(\App\Console\Commands\CommandValidationException::class);
+    )->toBeNull();
+});
 
-test('GIVEN an invalid API
-    WHEN calling validate()
-    THEN a CommandValidationException is thrown
+test('GIVEN a Command mocked to throw an unknown exception
+    WHEN calling catch()
+    THEN it returns null
     ', function () {
+
+    $exceptionType = \App\Http\Controllers\MultiDomain\Validators\TestException::class;
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('scheduler')
-        ->shouldReceive('argument')->with()->andReturn(['API' => 'XXX0'])
-        ->shouldReceive('argument')->with('API')->andReturn('XXX0')
+        ->shouldReceive('argument')->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->with('source')->andReturn('cli')
+        ->shouldReceive('argument')->with()->andReturn([])
+        ->shouldReceive('runThisCommand')->with()->andThrow(new $exceptionType('test'))
+        ->shouldReceive('warn')->with('')->andReturn()
+        ->shouldReceive('warn')->with('[💀] TestException')->andReturn()
+        ->shouldReceive('warn')->with('Message:   test')->andReturn()
+        ->shouldReceive('warn')->with('Exception: ' . $exceptionType)->andReturn()
+        ->shouldReceive('warn')->with('File:      ' . __FILE__)->andReturn()
+        ->shouldReceive('warn')->with('Line:      87')->andReturn() // Line exception thrown above
+        ->shouldReceive('warn')->with('---------------------------------')->andReturn()
+        ->shouldReceive('info')->andReturn()
         ->getMock();
 
-    // Inject the mock into a new CommandInformer's run() method
     expect(
-        (new CommandValidator())->validate(
-            $commandMock,
-            'test:test'
+        (new ExceptionCatcher())->catch(
+            $commandMock
         )
-    )->toBeTrue();
-})->expectException(\App\Http\Controllers\MultiDomain\Validators\ApiValidationException::class);
-
-
-test('GIVEN an invalid "Number to fetch"
-    WHEN calling validate()
-    THEN a CommandValidationException is thrown
-    ', function () {
-
-    // Mock a Command
-    $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('scheduler')
-        ->shouldReceive('argument')->with()->andReturn(['Number to fetch' => -1])
-        ->shouldReceive('argument')->with('Number to fetch')->andReturn(-1)
-        ->getMock();
-
-    // Inject the mock into a new CommandInformer's run() method
-    expect(
-        (new CommandValidator())->validate(
-            $commandMock,
-            'test:test'
-        )
-    )->toBeTrue();
-})->expectException(\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException::class);
-*/
+    )->toBeNull();
+});
