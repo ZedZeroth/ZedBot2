@@ -24,7 +24,7 @@ class CommandValidator
             string: $commandName,
             stringName: 'commandName',
             charactersToRemove: [':'],
-            shortestLength: 12,
+            shortestLength: 8,
             longestLength: 18,
             mustHaveUppercase: false,
             canHaveUppercase: false,

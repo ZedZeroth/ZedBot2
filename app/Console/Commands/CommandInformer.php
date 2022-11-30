@@ -145,5 +145,7 @@ class CommandInformer
 
         $this->command->info($string);
         \Illuminate\Support\Facades\Log::info($string);
+
+        return;
     }
 }

@@ -1,17 +1,88 @@
 <?php
 
 /**
- * Unit tests for the AccountSynchronizerRequestAdapterForENM0 class and its methods.
+ * Unit tests for the CommandInformerTest class and its methods.
  */
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Accounts\Synchronizer\Requests\AccountSynchronizerRequestAdapterForENM0;
+use App\Console\Commands\CommandInformer;
 
 /**
- * Testing the buildRequestParameters() method
+ * Testing the run() method
  */
 
+test('GIVEN a correctly mocked Command
+    WHEN calling run()
+    THEN it returns null
+    ', function () {
+
+    // Mock a Command to return a fake request response array
+    $commandMock = mock(Illuminate\Console\Command::class)
+        ->shouldReceive('argument')->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->with('source')->andReturn('cli')
+        ->shouldReceive('info')->with('[📟] test:test')->andReturn()
+        ->shouldReceive('info')->with('---------------------------------')->andReturn()
+        ->shouldReceive('argument')->with()->andReturn([])
+        ->shouldReceive('info')->with('... Running "test:test"')->andReturn()
+        ->shouldReceive('runThisCommand')->with()->andReturn()
+        ->shouldReceive('info')->with('... 0ms DONE')->andReturn()
+        ->shouldReceive('info')->with('No new models created.')->andReturn()
+        ->shouldReceive('info')->with('')->andReturn()
+        ->getMock();
+
+    // Inject the mock into a new CommandInformer and call run()
+    expect(
+        (new CommandInformer())->run($commandMock)
+    )->toBeNull();
+});
+
+test('GIVEN a mocked Command with "command" argument "t:t"
+    WHEN calling run()
+    THEN a StringValidationException is thrown
+    ', function () {
+
+    // Mock a Command to return a fake request response array
+    $commandMock = mock(Illuminate\Console\Command::class)
+        ->shouldReceive('argument')->with('command')->andReturn('t:t')
+        ->getMock();
+
+    // Inject the mock into a new CommandInformer and call run()
+    expect(
+        (new CommandInformer())->run($commandMock)
+    )->toBeNull();
+})
+->expectException(\App\Http\Controllers\MultiDomain\Validators\StringValidationException::class);
+
+test('GIVEN a mocked Command with "source" argument "test"
+    WHEN calling run()
+    THEN a CommandValidationException is thrown
+    ', function () {
+
+    // Mock a Command to return a fake request response array
+    $commandMock = mock(Illuminate\Console\Command::class)
+        ->shouldReceive('argument')->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->with('source')->andReturn('test')
+        ->getMock();
+
+    // Inject the mock into a new CommandInformer and call run()
+    expect(
+        (new CommandInformer())->run($commandMock)
+    )->toBeNull();
+})
+->expectException(\App\Console\Commands\CommandValidationException::class);
+
+
+
+
+
+
+
+
+
+
+
+/*
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
     THEN an AccountSynchronizerRequestAdapterForENM0 is returned
@@ -37,10 +108,8 @@ test('GIVEN numberToFetch: 1
     $property = (new \ReflectionClass($builtRequestAdapter))->getProperty('requestParameters');
     $property->setAccessible(true);
 
-    /**
-     * Check that postParameters holds the correct account number
-     * and that numberToFetch has been adapted to 'take'.
-     */
+    // Check that postParameters holds the correct account number
+    // and that numberToFetch has been adapted to 'take'.
     expect(
         $property->getValue($builtRequestAdapter)
     )->toMatchArray([
@@ -61,10 +130,6 @@ test('GIVEN numberToFetch: 0
     );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException::class);
-
-/**
- * Testing the fetchResponse() method
- */
 
 test('GIVEN a PostAdapterForENM0 with a mocked post() method
     WHEN calling fetchResponse()
@@ -93,10 +158,8 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
         ])
         ->getMock();
 
-    /**
-     * Inject the mocked PostAdapter into the RequestAdapter
-     * to check that the response array is passed back successfully.
-     */
+    // Inject the mocked PostAdapter into the RequestAdapter
+    // to check that the response array is passed back successfully.
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
     )->toMatchArray(['results' =>
@@ -107,7 +170,6 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
     ]);
 });
 
-/* Reinstate when another PostAdapter exists
 test('GIVEN a POST_ADAPTER with a mocked post() method
     WHEN calling fetchResponse()
     THEN \'...is not an adapter for...\' is thrown
@@ -148,7 +210,7 @@ test('GIVEN a POST_ADAPTER with a mocked post() method
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException::class)
 ->expectExceptionMessage('is not an adapter for');
-*/
+
 
 test('GIVEN a GetAdapterForLCS with a mocked post() method
     WHEN calling fetchResponse()
@@ -177,10 +239,8 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
         ])
         ->getMock();
 
-    /**
-     * Inject the mocked PostAdapter into the RequestAdapter
-     * to check if the response array is passed back successfully.
-     */
+    // Inject the mocked PostAdapter into the RequestAdapter
+    // to check if the response array is passed back successfully.
     expect(
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
     )->toMatchArray(['results' =>
@@ -192,3 +252,5 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException::class)
 ->expectExceptionMessage('does not contain these methods');
+
+*/
