@@ -91,14 +91,39 @@ THEN the correct View is returned
  * Testing import() method
  */
 
-// NOTE: Overload test is run in a separate file
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
+ */
+/*
+// POSITIVE TEST
+test('GIVEN an overriden CustomerImporter
+WHEN calling import()
+THEN return true
+', function () {
 
+    // Overload the CustomerImporter to return true on import()
+    $customerImporterMock = mock(
+        'overload:'
+        . \App\Http\Controllers\Customers\Import\CustomerImporter::class
+    )   ->shouldReceive('import')
+        ->with()
+        ->andReturn(true)
+        ->getMock();
+
+    // Expect the CustomerController to call the CustomerImporter's
+    // import() method and return its output.
+    expect(
+        (new CustomerController())->import()
+    )->toBeTrue();
+});
+*/
 // NEGATIVE TEST
 test('GIVEN no overriden CustomerImporter 
 WHEN calling import()
-THEN throw an Exception
+THEN throw an Error
 ', function () {
     expect(
         (new CustomerController())->import()
     )->toBeTrue();
-});//->expectException(\Exception::class);
+})->expectException(\Error::class);

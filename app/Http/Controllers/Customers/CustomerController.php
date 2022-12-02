@@ -45,7 +45,7 @@ class CustomerController extends \App\Http\Controllers\Controller
     {
         // ↖️ Creat customers from the CustomerDTOs
         return (new \App\Http\Controllers\Customers\Import\CustomerImporter())
-            ->import([]/*
+            ->import(/*
                 modelDTOs:
                 // ↖️ Array of AccountDTOs
                 (new \App\Http\Controllers\MultiDomain\Requests\Requester())
@@ -59,7 +59,7 @@ class CustomerController extends \App\Http\Controllers\Controller
                                     api: $syncCommandDTO->api
                                 ),
                         numberToFetch: $syncCommandDTO->numberToFetch
-                    )
-            */);
+                    )*/
+            );
     }
 }
