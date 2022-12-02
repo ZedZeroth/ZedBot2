@@ -6,9 +6,8 @@ namespace App\Http\Controllers\Currencies;
 
 use Illuminate\View\View;
 use App\Http\Controllers\Currencies\View\CurrencyViewer;
-use App\Http\Controllers\Currencies\Populate\CurrencyPopulator;
 
-class CurrencyController extends App\Http\Controllers\Controller
+class CurrencyController extends \App\Http\Controllers\Controller
 {
     /**
      * Show all currencies.
@@ -42,7 +41,7 @@ class CurrencyController extends App\Http\Controllers\Controller
      */
     public function populate(): void
     {
-        (new CurrencyPopulator())->populate();
+        (new \App\Http\Controllers\Currencies\Populate\CurrencyPopulator())->populate();
         return;
     }
 }

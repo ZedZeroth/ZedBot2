@@ -35,14 +35,16 @@ class AccountSynchronizer implements
                     ]
                 );
 
+            // Accounts must be manually assigned to their holder?
+
             // Create accounts
             Account::firstOrCreate(
                 ['identifier' => $accountDTO->identifier],
                 [
-                    'network' => $accountDTO->network,
-                    'customer_id' => $accountDTO->customer_id,
-                    'currency_id' => $accountDTO->currency_id,
-                    'balance' => $accountDTO->balance,
+                    'network'       => $accountDTO->network,
+                    'customer_id'   => 1,
+                    'currency_id'   => $accountDTO->currency_id,
+                    'balance'       => $accountDTO->balance,
                 ]
             );
 

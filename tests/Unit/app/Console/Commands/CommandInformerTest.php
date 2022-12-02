@@ -12,6 +12,7 @@ use App\Console\Commands\CommandInformer;
  * Testing the run() method
  */
 
+// POSITIVE TEST
 test('GIVEN a correctly mocked Command
     WHEN calling run()
     THEN it returns null
@@ -37,9 +38,10 @@ test('GIVEN a correctly mocked Command
     )->toBeNull();
 });
 
+// NEGATIVE TEST
 test('GIVEN a mocked Command with "command" argument "t:t"
     WHEN calling run()
-    THEN a StringValidationException is thrown
+    THEN throw a StringValidationException
     ', function () {
 
     // Mock a Command
@@ -54,9 +56,10 @@ test('GIVEN a mocked Command with "command" argument "t:t"
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\StringValidationException::class);
 
+// NEGATIVE TEST
 test('GIVEN a mocked Command with "source" argument "test"
     WHEN calling run()
-    THEN a CommandValidationException is thrown
+    THEN throw a CommandValidationException
     ', function () {
 
     // Mock a Command
@@ -76,6 +79,7 @@ test('GIVEN a mocked Command with "source" argument "test"
  * Testing the output() method
  */
 
+// POSITIVE TEST
 test('GIVEN a correctly mocked Command
     WHEN calling ouput("[📟] test:test")
     THEN it returns null
@@ -104,9 +108,10 @@ test('GIVEN a correctly mocked Command
     )->toBeNull();
 });
 
+// NEGATIVE TEST
 test('GIVEN a string of length 1000
     WHEN calling ouput()
-    THEN a StringValidationException is thrown
+    THEN throw a StringValidationException
     ', function () {
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)

@@ -12,6 +12,7 @@ use App\Http\Controllers\Accounts\Synchronize\Request\AccountSynchronizeRequestA
  * Testing the buildRequestParameters() method
  */
 
+// POSITIVE TEST
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
     THEN an AccountSynchronizeRequestAdapterForENM0 is returned
@@ -24,6 +25,7 @@ test('GIVEN numberToFetch: 1
     );
 });
 
+// POSITIVE TEST
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
     THEN the returned AccountSynchronizeRequestAdapterForENM0 holds the correct requestParameters
@@ -49,9 +51,10 @@ test('GIVEN numberToFetch: 1
     ]);
 });
 
+// NEGATIVE TEST
 test('GIVEN numberToFetch: 0
     WHEN calling buildRequestParameters()
-    THEN an IntegerValidationException is thrown
+    THEN throw an IntegerValidationException
     ', function () {
     expect(
         (new AccountSynchronizeRequestAdapterForENM0())
@@ -66,6 +69,7 @@ test('GIVEN numberToFetch: 0
  * Testing the fetchResponse() method
  */
 
+// POSITIVE TEST
 test('GIVEN a PostAdapterForENM0 with a mocked post() method
     WHEN calling fetchResponse()
     THEN the received response array is passed up and returned
@@ -110,7 +114,7 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
 /* Reinstate when another PostAdapter exists
 test('GIVEN a POST_ADAPTER with a mocked post() method
     WHEN calling fetchResponse()
-    THEN \'...is not an adapter for...\' is thrown
+    THEN throw \'...is not an adapter for...\'
     ', function () {
 
     // Build the RequestAdapter's postParameters property
@@ -150,9 +154,10 @@ test('GIVEN a POST_ADAPTER with a mocked post() method
 ->expectExceptionMessage('is not an adapter for');
 */
 
+// NEGATIVE TEST
 test('GIVEN a GetAdapterForLCS with a mocked post() method
     WHEN calling fetchResponse()
-    THEN \'...adapter does not contain these methods...\' is thrown
+    THEN throw \'...adapter does not contain these methods...\'
     ', function () {
 
     // Build the RequestAdapter's postParameters property

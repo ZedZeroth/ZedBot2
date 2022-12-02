@@ -221,9 +221,6 @@ return [
     |
     */
 
-    # Testing
-    'ZED_TEST_ACCOUNT_IDENTIFIER' => (string) env('ZED_TEST_ACCOUNT_IDENTIFIER'),
-
     # Connections
     'ZED_CONNECT_SINGLE_TIMEOUT' => (int) env('ZED_CONNECT_SINGLE_TIMEOUT'),
     'ZED_CONNECT_RETRY' => (int) env('ZED_CONNECT_RETRY'),

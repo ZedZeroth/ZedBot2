@@ -12,6 +12,7 @@ use App\Console\Commands\CommandValidator;
  * Testing the validate() method
  */
 
+// POSITIVE TEST
 test('GIVEN a correctly mocked Command and $commandName
     WHEN calling validate()
     THEN it returns true
@@ -34,9 +35,10 @@ test('GIVEN a correctly mocked Command and $commandName
     )->toBeTrue();
 });
 
+// NEGATIVE TEST
 test('GIVEN an invalid source
     WHEN calling validate()
-    THEN a CommandValidationException is thrown
+    THEN throw a CommandValidationException
     ', function () {
 
     // Mock a Command
@@ -54,9 +56,10 @@ test('GIVEN an invalid source
 })
 ->expectException(\App\Console\Commands\CommandValidationException::class);
 
+// NEGATIVE TEST
 test('GIVEN an invalid API
     WHEN calling validate()
-    THEN a CommandValidationException is thrown
+    THEN throw a CommandValidationException
     ', function () {
 
     // Mock a Command
@@ -75,10 +78,10 @@ test('GIVEN an invalid API
     )->toBeTrue();
 })->expectException(\App\Http\Controllers\MultiDomain\Validators\ApiValidationException::class);
 
-
+// NEGATIVE TEST
 test('GIVEN an invalid "Number to fetch"
     WHEN calling validate()
-    THEN a CommandValidationException is thrown
+    THEN throw a CommandValidationException
     ', function () {
 
     // Mock a Command
@@ -101,6 +104,7 @@ test('GIVEN an invalid "Number to fetch"
  * Testing the getEmojiFromCommandSource() method
  */
 
+// POSITIVE TEST
 test('GIVEN the source "auto"
     WHEN calling getEmojiFromCommandSource()
     THEN it returns 🤖
@@ -113,6 +117,7 @@ test('GIVEN the source "auto"
     )->toBe('🤖');
 });
 
+// POSITIVE TEST
 test('GIVEN the source "test"
     WHEN calling getEmojiFromCommandSource()
     THEN it returns 🤖
@@ -125,9 +130,10 @@ test('GIVEN the source "test"
     )->toBeNull();
 });
 
+// NEGATIVE TEST
 test('GIVEN the source ""
     WHEN calling getEmojiFromCommandSource()
-    THEN it returns 🤖
+    THEN throw a StringValidationException
     ', function () {
 
     expect(

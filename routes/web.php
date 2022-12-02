@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Accounts\AccountController;
 use App\Http\Controllers\Charts\ChartController;
 use App\Http\Controllers\Currencies\CurrencyController;
+use App\Http\Controllers\Customers\CustomerController;
 use App\Http\Controllers\Payments\PaymentController;
 
 /*
@@ -38,6 +39,10 @@ Route::get('/accounts', [AccountController::class, 'showAll']);
 Route::get('/account/networks', [AccountController::class, 'showNetworks']);
 Route::get('/account/{identfier}', [AccountController::class, 'showByIdentifier']);
 Route::get('/{network}/accounts', [AccountController::class, 'showOnNetwork']);
+
+/* Customers */
+Route::get('/customers', [CustomerController::class, 'showAll']);
+Route::get('/customer/{identfier}', [CustomerController::class, 'showByIdentifier']);
 
 /* Charts */
 Route::get('/chart', [ChartController::class, 'view']);

@@ -22,6 +22,23 @@
                     <table>
                         <tr>
                             <td>
+                                &bull; <a href="accounts">Accounts</a>
+                            </td>
+                            <td>
+                                <livewire:account-synchronizer-component />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                &bull; <a href="customers">Customers</a>
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                        <tr>
+                            <td>
                                 &bull; <a href="currencies">Currencies</a>
                             </td>
                             <td>
@@ -34,14 +51,6 @@
                             </td>
                             <td>
                                 <livewire:payment-synchronizer-component />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                &bull; <a href="accounts">Accounts</a>
-                            </td>
-                            <td>
-                                <livewire:account-synchronizer-component />
                             </td>
                         </tr>
                     </table>

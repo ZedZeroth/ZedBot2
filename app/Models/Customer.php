@@ -1,11 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class Customer extends Model
+class Customer extends \Illuminate\Database\Eloquent\Model
 {
-    use HasFactory;
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected /* Do not define */ $guarded = [];
+
+    /**
+    * Get the accounts for this customer.
+    */
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
 }

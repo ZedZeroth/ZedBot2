@@ -12,6 +12,7 @@ use App\Console\Commands\ExceptionCatcher;
  * Testing the catch() method
  */
 
+// POSITIVE TEST
 test('GIVEN a Command mocked to throw an Exception
     WHEN calling catch()
     THEN it returns null
@@ -30,7 +31,7 @@ test('GIVEN a Command mocked to throw an Exception
         ->shouldReceive('warn')->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->with('Exception: ' . $exceptionType)->andReturn()
         ->shouldReceive('warn')->with('File:      ' . __FILE__)->andReturn()
-        ->shouldReceive('warn')->with('Line:      27')->andReturn() // Line exception thrown above
+        ->shouldReceive('warn')->with('Line:      28')->andReturn() // Line exception thrown above
         ->shouldReceive('warn')->with('---------------------------------')->andReturn()
         ->shouldReceive('info')->andReturn()
         ->getMock();
@@ -42,6 +43,7 @@ test('GIVEN a Command mocked to throw an Exception
     )->toBeNull();
 });
 
+// POSITIVE TEST
 test('GIVEN a Command mocked to throw a StringValidationException
     WHEN calling catch()
     THEN it returns null
@@ -60,7 +62,7 @@ test('GIVEN a Command mocked to throw a StringValidationException
         ->shouldReceive('warn')->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->with('Exception: ' . $exceptionType)->andReturn()
         ->shouldReceive('warn')->with('File:      ' . __FILE__)->andReturn()
-        ->shouldReceive('warn')->with('Line:      57')->andReturn() // Line exception thrown above
+        ->shouldReceive('warn')->with('Line:      59')->andReturn() // Line exception thrown above
         ->shouldReceive('warn')->with('---------------------------------')->andReturn()
         ->shouldReceive('info')->andReturn()
         ->getMock();
@@ -72,6 +74,7 @@ test('GIVEN a Command mocked to throw a StringValidationException
     )->toBeNull();
 });
 
+// POSITIVE TEST
 test('GIVEN a Command mocked to throw an unknown exception
     WHEN calling catch()
     THEN it returns null
@@ -90,7 +93,7 @@ test('GIVEN a Command mocked to throw an unknown exception
         ->shouldReceive('warn')->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->with('Exception: ' . $exceptionType)->andReturn()
         ->shouldReceive('warn')->with('File:      ' . __FILE__)->andReturn()
-        ->shouldReceive('warn')->with('Line:      87')->andReturn() // Line exception thrown above
+        ->shouldReceive('warn')->with('Line:      90')->andReturn() // Line exception thrown above
         ->shouldReceive('warn')->with('---------------------------------')->andReturn()
         ->shouldReceive('info')->andReturn()
         ->getMock();

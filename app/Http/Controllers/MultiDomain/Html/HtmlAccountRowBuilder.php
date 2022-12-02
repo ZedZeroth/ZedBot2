@@ -30,9 +30,11 @@ class HtmlAccountRowBuilder implements
                 . $account->network
                 . '</a></td>'
 
-                . '<td style="font-weight: bold;">'
-                . '{HOLDER}'
-                . '</td>'
+                . '<td><a href="/customer/'
+                . $account->holder()->firstOrFail()->identifier
+                . '">'
+                . $account->holder()->firstOrFail()->identifier
+                . '</a></td>'
 
                 . '<td>“' . $account->label . '”</td>'
 

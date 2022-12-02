@@ -13,12 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        /**
-         * ADD 'HELD' and 'CLAIMED' ATTRIBUTES?
-         */
-
         Schema::create('payments', function (Blueprint $table) {
-            // Identifiable
             $table->id(); // Laravel
             $table->string('state'); // Spatie's state system
             $table->string('network'); // e.g. FPS, ethereum, LBC...

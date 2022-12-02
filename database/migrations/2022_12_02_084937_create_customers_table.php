@@ -14,8 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); // Laravel
+            $table->string('state'); // Spatie's state system
+            $table->string('identifier'); // ???
+            $table->string('type'); // person, company, bank, vasp, self
+            $table->string('familyName'); // e.g. "last name" / "surname"
+            $table->timestamps(); // Laravel
         });
     }
 

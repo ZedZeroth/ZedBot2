@@ -41,7 +41,8 @@ class PopulateCurrenciesCommand extends \Illuminate\Console\Command
     {
         /* Validated by ExceptionCatcher */
 
-        (new \App\Http\Controllers\Currencies\CurrencyController())->populate();
+        (new \App\Http\Controllers\Currencies\CurrencyController())
+            ->populate();
         return;
     }
 }

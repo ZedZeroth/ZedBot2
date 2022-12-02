@@ -29,7 +29,7 @@
         </h3>
 
         <h3>Holder:
-            <a href="/customers/{{ $account->customer_id }}">
+            <a href="/customer/{{ $account->customer()->identifier}}">
                 { $account->holder }
             </a>
         </h3>
