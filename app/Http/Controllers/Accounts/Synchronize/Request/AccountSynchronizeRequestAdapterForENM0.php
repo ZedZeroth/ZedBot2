@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts\Synchronizer\Requests;
+namespace App\Http\Controllers\Accounts\Synchronize\Request;
 
 use App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 
-class AccountSynchronizerRequestAdapterForENM0 implements
+class AccountSynchronizeRequestAdapterForENM0 implements
     RequestAdapterInterface,
     AdapterInterface
 {

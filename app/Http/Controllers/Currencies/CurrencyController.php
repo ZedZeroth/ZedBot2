@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Currencies;
 
-use App\Http\Controllers\Controller;
 use Illuminate\View\View;
-use App\Http\Controllers\Currencies\Populator\CurrencyPopulator;
-use App\Http\Controllers\Currencies\Viewer\CurrencyViewer;
+use App\Http\Controllers\Currencies\View\CurrencyViewer;
+use App\Http\Controllers\Currencies\Populate\CurrencyPopulator;
 
-class CurrencyController extends Controller
+class CurrencyController extends App\Http\Controllers\Controller
 {
     /**
      * Show all currencies.

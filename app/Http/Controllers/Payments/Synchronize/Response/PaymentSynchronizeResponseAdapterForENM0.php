@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Synchronizer\Responses;
+namespace App\Http\Controllers\Payments\Synchronize\Response;
 
 use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
 use App\Models\Account;
 use App\Http\Controllers\Accounts\AccountDTO;
 
-class PaymentSynchronizerResponseAdapterForENM0 implements
+class PaymentSynchronizeResponseAdapterForENM0 implements
     \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
     \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {
@@ -215,7 +215,7 @@ class PaymentSynchronizerResponseAdapterForENM0 implements
             );
 
             // Sync accounts
-            (new \App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer())
+            (new \App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer())
                 ->sync(modelDTOs: $accountDTOs);
 
             // Convert amount to base units

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Synchronizer;
+namespace App\Http\Controllers\Payments\Synchronize;
 
 use App\Models\Payment;
 

@@ -13,10 +13,15 @@ abstract class PaymentState extends \Spatie\ModelStates\State
     {
         return parent::config()
             ->default(Unconfirmed::class)
+            ->allowTransition(Unconfirmed::class, Unconfirmed::class)
 
-            // Unconfirmed  -> Held     -> Unconfirmed
+            // Everything except Reciprocated  -> Held     -> Unconfirmed
             ->allowTransition(Unconfirmed::class, Held::class)
-            ->allowTransition(Held::class, Held::class)
+            ->allowTransition(Settled::class, Held::class)
+            ->allowTransition(AmountError::class, Held::class)
+            ->allowTransition(OriginatorError::class, Held::class)
+            ->allowTransition(AmountError::class, Held::class)
+            ->allowTransition(Matched::class, Held::class)
             ->allowTransition(Held::class, Unconfirmed::class)
 
             // Unconfirmed  -> Settled   -> AmountError

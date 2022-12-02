@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts\Synchronizer\Responses;
+namespace App\Http\Controllers\Accounts\Synchronize\Response;
 
 use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
 
-class AccountSynchronizerResponseAdapterForMMP0 implements
+class AccountSynchronizeResponseAdapterForMMP0 implements
     \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
     \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {

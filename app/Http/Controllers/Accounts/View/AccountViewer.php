@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts\Viewer;
+namespace App\Http\Controllers\Accounts\View;
 
 use Illuminate\View\View;
 use App\Models\Account;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Currencies\Viewer;
+namespace App\Http\Controllers\Currencies\View;
 
 use Illuminate\View\View;
 use App\Models\Currency;

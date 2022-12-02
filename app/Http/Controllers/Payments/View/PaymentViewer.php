@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Viewer;
+namespace App\Http\Controllers\Payments\View;
 
 use Illuminate\View\View;
 use App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Synchronizer\Requests;
+namespace App\Http\Controllers\Payments\Synchronize\Request;
 
 use App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 
-class PaymentSynchronizerRequestAdapterForMMP0 implements
+class PaymentSynchronizeRequestAdapterForMMP0 implements
     RequestAdapterInterface,
     AdapterInterface
 {

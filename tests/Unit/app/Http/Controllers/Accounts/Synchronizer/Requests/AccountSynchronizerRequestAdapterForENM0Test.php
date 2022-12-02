@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Unit tests for the AccountSynchronizerRequestAdapterForENM0 class and its methods.
+ * Unit tests for the AccountSynchronizeRequestAdapterForENM0 class and its methods.
  */
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Accounts\Synchronizer\Requests\AccountSynchronizerRequestAdapterForENM0;
+use App\Http\Controllers\Accounts\Synchronize\Request\AccountSynchronizeRequestAdapterForENM0;
 
 /**
  * Testing the buildRequestParameters() method
@@ -14,23 +14,23 @@ use App\Http\Controllers\Accounts\Synchronizer\Requests\AccountSynchronizerReque
 
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
-    THEN an AccountSynchronizerRequestAdapterForENM0 is returned
+    THEN an AccountSynchronizeRequestAdapterForENM0 is returned
     ', function () {
     expect(
-        (new AccountSynchronizerRequestAdapterForENM0())
+        (new AccountSynchronizeRequestAdapterForENM0())
             ->buildRequestParameters(numberToFetch: 1)
     )->toBeInstanceOf(
-        AccountSynchronizerRequestAdapterForENM0::class
+        AccountSynchronizeRequestAdapterForENM0::class
     );
 });
 
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
-    THEN the returned AccountSynchronizerRequestAdapterForENM0 holds the correct requestParameters
+    THEN the returned AccountSynchronizeRequestAdapterForENM0 holds the correct requestParameters
     ', function () {
 
     // Build the RequestAdapter's postParameters property
-    $builtRequestAdapter = (new AccountSynchronizerRequestAdapterForENM0())
+    $builtRequestAdapter = (new AccountSynchronizeRequestAdapterForENM0())
             ->buildRequestParameters(numberToFetch: 1);
 
     // Create a reflection in order to access its private postParameters property
@@ -54,10 +54,10 @@ test('GIVEN numberToFetch: 0
     THEN an IntegerValidationException is thrown
     ', function () {
     expect(
-        (new AccountSynchronizerRequestAdapterForENM0())
+        (new AccountSynchronizeRequestAdapterForENM0())
             ->buildRequestParameters(numberToFetch: 0)
     )->toBeInstanceOf(
-        AccountSynchronizerRequestAdapterForENM0::class
+        AccountSynchronizeRequestAdapterForENM0::class
     );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException::class);
@@ -72,7 +72,7 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
     ', function () {
 
     // Build the RequestAdapter's postParameters property
-    $builtRequestAdapter = (new AccountSynchronizerRequestAdapterForENM0())
+    $builtRequestAdapter = (new AccountSynchronizeRequestAdapterForENM0())
         ->buildRequestParameters(numberToFetch: 1);
 
     // Mock a PostAdapter to return a fake request response array
@@ -114,7 +114,7 @@ test('GIVEN a POST_ADAPTER with a mocked post() method
     ', function () {
 
     // Build the RequestAdapter's postParameters property
-    $builtRequestAdapter = (new AccountSynchronizerRequestAdapterForENM0())
+    $builtRequestAdapter = (new AccountSynchronizeRequestAdapterForENM0())
         ->buildRequestParameters(numberToFetch: 1);
 
     // Mock an incorrect Adapter to return a fake request response array
@@ -156,7 +156,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
     ', function () {
 
     // Build the RequestAdapter's postParameters property
-    $builtRequestAdapter = (new AccountSynchronizerRequestAdapterForENM0())
+    $builtRequestAdapter = (new AccountSynchronizeRequestAdapterForENM0())
         ->buildRequestParameters(numberToFetch: 1);
 
     // Mock an incorrect GetAdapter to return a fake request response array

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Accounts;
 
 use Illuminate\View\View;
-use App\Http\Controllers\Accounts\Viewer\AccountViewer;
+use App\Http\Controllers\Accounts\View\AccountViewer;
 
 class AccountController extends \App\Http\Controllers\Controller implements
     \App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface
@@ -96,7 +96,7 @@ class AccountController extends \App\Http\Controllers\Controller implements
             );
 
         // ↖️ Creat accounts from the AccountDTOs
-        (new \App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer())
+        (new \App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer())
             ->sync(
                 modelDTOs:
                 // ↖️ Array of AccountDTOs
@@ -107,7 +107,7 @@ class AccountController extends \App\Http\Controllers\Controller implements
                             (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())
                                 ->build(
                                     model: 'Account',
-                                    action: 'Synchronizer',
+                                    action: 'Synchronize',
                                     api: $syncCommandDTO->api
                                 ),
                         numberToFetch: $syncCommandDTO->numberToFetch

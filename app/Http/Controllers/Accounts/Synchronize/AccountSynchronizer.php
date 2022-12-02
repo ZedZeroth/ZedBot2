@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Accounts\Synchronizer;
+namespace App\Http\Controllers\Accounts\Synchronize;
 
 use App\Models\Account;
 

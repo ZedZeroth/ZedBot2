@@ -57,25 +57,25 @@ DomainController (e.g. AccountController)
 ║.........║  
 ║.........╠══ Domain1DTO (e.g. AccountDTO.php)  
 ║.........║  
-║.........╠══ *Action1* (e.g. Synchronizer)  
+║.........╠══ *Action1* (e.g. Synchronize)  
 ║.........║.........║  
 ║.........║.........╠══ Actioner1 (e.g. AccountSynchronizer.php)  
 ║.........║.........║  
 ║.........║.........╠══ *RequestAdapters*  
 ║.........║.........║.........║  
 ║.........║.........║.........╠══ Domain1Action1RequestAdapterForAPI1  
-║.........║.........║.........║.........(e.g. AccountSynchronizerRequestAdapterForENM0.php)  
+║.........║.........║.........║.........(e.g. AccountSynchronizeRequestAdapterForENM0.php)  
 ║.........║.........║.........╚══ Domain1Action1RequestAdapterForAPI2  
-║.........║.........║.................. (e.g. AccountSynchronizerRequestAdapterForLCS0.php)  
+║.........║.........║.................. (e.g. AccountSynchronizeRequestAdapterForLCS0.php)  
 ║.........║.........║  
 ║.........║.........╚══ *ResponseAdapters*  
 ║.........║.................. ║  
 ║.........║.................. ╠══ Domain1Action1ResponseAdapterForAPI1  
-║.........║.................. ║.........(e.g. AccountSynchronizerResponseAdapterForENM0.php)  
+║.........║.................. ║.........(e.g. AccountSynchronizeResponseAdapterForENM0.php)  
 ║.........║.................. ╚══ Domain1Action1ResponseAdapterForAPI2  
-║.........║...........................  (e.g. AccountSynchronizerResponseAdapterForLCS0.php)  
+║.........║...........................  (e.g. AccountSynchronizeResponseAdapterForLCS0.php)  
 ║.........║  
-║.........╚══ *Action2* (e.g. Maker)  
+║.........╚══ *Action2* (e.g. Make)  
 ║.................. ║  
 ║.................. ╚══ Actioner2 (e.g. AccountMaker.php)  
 ║.................. ║  
@@ -89,7 +89,7 @@ DomainController (e.g. AccountController)
 ║.........║  
 ║.........╠══ Domain2DTO (e.g. PaymentDTO.php)  
 ║.........║  
-║.........╚══ *Action1* (e.g. Synchronizer)  
+║.........╚══ *Action1* (e.g. Synchronize)  
 etc.  
 
 ## Non-model entities (4)

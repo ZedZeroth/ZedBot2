@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Payments;
 
 use Illuminate\View\View;
-use App\Http\Controllers\Payments\Viewer\PaymentViewer;
+use App\Http\Controllers\Payments\View\PaymentViewer;
 
 class PaymentController extends \App\Http\Controllers\Controller implements
     \App\Http\Controllers\MultiDomain\Interfaces\ControllerInterface
@@ -95,7 +95,7 @@ class PaymentController extends \App\Http\Controllers\Controller implements
             );
 
         // ↖️ Creat payments from the DTOs
-        (new \App\Http\Controllers\Payments\Synchronizer\PaymentSynchronizer())
+        (new \App\Http\Controllers\Payments\Synchronize\PaymentSynchronizer())
             ->sync(
                 modelDTOs:
                 // ↖️ Build DTOs from the request
@@ -106,7 +106,7 @@ class PaymentController extends \App\Http\Controllers\Controller implements
                             (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())
                                 ->build(
                                     model: 'Payment',
-                                    action: 'Synchronizer',
+                                    action: 'Synchronize',
                                     api: $syncCommandDTO->api
                                 ),
                         numberToFetch: $syncCommandDTO->numberToFetch

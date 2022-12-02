@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Synchronizer\Responses;
+namespace App\Http\Controllers\Payments\Synchronize\Response;
 
 use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
 use App\Models\Account;
 use App\Http\Controllers\Accounts\AccountDTO;
-use App\Http\Controllers\Accounts\Synchronizer\AccountSynchronizer;
+use App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer;
 
-class PaymentSynchronizerResponseAdapterForMMP0 implements
+class PaymentSynchronizeResponseAdapterForMMP0 implements
     \App\Http\Controllers\MultiDomain\Interfaces\ResponseAdapterInterface,
     \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
 {

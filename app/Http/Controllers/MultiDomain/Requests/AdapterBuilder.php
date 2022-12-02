@@ -43,8 +43,8 @@ class AdapterBuilder
             string: $action,
             stringName: 'action',
             charactersToRemove: [],
-            shortestLength: 12,
-            longestLength: 12,
+            shortestLength: 6,
+            longestLength: 11,
             mustHaveUppercase: true,
             canHaveUppercase: true,
             mustHaveLowercase: true,
@@ -67,7 +67,7 @@ class AdapterBuilder
 
         // Build the request adaper
         $requestAdapterClass = $modelActionPath
-            . '\\Requests\\'
+            . '\\Request\\'
             . $model
             . $action
             . 'RequestAdapterFor'
@@ -77,7 +77,7 @@ class AdapterBuilder
 
         // Build the response adaper
         $responseAdapterClass = $modelActionPath
-            . '\\Responses\\'
+            . '\\Response\\'
             . $model
             . $action
             . 'ResponseAdapterFor'
