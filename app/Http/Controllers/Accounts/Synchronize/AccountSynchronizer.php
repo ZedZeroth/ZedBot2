@@ -35,6 +35,8 @@ class AccountSynchronizer implements
                     ]
                 );
 
+            // Has DTO data been validated...? Pulled straight from API?
+
             // Accounts must be manually assigned to their holder?
 
             // Create accounts

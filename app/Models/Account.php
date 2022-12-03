@@ -6,6 +6,8 @@ namespace App\Models;
 
 class Account extends \Illuminate\Database\Eloquent\Model
 {
+    use \Spatie\ModelStates\HasStates;
+
     /**
      * The default attributes.
      *
@@ -15,6 +17,15 @@ class Account extends \Illuminate\Database\Eloquent\Model
         'customer_id' => null,
         'networkAccountName' => '',
         'label' => ''
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'state' => \App\Models\Accounts\States\AccountState::class
     ];
 
     /**

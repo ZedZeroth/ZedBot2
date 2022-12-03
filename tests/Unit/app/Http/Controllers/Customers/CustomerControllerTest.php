@@ -48,13 +48,13 @@ test('GIVEN no parameters
  */
 
 // POSITIVE TEST
-test('GIVEN "test" // replace with my name
+test('GIVEN "test::test" // replace with my name
 WHEN calling showByIdentifier()
 THEN the correct View is returned
 ', function () {
     // Generate the View
     $view = (new CustomerController())
-        ->showByIdentifier('test');
+        ->showByIdentifier('test::test');
     $this->assertInstanceOf(View::class, $view);
 
     // Check the "view" property is "customer"
@@ -77,13 +77,13 @@ THEN the correct View is returned
 });
 
 // NEGATIVE TEST
-test('GIVEN "test::test"
+test('GIVEN "test::test::test"
 WHEN calling showByIdentifier()
 THEN the correct View is returned
 ', function () {
     // Generate the View
     $view = (new CustomerController())
-        ->showByIdentifier('test::test');
+        ->showByIdentifier('test::test::test');
     $this->assertInstanceOf(View::class, $view);
 })->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
 

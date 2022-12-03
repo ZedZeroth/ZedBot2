@@ -26,7 +26,6 @@ class HtmlModelTableBuilder
                 . '</td></tr>';
         }
         $html .= '</table>';
-
         return $html;
     }
 }

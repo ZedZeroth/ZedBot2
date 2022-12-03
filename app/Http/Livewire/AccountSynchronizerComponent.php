@@ -15,6 +15,8 @@ class AccountSynchronizerComponent extends \Livewire\Component
      */
     public function sync(string $api): void
     {
+        // Convert to integer
+        $numberToFetch = (int) $numberToFetch;
 
         // Validate $api
         (new \App\Http\Controllers\MultiDomain\Validators\ApiValidator())
