@@ -12,7 +12,7 @@ use App\Http\Controllers\Customers\Import\CustomerImporter;
  * Testing import() method
  */
 
- // POSITIVE TEST
+// POSITIVE TEST
 test('GIVEN a valid customerDTO
     WHEN calling import()
     THEN return true
@@ -42,7 +42,6 @@ test('GIVEN a valid customerDTO
     $customer = \App\Models\Customer::where('identifier', $identifier)->firstOrFail();
     $customer->delete();
 });
-
 
 // NEGATIVE TEST
 test('GIVEN an invalid array type
