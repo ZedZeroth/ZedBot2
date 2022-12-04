@@ -6,8 +6,7 @@ namespace App\Http\Controllers\Accounts\Synchronize;
 
 use App\Models\Account;
 
-class AccountSynchronizer implements
-    \App\Http\Controllers\MultiDomain\Interfaces\SynchronizerInterface
+class AccountSynchronizer
 {
     /**
      * Uses the DTOs to create accounts for
@@ -44,7 +43,7 @@ class AccountSynchronizer implements
                 ['identifier' => $accountDTO->identifier],
                 [
                     'network'       => $accountDTO->network,
-                    'customer_id'   => 1,
+                    'customer_id'     => 1,
                     'currency_id'   => $accountDTO->currency_id,
                     'balance'       => $accountDTO->balance,
                 ]

@@ -113,7 +113,7 @@ class AccountSynchronizeResponseAdapterForMMP0 implements
                     identifier: (string) 'bitcoin'
                         . '::' . strtolower($currency->code)
                         . '::' . $response['address'],
-                    customer_id: (int) 0,
+                    customer_id: (int) 1,
                     networkAccountName: $response['address'],
                     label: (string) $addressDetails['label'],
                     currency_id: (int) $currency->id,

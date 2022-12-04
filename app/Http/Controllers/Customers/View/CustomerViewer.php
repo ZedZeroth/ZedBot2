@@ -17,22 +17,6 @@ class CustomerViewer implements
      */
     public function showAll(): View
     {
-        // TESTING
-        $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
-            state: 'test',
-            identifier: 'test::test',
-            type: 'test',
-            familyName: 'Test',
-            givenName1: 'Test',
-            givenName2: 'Test',
-            companyName: 'Test Ltd',
-            preferredName: 'T',
-        );
-
-        (new \App\Http\Controllers\Customers\Import\CustomerImporter())->import(
-            modelDTOs: [$customerDTO]
-        );
-
         return view('customers', [
             'customers' => Customer::all()
         ]);

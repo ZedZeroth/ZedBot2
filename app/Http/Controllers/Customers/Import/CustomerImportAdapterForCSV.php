@@ -23,11 +23,11 @@ class CustomerImportAdapterForCSV implements
         /*💬*/ //print_r($responseArray);
 
         // Adapt each account
-        $accountDTOs = [];
+        $customerDTOs = [];
         foreach ($readerArray as $row) {
             /*💬*/ //print_r($result);
 
-            // Validate the injected array
+            // Validate the headers (keys) of each row
             (new ArrayValidator())->validate(
                 array: $row,
                 arrayName: 'row',
@@ -35,31 +35,8 @@ class CustomerImportAdapterForCSV implements
                 keysToIgnore: []
             );
 
-            // Skip non-UK accounts
-            if (array_key_exists('swift', $result)) {
-                continue;
-            }
-
-            // Proceed with array validation
-            (new ArrayValidator())->validate(
-                array: $result,
-                arrayName: 'result',
-                requiredKeys: [
-                    'ern',
-                    'nickName',
-                    'beneficiaryERN',
-                    'confidenceScore',
-                    'riskWeight',
-                    'sortCode',
-                    'accountNumber',
-                    'accountName',
-                    'createdDate',
-                    'owners',
-                    'hasOwners'
-                ],
-                keysToIgnore: ['modifiedDate', 'bankName']
-            );
-
+            //VALIDATE EACH REQUIRED FIELD
+/*
             // Validate $result['sortCode']
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['sortCode'],
@@ -110,32 +87,28 @@ class CustomerImportAdapterForCSV implements
                 isAlphanumeric: true,
                 isHexadecimal: false
             );
-
-            // Determine the currency
-            $currency = \App\Models\Currency::
-                    where(
-                        'code',
-                        'GBP'
-                    )->firstOrFail();
+*/
 
             // Build the DTO
             array_push(
-                $accountDTOs,
-                new \App\Http\Controllers\Accounts\AccountDTO(
-                    network: (string) 'FPS',
-                    identifier: (string) 'fps'
-                        . '::' . 'gbp'
-                        . '::' . $result['sortCode']
-                        . '::' . $result['accountNumber'],
-                    customer_id: (int) null,
-                    networkAccountName: (string) '',
-                    label: (string) $result['accountName'],
-                    currency_id: (int) $currency->id,
-                    balance: (int) 0,
+                $customerDTOs,
+                new \App\Http\Controllers\Customers\CustomerDTO(
+                    // Build identifiers in importer/synchronizer!
+                    // "customer"::customer_id::surname::surname_collision_increment::given_name_1::given_name_2
+                    identifier: (string) 'customer'
+                        . '::' . $row['ID SURNAME']
+                        . '::' . $row['GIVEN NAME 1']
+                        . '::' . $row['GIVEN NAME 2'],
+                    type: (string) 'person', // Needs reviewing
+                    familyName: (string) $row['ID SURNAME'],
+                    givenName1: (string) $row['GIVEN NAME 1'],
+                    givenName2: (string) $row['GIVEN NAME 2'],
+                    companyName: (string) '',
+                    preferredName: (string) $row['PREFERRED NAME'],
                 ),
             );
         }
 
-        return $accountDTOs;
+        return $customerDTOs;
     }
 }

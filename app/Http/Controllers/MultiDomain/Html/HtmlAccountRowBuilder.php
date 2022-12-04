@@ -31,9 +31,9 @@ class HtmlAccountRowBuilder implements
                 . '</a></td>'
 
                 . '<td><a href="/customer/'
-                . $account->holder()->firstOrFail()->identifier
+                . $account->customer()->firstOrFail()->identifier
                 . '">'
-                . $account->holder()->firstOrFail()->identifier
+                . $account->customer()->firstOrFail()->identifier
                 . '</a></td>'
 
                 . '<td>“' . $account->label . '”</td>'

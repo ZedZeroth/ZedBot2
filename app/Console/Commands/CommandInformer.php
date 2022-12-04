@@ -71,6 +71,7 @@ class CommandInformer
         $models = [
             'Account' => \App\Models\Account::all()->count(),
             'Currency' => \App\Models\Currency::all()->count(),
+            'Customer' => \App\Models\Customer::all()->count(),
             'Payment' => \App\Models\Payment::all()->count(),
         ];
         $startTime = now();

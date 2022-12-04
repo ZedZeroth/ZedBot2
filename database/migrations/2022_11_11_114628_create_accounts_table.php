@@ -18,7 +18,7 @@ return new class extends Migration
             //$table->string('state'); // active, inactive, unverified, blocked
             $table->string('network');
             $table->string('identifier');
-            $table->integer('customer_id');
+            $table->integer('customer_id'); // Customer
             $table->string('networkAccountName');
             $table->string('label');
             $table->integer('currency_id');

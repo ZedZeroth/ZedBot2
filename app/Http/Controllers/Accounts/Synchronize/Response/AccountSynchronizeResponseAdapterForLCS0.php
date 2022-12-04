@@ -80,7 +80,7 @@ class AccountSynchronizeResponseAdapterForLCS0 implements
                 . '::' . strtolower($currency->code)
                 . '::' . $username
                 . '::' . $walletType,
-            customer_id: (int) 0,
+            customer_id: (int) 1,
             networkAccountName: '',
             label: (string) $username . ' ' . $currency->code . ' ' . $walletType,
             currency_id: (int) $currency->id,

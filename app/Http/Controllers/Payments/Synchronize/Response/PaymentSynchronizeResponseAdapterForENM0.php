@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Payments\Synchronize\Response;
 
 use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
-use App\Models\Account;
 use App\Http\Controllers\Accounts\AccountDTO;
 
 class PaymentSynchronizeResponseAdapterForENM0 implements
@@ -185,38 +184,27 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                 $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
             }
 
-            $accountDTOs = [];
             // Create the originator DTO
-            array_push(
-                $accountDTOs,
-                new AccountDTO(
-                    network: (string) 'FPS',
-                    identifier: (string) $originatorAccountIdentifier,
-                    customer_id: (int) 0,
-                    networkAccountName: (string) $originatorNetworkAccountName,
-                    label: (string) $originatorLabel,
-                    currency_id: (int) $currency->id,
-                    balance: (int) 0
-                )
+            $originatorAccountDTO = new AccountDTO(
+                network: (string) 'FPS',
+                identifier: (string) $originatorAccountIdentifier,
+                customer_id: (int) 1,
+                networkAccountName: (string) $originatorNetworkAccountName,
+                label: (string) $originatorLabel,
+                currency_id: (int) $currency->id,
+                balance: (int) 0
             );
 
             // Create the beneficiary DTO
-            array_push(
-                $accountDTOs,
-                new AccountDTO(
-                    network: (string) 'FPS',
-                    identifier: (string) $beneficiaryAccountIdentifier,
-                    customer_id: (int) 0,
-                    networkAccountName: (string) $beneficiaryNetworkAccountName,
-                    label: (string) $beneficiaryLabel,
-                    currency_id: (int) $currency->id,
-                    balance: (int) 0
-                )
+            $beneficiaryAccountDTO = new AccountDTO(
+                network: (string) 'FPS',
+                identifier: (string) $beneficiaryAccountIdentifier,
+                customer_id: (int) 1,
+                networkAccountName: (string) $beneficiaryNetworkAccountName,
+                label: (string) $beneficiaryLabel,
+                currency_id: (int) $currency->id,
+                balance: (int) 0
             );
-
-            // Sync accounts
-            (new \App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer())
-                ->sync(modelDTOs: $accountDTOs);
 
             // Convert amount to base units
             $amount = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
@@ -267,17 +255,15 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                         . $result['id'],
                     amount: (int) $amount,
                     currency_id: (int) $currency->id,
-                    originator_id: (int) Account::
-                        where('identifier', $originatorAccountIdentifier)
-                        ->first()->id,
-                    beneficiary_id: (int) Account::
-                        where('identifier', $beneficiaryAccountIdentifier)
-                        ->first()->id,
+                    originator_identifier: (string) $originatorAccountIdentifier,
+                    beneficiary_identifier: (string) $beneficiaryAccountIdentifier,
                     memo: (string) $result['paymentReference'],
                     timestamp: (string) date(
                         'Y-m-d H:i:s',
                         strtotime($result['transactionTimeLocal'])
                     ),
+                    originatorAccountDTO: $originatorAccountDTO,
+                    beneficiaryAccountDTO: $beneficiaryAccountDTO,
                 )
             );
         }

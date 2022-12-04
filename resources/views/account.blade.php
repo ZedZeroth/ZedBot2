@@ -29,8 +29,8 @@
         </h3>
 
         <h3>Holder:
-            <a href="/customer/{{ $account->customer()->identifier}}">
-                { $account->holder }
+            <a href="/customer/{{ $account->customer->identifier}}">
+                {{ $account->customer->familyName }}
             </a>
         </h3>
         Network account name: {{ $account->networkAccountName }}

@@ -94,7 +94,7 @@ class PaymentController extends \App\Http\Controllers\Controller implements
                 highestValue: pow(10, 6)
             );
 
-        // ↖️ Creat payments from the DTOs
+        // ↖️ Creat payments (and linked accounts) from the DTOs
         (new \App\Http\Controllers\Payments\Synchronize\PaymentSynchronizer())
             ->sync(
                 modelDTOs:
@@ -110,7 +110,9 @@ class PaymentController extends \App\Http\Controllers\Controller implements
                                     api: $syncCommandDTO->api
                                 ),
                         numberToFetch: $syncCommandDTO->numberToFetch
-                    )
+                    ),
+                accountSynchronizer:
+                    (new \App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer())
             );
         return;
     }

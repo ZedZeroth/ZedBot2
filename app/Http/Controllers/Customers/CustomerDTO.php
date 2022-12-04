@@ -12,7 +12,6 @@ class CustomerDTO
      * an adapter and the importer.
      */
     public function __construct(
-        public string $state,
         public string $identifier,
         public string $type,
         public string $familyName,

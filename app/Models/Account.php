@@ -14,7 +14,7 @@ class Account extends \Illuminate\Database\Eloquent\Model
      * @var array<int, string>
      */
     protected /* Do not define */ $attributes = [
-        'customer_id' => null,
+        //'customer_id' => null,
         'networkAccountName' => '',
         'label' => ''
     ];
@@ -38,9 +38,9 @@ class Account extends \Illuminate\Database\Eloquent\Model
     /**
     * Defines the account's holder.
     */
-    public function holder()
+    public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class);
     }
 
     /**

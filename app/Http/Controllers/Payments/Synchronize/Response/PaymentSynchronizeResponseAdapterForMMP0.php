@@ -173,7 +173,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         new AccountDTO(
                             network: (string) 'Bitcoin',
                             identifier: (string) $originatorAccountIdentifier,
-                            customer_id: (int) 0,
+                            customer_id: (int) 1,
                             networkAccountName: (string) $addressDetails['address'],
                             label: (string) $addressDetails['label'],
                             currency_id: (int) $currency->id,
@@ -190,7 +190,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                             new AccountDTO(
                                 network: (string) 'Bitcoin',
                                 identifier: (string) $beneficiaryAccountIdentifier,
-                                customer_id: (int) 0,
+                                customer_id: (int) 1,
                                 networkAccountName: (string) $output['scriptpubkey_address'],
                                 label: (string) 'Beneficiary of payment from ' . $addressDetails['label'],
                                 currency_id: (int) $currency->id,
@@ -238,7 +238,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         new AccountDTO(
                             network: (string) 'Bitcoin',
                             identifier: (string) $beneficiaryAccountIdentifier,
-                            customer_id: (int) 0,
+                            customer_id: (int) 1,
                             networkAccountName: (string) $addressDetails['address'],
                             label: (string) $addressDetails['label'],
                             currency_id: (int) $currency->id,
@@ -255,7 +255,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                             new AccountDTO(
                                 network: (string) 'Bitcoin',
                                 identifier: (string) $originatorAccountIdentifier,
-                                customer_id: (int) 0,
+                                customer_id: (int) 1,
                                 networkAccountName: (string) $input['prevout']['scriptpubkey_address'],
                                 label: (string) 'Originator of payment to ' . $addressDetails['label'],
                                 currency_id: (int) $currency->id,

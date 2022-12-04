@@ -24,7 +24,6 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                     dto: $customerDTO,
                     dtoName: 'customerDTO',
                     requiredProperties: [
-                        'state',
                         'identifier',
                         'type',
                         'familyName',

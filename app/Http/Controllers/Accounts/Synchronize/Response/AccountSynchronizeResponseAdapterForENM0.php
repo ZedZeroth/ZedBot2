@@ -129,7 +129,7 @@ class AccountSynchronizeResponseAdapterForENM0 implements
                         . '::' . 'gbp'
                         . '::' . $result['sortCode']
                         . '::' . $result['accountNumber'],
-                    customer_id: (int) null,
+                    customer_id: (int) null, // Must be assigned manually
                     networkAccountName: (string) '',
                     label: (string) $result['accountName'],
                     currency_id: (int) $currency->id,
