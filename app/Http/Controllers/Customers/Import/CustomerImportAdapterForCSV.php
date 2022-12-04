@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Customers\Import;
 
+use App\Http\Controllers\MultiDomain\Validators\ArrayValidator;
+
 class CustomerImportAdapterForCSV implements
     \App\Http\Controllers\MultiDomain\Interfaces\ImportAdapterInterface,
     \App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface
@@ -20,20 +22,18 @@ class CustomerImportAdapterForCSV implements
     ): array {
         /*💬*/ //print_r($responseArray);
 
-        // Validate the injected array
-        (new ArrayValidator())->validate(
-            array: $responseArray,
-            arrayName: 'responseArray',
-            requiredKeys: ['count', 'results'],
-            keysToIgnore: []
-        );
-
         // Adapt each account
         $accountDTOs = [];
-        foreach ($responseArray['results'] as $result) {
+        foreach ($readerArray as $row) {
             /*💬*/ //print_r($result);
 
             // Validate the injected array
+            (new ArrayValidator())->validate(
+                array: $row,
+                arrayName: 'row',
+                requiredKeys: config('app.ZED_CUSTOMER_RECORDS_CSV_HEADERS'),
+                keysToIgnore: []
+            );
 
             // Skip non-UK accounts
             if (array_key_exists('swift', $result)) {

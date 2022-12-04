@@ -32,7 +32,7 @@ class ExceptionInformer
             stringName: '$e->getMessage()',
             charactersToRemove: [],
             shortestLength: 1,
-            longestLength: pow(10, 3),
+            longestLength: pow(10, 4),
             mustHaveUppercase: false,
             canHaveUppercase: true,
             mustHaveLowercase: false,

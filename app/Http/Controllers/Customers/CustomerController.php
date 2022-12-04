@@ -45,21 +45,17 @@ class CustomerController extends \App\Http\Controllers\Controller
     {
         // ↖️ Creat customers from the CustomerDTOs
         return (new \App\Http\Controllers\Customers\Import\CustomerImporter())
-            ->import(/*
+            ->import(
                 modelDTOs:
-                // ↖️ Array of AccountDTOs
-                (new \App\Http\Controllers\MultiDomain\Requests\Requester())
-                    ->request(
-                        adapterDTO:
-                            // ↖️ AdapterDTO
-                            (new \App\Http\Controllers\MultiDomain\Requests\AdapterBuilder())
-                                ->build(
-                                    model: 'Account',
-                                    action: 'Synchronize',
-                                    api: $syncCommandDTO->api
-                                ),
-                        numberToFetch: $syncCommandDTO->numberToFetch
-                    )*/
+                // ↖️ Array of CustomerDTOs
+                (new \App\Http\Controllers\MultiDomain\Imports\Importer())
+                    ->import(
+                        readerArray:
+                            (new \App\Http\Controllers\MultiDomain\Imports\CsvReader())
+                                ->read('customer_records.csv'),
+                        importerAdapter:
+                            (new \App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV())
+                    )
             );
     }
 }

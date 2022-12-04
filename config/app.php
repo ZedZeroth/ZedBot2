@@ -221,6 +221,9 @@ return [
     |
     */
 
+    #CSVs
+    'ZED_CUSTOMER_RECORDS_CSV_HEADERS' => (array) explode(',', env('ZED_CUSTOMER_RECORDS_CSV_HEADERS')),
+
     # Connections
     'ZED_CONNECT_SINGLE_TIMEOUT' => (int) env('ZED_CONNECT_SINGLE_TIMEOUT'),
     'ZED_CONNECT_RETRY' => (int) env('ZED_CONNECT_RETRY'),

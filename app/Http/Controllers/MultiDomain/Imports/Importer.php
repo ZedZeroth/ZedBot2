@@ -14,7 +14,7 @@ class Importer
      */
     public function import(
         array $readerArray,
-        ImportAdapterInterface $importerAdapter,
+        \App\Http\Controllers\MultiDomain\Interfaces\ImportAdapterInterface $importerAdapter,
     ): array {
 
         // VALIDATION

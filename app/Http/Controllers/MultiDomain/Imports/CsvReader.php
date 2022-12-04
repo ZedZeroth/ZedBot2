@@ -5,7 +5,8 @@ namespace App\Http\Controllers\MultiDomain\Imports;
 class CsvReader
 {
     /**
-     * Converts a CSV file into an array.
+     * Converts a CSV file into an associative
+     * array with the column headers as keys.
      *
      * @param string $fileName
      * @return array
@@ -14,20 +15,28 @@ class CsvReader
         string $fileName
     ): array {
 
-        // VALIDATION
+        // VALIDATE FILENAME
 
-        $fileNameWithPath = '' . $fileName;
-        $row = 1;
-        if (($handle = fopen("test.csv", "r")) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $num = count($data);
-                echo "<p> $num fields in line $row: <br /></p>\n";
-                $row++;
-                for ($c=0; $c < $num; $c++) {
-                    echo $data[$c] . "<br />\n";
+        $csvFilePath = \Illuminate\Support\Facades\Storage::path('csv/' . $fileName);
+
+        $headers = [];
+        $readerArray = [];
+        if (($handle = fopen($csvFilePath, "r")) !== false) {
+            while (($row = fgetcsv($handle)) !== false) {
+                if (!$headers) {
+                    $headers = $row;
+                } else {
+                    $counter = 0;
+                    $rowArray = [];
+                    foreach ($row as $cell) {
+                        $rowArray[$headers[$counter]] = $cell;
+                        $counter++;
+                    }
+                    array_push($readerArray, $rowArray);
                 }
             }
             fclose($handle);
         }
+        return $readerArray;
     }
 }

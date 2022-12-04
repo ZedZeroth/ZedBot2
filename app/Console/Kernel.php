@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\SchedulerIsRunningCommand::class,
         Commands\SyncAccountsCommand::class,
         Commands\SyncPaymentsCommand::class,
+        Commands\ImportCustomersCommand::class,
 
     ];
 

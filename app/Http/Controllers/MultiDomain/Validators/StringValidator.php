@@ -52,7 +52,7 @@ class StringValidator
             integer: $longestLength,
             integerName: 'longestLength',
             lowestValue: 0,
-            highestValue: pow(10, 3)
+            highestValue: pow(10, 4)
         );
 
         // Set prefix

@@ -26,7 +26,7 @@ class ArrayValidator
             string: $arrayName,
             stringName: 'arrayName',
             charactersToRemove: [],
-            shortestLength: 4,
+            shortestLength: 3,
             longestLength: pow(10, 2),
             mustHaveUppercase: false,
             canHaveUppercase: true,
@@ -54,7 +54,16 @@ class ArrayValidator
             count($array) != count($requiredKeys)
         ) {
             throw new ArrayValidationException(
-                message: $prefix . 'does not contain these keys: ' . implode(',', $requiredKeys)
+                message:
+                    $prefix
+                    . 'does not contain expected keys. array_diff = '
+                    . implode(
+                        ',',
+                        array_diff(
+                            array_keys($array),
+                            $requiredKeys
+                        )
+                    )
             );
         } else {
             return true;
