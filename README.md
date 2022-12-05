@@ -27,12 +27,48 @@ I aim to implment Test Driven Development (TDD) and Domain Driven Design (DDD) w
 
 ### Account
 
-These represent financial accounts, such as bank accounts and blockchain addresses, on various payment networks. They are originators or beneficiaries of Payments in a single currency, they have a holder (who may be a Customer), and they may be assigned a balance in their currency. Their actions include:
+These represent financial accounts, such as bank accounts and blockchain addresses, on various payment networks. They are originators or beneficiaries of Payments in a single currency, they have a holder (who may be a Customer), and they may be assigned a balance in their currency.
+
+Their actions include:
 
 - **Add**: This creates a new account on the payment network.
-- **Create**: This creates a new Eloquent model from a model DTO.
 - **Fetch**: This fetches information for a specific account and updates the Eloquent model accordingly.
-- **Synchronize**: This fetches a batch of accounts  and updates their Eloquent models accordingly, creating new models where they don't already exist.
+- **Synchronize**: This fetches a batch of accounts from an API, updates their Eloquent models accordingly, and creates new models where they don't already exist.
+- **Update**: This creates/updates an Eloquent model from a model DTO.
+- **View**: This allows details of each account to be viewed via the browser.
+
+### Currency
+
+These represent financial currencies such as GBP and BTC. They include the relevant details useful for text formatting and denomination conversion.
+
+Their actions include:
+
+- **Populate**: This builds all the currency models required by the platform and only needs to be run once upon initialization.
+- **Update**: This creates/updates an Eloquent model from a model DTO.
+- **View**: This allows details of each currency to be viewed via the browser.
+
+### Customer
+
+These represent people or companies engaged in exchanging currencies. They must be verified according to regulations and are categorized as **natural persons**, **companies**, **financial institutions** (e.g. banks/VASPs), **personal account holders** (for non-business payments), and **self** (my own accounts/profiles). Customers hold Accounts on payment networks and Profiles on exchange platforms.
+
+Their actions include:
+
+- **Add**: Allows a new verified customer to be added via the browser.
+- **Import**: This fetches a batch of customers from a CSV file, updates their Eloquent models accordingly, and creates new models where they don't already exist.
+- **Update**: This creates/updates an Eloquent model from a model DTO.
+- **View**: This allows details of each currency to be viewed via the browser.
+
+### Payment
+
+These represent transactions in a single Currency on various payment networks. They have an originator and a beneficiary Account.
+
+Their actions include:
+
+- **Fetch**: This fetches information for a specific Payment and updates the Eloquent model accordingly.
+- **Pay**: This creates a new Payment on the payment network.
+- **Synchronize**: This fetches a batch of Payments from an API, updates their Eloquent models accordingly, and creates new models where they don't already exist.
+- **Update**: This creates/updates an Eloquent model from a model DTO.
+- **View**: This allows details of each Payment to be viewed via the browser.
 
 ## "Command to action" chain
 
