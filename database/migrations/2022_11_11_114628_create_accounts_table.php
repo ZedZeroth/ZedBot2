@@ -18,8 +18,8 @@ return new class extends Migration
             //$table->string('state'); // active, inactive, unverified, blocked
             $table->string('network');
             $table->string('identifier');
-            $table->integer('customer_id'); // Customer
-            $table->string('networkAccountName');
+            $table->integer('customer_id')->nullable();
+            $table->string('networkAccountName')->nullable();
             $table->string('label');
             $table->integer('currency_id');
             $table->bigInteger('balance');

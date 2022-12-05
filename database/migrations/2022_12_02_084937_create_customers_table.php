@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('type'); // person, company, bank, vasp, self
             $table->string('familyName'); // "last name" / "surname"
             $table->string('givenName1'); // first name
-            $table->string('givenName2'); // first middle name
-            $table->string('companyName');
-            $table->string('preferredName'); // If preferred over givenName1
+            $table->string('givenName2')->nullable(); // first middle name
+            $table->string('companyName')->nullable();
+            $table->string('preferredName')->nullable(); // If preferred over givenName1
             $table->timestamps(); // Laravel
         });
     }

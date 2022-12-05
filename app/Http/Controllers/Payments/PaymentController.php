@@ -111,8 +111,10 @@ class PaymentController extends \App\Http\Controllers\Controller implements
                                 ),
                         numberToFetch: $syncCommandDTO->numberToFetch
                     ),
-                accountSynchronizer:
-                    (new \App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer())
+                paymentUpdater:
+                    (new \App\Http\Controllers\Payments\Update\PaymentUpdater()),
+                accountUpdater:
+                    (new \App\Http\Controllers\Accounts\Update\AccountUpdater())
             );
         return;
     }

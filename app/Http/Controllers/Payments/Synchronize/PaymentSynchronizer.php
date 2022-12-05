@@ -13,13 +13,15 @@ class PaymentSynchronizer
      * Uses the DTOs to create payments for
      * any that do not already exist.
      *
-     * @param array $DTOs
-     * @param AccountSynchronizer $accountSynchronizer
+     * @param array $modelDTOs
+     * @param PaymentUpdater $paymentUpdater
+     * @param AccountUpdater $accountUpdater
      */
     public function sync(
         array $modelDTOs,
-        \App\Http\Controllers\Accounts\Synchronize\AccountSynchronizer $accountSynchronizer
-    ): void {
+        \App\Http\Controllers\Payments\Update\PaymentUpdater $paymentUpdater,
+        \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater
+    ): bool {
         foreach ($modelDTOs as $paymentDTO) {
             //Validate DTOs
             (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
@@ -32,8 +34,8 @@ class PaymentSynchronizer
                         'identifier',
                         'amount',
                         'currency_id',
-                        'originator_identifier',
-                        'beneficiary_identifier',
+                        'originator_id',
+                        'beneficiary_id',
                         'memo',
                         'timestamp',
                         'originatorAccountDTO',
@@ -42,38 +44,19 @@ class PaymentSynchronizer
                 );
 
             // Create originator and beneficiary accounts for the payment
-            $accountSynchronizer->sync(modelDTOs: [
-                $paymentDTO->originatorAccountDTO,
-                $paymentDTO->beneficiaryAccountDTO
-            ]);
-
-            // Create payments
-            Payment::firstOrCreate(
-                ['identifier' => $paymentDTO->identifier],
-                [
-                    'network'           => $paymentDTO->network,
-                    'amount'            => $paymentDTO->amount,
-                    'currency_id'       => $paymentDTO->currency_id,
-                    'originator_id'     => Account::
-                        where('identifier', $paymentDTO->originator_identifier)
-                        ->first()->id,
-                    'beneficiary_id'    => Account::
-                        where('identifier', $paymentDTO->beneficiary_identifier)
-                        ->first()->id,
-                    'memo'              => $paymentDTO->memo,
-                    'timestamp'         => $paymentDTO->timestamp,
-                ]
+            $originatorAccount = $accountUpdater->update(
+                $paymentDTO->originatorAccountDTO
             );
+            $paymentDTO->originator_id = $originatorAccount->id;
+            $beneficiaryAccount = $accountUpdater->update(
+                $paymentDTO->beneficiaryAccountDTO
+            );
+            $paymentDTO->beneficiary_id = $beneficiaryAccount->id;
 
-            // Find the model
-            $payment = Payment::where('identifier', $paymentDTO->identifier)->first();
-
-            // Cast the most recent state to the model
-            $payment->state->transitionTo($paymentDTO->state);
-            // Save the model and its new state to the database
-            $payment->save();
+            // Create payment
+            $paymentUpdater->update($paymentDTO);
         }
 
-        return;
+        return true;
     }
 }

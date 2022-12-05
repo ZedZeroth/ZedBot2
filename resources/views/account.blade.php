@@ -29,9 +29,13 @@
         </h3>
 
         <h3>Holder:
-            <a href="/customer/{{ $account->customer->identifier}}">
-                {{ $account->customer->familyName }}
-            </a>
+            @if ($account->customer)
+                <a href="/customer/{{ $account->customer->identifier}}">
+                    {{ $account->customer->familyName }}
+                </a>
+            @else
+                <span style="font-style: italic;">NONE</span>
+            @endif
         </h3>
         Network account name: {{ $account->networkAccountName }}
         <br>Label: {{ $account->label }}

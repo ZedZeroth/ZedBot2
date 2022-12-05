@@ -39,9 +39,9 @@ class CurrencyController extends \App\Http\Controllers\Controller
      *
      * @return void
      */
-    public function populate(): void
+    public function populate(): bool
     {
-        (new \App\Http\Controllers\Currencies\Populate\CurrencyPopulator())->populate();
-        return;
+        return (new \App\Http\Controllers\Currencies\Populate\CurrencyPopulator())
+            ->populate();
     }
 }

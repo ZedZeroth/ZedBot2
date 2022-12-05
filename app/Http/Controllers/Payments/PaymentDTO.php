@@ -6,7 +6,8 @@ namespace App\Http\Controllers\Payments;
 
 use App\Http\Controllers\Accounts\AccountDTO;
 
-class PaymentDTO
+class PaymentDTO implements
+    \App\Http\Controllers\MultiDomain\Interfaces\ModelDtoInterface
 {
     /**
      * The payment data transfer object
@@ -14,13 +15,13 @@ class PaymentDTO
      * an adapter and the synchronizer.
      */
     public function __construct(
-        public string $state,
+        public ?string $state,
         public string $network,
         public string $identifier,
         public int $amount,
         public int $currency_id,
-        public string $originator_identifier,
-        public string $beneficiary_identifier,
+        public ?int $originator_id,
+        public ?int $beneficiary_id,
         public string $memo,
         public string $timestamp,
         public AccountDTO $originatorAccountDTO,

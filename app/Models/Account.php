@@ -14,7 +14,7 @@ class Account extends \Illuminate\Database\Eloquent\Model
      * @var array<int, string>
      */
     protected /* Do not define */ $attributes = [
-        //'customer_id' => null,
+        'customer_id' => null,
         'networkAccountName' => '',
         'label' => ''
     ];

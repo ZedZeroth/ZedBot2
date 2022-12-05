@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Accounts;
 
-class AccountDTO
+class AccountDTO implements
+    \App\Http\Controllers\MultiDomain\Interfaces\ModelDtoInterface
 {
     /**
      * The account data transfer object
@@ -14,8 +15,8 @@ class AccountDTO
     public function __construct(
         public string $network,
         public string $identifier,
-        public int $customer_id,
-        public string $networkAccountName,
+        public ?int $customer_id,
+        public ?string $networkAccountName,
         public string $label,
         public int $currency_id,
         public int $balance,

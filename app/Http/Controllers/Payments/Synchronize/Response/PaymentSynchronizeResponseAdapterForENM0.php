@@ -166,7 +166,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                 $originatorLabel = config('app.ZED_ENM0_ACCOUNT_NAME');
                 $originatorAccountIdentifier = $this->convertIbanToAccountIdentifier($result['accno']);
 
-                $beneficiaryNetworkAccountName = '';
+                $beneficiaryNetworkAccountName = null;
                 // Enumis missing beneficiary account name
                 if ($beneficiary[0]) {
                     $beneficiaryLabel = $beneficiary[0];
@@ -188,7 +188,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
             $originatorAccountDTO = new AccountDTO(
                 network: (string) 'FPS',
                 identifier: (string) $originatorAccountIdentifier,
-                customer_id: (int) 1,
+                customer_id: null,
                 networkAccountName: (string) $originatorNetworkAccountName,
                 label: (string) $originatorLabel,
                 currency_id: (int) $currency->id,
@@ -199,7 +199,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
             $beneficiaryAccountDTO = new AccountDTO(
                 network: (string) 'FPS',
                 identifier: (string) $beneficiaryAccountIdentifier,
-                customer_id: (int) 1,
+                customer_id: null,
                 networkAccountName: (string) $beneficiaryNetworkAccountName,
                 label: (string) $beneficiaryLabel,
                 currency_id: (int) $currency->id,
@@ -255,8 +255,8 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                         . $result['id'],
                     amount: (int) $amount,
                     currency_id: (int) $currency->id,
-                    originator_identifier: (string) $originatorAccountIdentifier,
-                    beneficiary_identifier: (string) $beneficiaryAccountIdentifier,
+                    originator_id: null,
+                    beneficiary_id: null,
                     memo: (string) $result['paymentReference'],
                     timestamp: (string) date(
                         'Y-m-d H:i:s',
