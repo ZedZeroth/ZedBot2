@@ -29,21 +29,10 @@ I aim to implment Test Driven Development (TDD) and Domain Driven Design (DDD) w
 
 These represent financial accounts, such as bank accounts and blockchain addresses, on various payment networks. They are originators or beneficiaries of Payments in a single currency, they have a holder (who may be a Customer), and they may be assigned a balance in their currency. Their actions include:
 
-#### Add
-
-This creates a new account on the payment network.
-
-#### Create
-
-This creates a new Eloquent model from a model DTO.
-
-#### Fetch
-
-This fetches information for a specific account and updates the Eloquent model accordingly.
-
-#### Synchronize
-
-This fetches a batch of accounts  and updates their Eloquent models accordingly, creating new models where they don't already exist.
+- **Add**: This creates a new account on the payment network.
+- **Create**: This creates a new Eloquent model from a model DTO.
+- **Fetch**: This fetches information for a specific account and updates the Eloquent model accordingly.
+- **Synchronize**: This fetches a batch of accounts  and updates their Eloquent models accordingly, creating new models where they don't already exist.
 
 ## "Command to action" chain
 
