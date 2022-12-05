@@ -2,7 +2,7 @@
 
 *Note: The four key entities not represented by Eloquent models are written uppercase and bold. These are: **NETWORK**, **EXCHANGE**, **MARKET**, and **API**. The twelve Eloquent models are written capitalized and bold: e.g. **Customer**, **Trade**, etc.*
 
-## Function
+## Purpose
 
 ZedBot is an semi-automated currency exchange application. It interacts with currency **MARKET**s, **EXCHANGE** platforms, and payment **NETWORK**s via their **API**s in order to:
 
@@ -22,6 +22,28 @@ ZedBot is an semi-automated currency exchange application. It interacts with cur
 ## Development & design
 
 I aim to implment Test Driven Development (TDD) and Domain Driven Design (DDD) while applying SOLID principles. "Single Responsibility" classes and "Interface Segregation" drive the use of many small and specific classes/interfaces as opposed to "fat" "God-like" ones. "Dependency Inversion" and "Dependency Injection" are both applied to create loose couplings so that changes can be applied to one class without requiring change to others.
+
+## Models & their actions
+
+### Account
+
+These represent financial accounts, such as bank accounts and blockchain addresses, on various payment networks. They are originators or beneficiaries of Payments in a single currency, they have a holder (who may be a Customer), and they may be assigned a balance in their currency. Their actions include:
+
+#### Add
+
+This creates a new account on the payment network.
+
+#### Create
+
+This creates a new Eloquent model from a model DTO.
+
+#### Fetch
+
+This fetches information for a specific account and updates the Eloquent model accordingly.
+
+#### Synchronize
+
+This fetches a batch of accounts  and updates their Eloquent models accordingly, creating new models where they don't already exist.
 
 ## "Command to action" chain
 

@@ -51,7 +51,6 @@ class PaymentSynchronizer
             Payment::firstOrCreate(
                 ['identifier' => $paymentDTO->identifier],
                 [
-                    //'state'             => $paymentDTO->state, // Testing
                     'network'           => $paymentDTO->network,
                     'amount'            => $paymentDTO->amount,
                     'currency_id'       => $paymentDTO->currency_id,
