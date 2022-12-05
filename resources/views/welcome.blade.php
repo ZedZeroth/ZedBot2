@@ -33,7 +33,7 @@
                                 &bull; <a href="customers">Customers</a>
                             </td>
                             <td>
-                                
+                                <livewire:customer-importer-component />
                             </td>
                         </tr>
                         <tr>

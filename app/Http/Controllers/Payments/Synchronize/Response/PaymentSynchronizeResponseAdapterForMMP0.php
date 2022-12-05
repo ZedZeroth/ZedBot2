@@ -156,9 +156,6 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                             'BTC'
                         )->firstOrFail();
 
-                // Create the account array
-                $accountDTOs = [];
-
                 if (!$isDebit and !$isCredit) {
                     throw new \Exception('Must be originator or beneficiary');
                 }
@@ -168,36 +165,28 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                     $originatorAccountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
 
                     // Build originator account DTO and sync
-                    array_push(
-                        $accountDTOs,
-                        new AccountDTO(
-                            network: (string) 'Bitcoin',
-                            identifier: (string) $originatorAccountIdentifier,
-                            customer_id: (int) 1,
-                            networkAccountName: (string) $addressDetails['address'],
-                            label: (string) $addressDetails['label'],
-                            currency_id: (int) $currency->id,
-                            balance: (int) 0
-                        )
+                    $originatorAccountDTO = new AccountDTO(
+                        network: (string) 'Bitcoin',
+                        identifier: (string) $originatorAccountIdentifier,
+                        customer_id: null,
+                        networkAccountName: (string) $addressDetails['address'],
+                        label: (string) $addressDetails['label'],
+                        currency_id: (int) $currency->id,
+                        balance: (int) 0
                     );
-                    (new AccountSynchronizer())->sync(modelDTOs: $accountDTOs);
 
                     foreach ($vout as $output) {
                         $beneficiaryAccountIdentifier = 'bitcoin::btc::' . $output['scriptpubkey_address'];
                         // Build beneficiary account DTOs and sync
-                        array_push(
-                            $accountDTOs,
-                            new AccountDTO(
-                                network: (string) 'Bitcoin',
-                                identifier: (string) $beneficiaryAccountIdentifier,
-                                customer_id: (int) 1,
-                                networkAccountName: (string) $output['scriptpubkey_address'],
-                                label: (string) 'Beneficiary of payment from ' . $addressDetails['label'],
-                                currency_id: (int) $currency->id,
-                                balance: (int) 0
-                            )
+                        $beneficiaryAccountDTO = new AccountDTO(
+                            network: (string) 'Bitcoin',
+                            identifier: (string) $beneficiaryAccountIdentifier,
+                            customer_id: null,
+                            networkAccountName: (string) $output['scriptpubkey_address'],
+                            label: (string) 'Beneficiary of payment from ' . $addressDetails['label'],
+                            currency_id: (int) $currency->id,
+                            balance: (int) 0
                         );
-                        (new AccountSynchronizer())->sync(modelDTOs: $accountDTOs);
 
                         // Create the payment DTOs
                         $memo = 'Payment from ' . $addressDetails['label'];
@@ -207,7 +196,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         array_push(
                             $paymentDTOs,
                             new \App\Http\Controllers\Payments\PaymentDTO(
-                                state: (string) \App\Models\Payments\States\Unconfirmed::class,
+                                state: \App\Models\Payments\States\Unconfirmed::class,
                                 network: (string) 'Bitcoin',
                                 identifier: (string) 'bitcoin::btc'
                                 . '::' . $addressDetails['address']
@@ -215,14 +204,12 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                                 . '::' . $output['scriptpubkey_address'],
                                 amount: (int) 0,
                                 currency_id: (int) $currency->id,
-                                originator_id: (int) Account::
-                                    where('identifier', $originatorAccountIdentifier)
-                                    ->first()->id,
-                                beneficiary_id: (int) Account::
-                                    where('identifier', $beneficiaryAccountIdentifier)
-                                    ->first()->id,
+                                originator_id: null,
+                                beneficiary_id: null,
                                 memo: (string) $memo,
-                                timestamp: (string) '2000-01-01T00:00:00.0000000+00:00'
+                                timestamp: null,
+                                originatorAccountDTO: $originatorAccountDTO,
+                                beneficiaryAccountDTO: $beneficiaryAccountDTO,
                             )
                         );
                     }
@@ -233,42 +220,34 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                     $beneficiaryAccountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
 
                     // Build the beneficiary account DTO and sync
-                    array_push(
-                        $accountDTOs,
-                        new AccountDTO(
-                            network: (string) 'Bitcoin',
-                            identifier: (string) $beneficiaryAccountIdentifier,
-                            customer_id: (int) 1,
-                            networkAccountName: (string) $addressDetails['address'],
-                            label: (string) $addressDetails['label'],
-                            currency_id: (int) $currency->id,
-                            balance: (int) 0
-                        )
+                    $beneficiaryAccountDTO = new AccountDTO(
+                        network: (string) 'Bitcoin',
+                        identifier: (string) $beneficiaryAccountIdentifier,
+                        customer_id: null,
+                        networkAccountName: (string) $addressDetails['address'],
+                        label: (string) $addressDetails['label'],
+                        currency_id: (int) $currency->id,
+                        balance: (int) 0
                     );
-                    (new AccountSynchronizer())->sync(modelDTOs: $accountDTOs);
 
                     foreach ($vin as $input) {
                         $originatorAccountIdentifier = 'bitcoin::btc::' . $input['prevout']['scriptpubkey_address'];
                         // Build the originator account DTOs and sync
-                        array_push(
-                            $accountDTOs,
-                            new AccountDTO(
-                                network: (string) 'Bitcoin',
-                                identifier: (string) $originatorAccountIdentifier,
-                                customer_id: (int) 1,
-                                networkAccountName: (string) $input['prevout']['scriptpubkey_address'],
-                                label: (string) 'Originator of payment to ' . $addressDetails['label'],
-                                currency_id: (int) $currency->id,
-                                balance: (int) 0
-                            )
+                        $originatorAccountDTO = new AccountDTO(
+                            network: (string) 'Bitcoin',
+                            identifier: (string) $originatorAccountIdentifier,
+                            customer_id: null,
+                            networkAccountName: (string) $input['prevout']['scriptpubkey_address'],
+                            label: (string) 'Originator of payment to ' . $addressDetails['label'],
+                            currency_id: (int) $currency->id,
+                            balance: (int) 0
                         );
-                        (new AccountSynchronizer())->sync(modelDTOs: $accountDTOs);
 
                         // Create the payment DTOs
                         array_push(
                             $paymentDTOs,
                             new \App\Http\Controllers\Payments\PaymentDTO(
-                                state: (string) \App\Models\Payments\States\Unconfirmed::class,
+                                state: \App\Models\Payments\States\Unconfirmed::class,
                                 network: (string) 'Bitcoin',
                                 identifier: (string) 'bitcoin::btc'
                                 . '::' . $input['prevout']['scriptpubkey_address']
@@ -276,14 +255,12 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                                 . '::' . $addressDetails['address'],
                                 amount: (int) 0,
                                 currency_id: (int) $currency->id,
-                                originator_id: (int) Account::
-                                    where('identifier', $originatorAccountIdentifier)
-                                    ->first()->id,
-                                beneficiary_id: (int) Account::
-                                    where('identifier', $beneficiaryAccountIdentifier)
-                                    ->first()->id,
+                                originator_id: null,
+                                beneficiary_id: null,
                                 memo: (string) 'Payment to ' . $addressDetails['label'],
-                                timestamp: (string) '2000-01-01T00:00:00.0000000+00:00'
+                                timestamp: null,
+                                originatorAccountDTO: $originatorAccountDTO,
+                                beneficiaryAccountDTO: $beneficiaryAccountDTO,
                             )
                         );
                     }

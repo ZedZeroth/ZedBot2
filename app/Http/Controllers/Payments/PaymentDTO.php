@@ -23,7 +23,7 @@ class PaymentDTO implements
         public ?int $originator_id,
         public ?int $beneficiary_id,
         public string $memo,
-        public string $timestamp,
+        public ?string $timestamp,
         public AccountDTO $originatorAccountDTO,
         public AccountDTO $beneficiaryAccountDTO,
     ) {

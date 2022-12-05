@@ -10,11 +10,13 @@
 
         <h1>Customers</h1>
 
-        @foreach ($customers as $customer)
+        <ul>
+        @foreach ($customers->sortBy('identifier') as $customer)
             <a href="/customer/{{ $customer->identifier }}">
-                {{ $customer->identifier }}
+                <li>{{ $customer->identifier }}</li>
             </a>
         @endforeach
+        </ul>
 
     </body>
 </html>

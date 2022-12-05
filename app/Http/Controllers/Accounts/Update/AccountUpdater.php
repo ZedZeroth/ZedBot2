@@ -39,6 +39,7 @@ class AccountUpdater implements
             ['identifier' => $modelDTO->identifier],
             [
                 'network'       => $modelDTO->network,
+                'label'         => $modelDTO->label,
                 'currency_id'   => $modelDTO->currency_id,
                 'balance'       => $modelDTO->balance,
             ]

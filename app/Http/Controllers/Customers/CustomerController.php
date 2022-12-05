@@ -55,7 +55,11 @@ class CustomerController extends \App\Http\Controllers\Controller
                                 ->read('customer_records.csv'),
                         importerAdapter:
                             (new \App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV())
-                    )
+                    ),
+                customerUpdater:
+                    (new \App\Http\Controllers\Customers\Update\CustomerUpdater()),
+                accountUpdater:
+                    (new \App\Http\Controllers\Accounts\Update\AccountUpdater())
             );
     }
 }

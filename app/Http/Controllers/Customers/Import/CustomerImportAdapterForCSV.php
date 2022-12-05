@@ -88,13 +88,51 @@ class CustomerImportAdapterForCSV implements
                 isHexadecimal: false
             );
 */
+            // Determine the currency
+            $currency = \App\Models\Currency::
+            where(
+                'code',
+                'GBP'
+            )->firstOrFail();
 
-            // Build the DTO
+            $accountDTOs = [];
+            // Build the account DTOs
+            $accountCell = $row['BANK 1/SURNAME/SORT CODE/ACCOUNT NO/BANK 2/SURNAME/SORT CODE/ACCOUNT NO ETC…'];
+            if ($accountCell) {
+                $accountArray   = explode('/', $accountCell);
+                if (count($accountArray) % 4 != 0) {
+                    throw new \Exception('$accountArray "' . $accountCell . '" is not divisible by 4');
+                } else {
+                    for ($i = 0; $i < count($accountArray) / 4; $i++) {
+                        $label = $accountArray[4 * $i + 1];
+                        $sortCode = $accountArray[4 * $i + 2];
+                        $accountNumber = $accountArray[4 * $i + 3];
+                        array_push(
+                            $accountDTOs,
+                            new \App\Http\Controllers\Accounts\AccountDTO(
+                                network: (string) 'FPS',
+                                identifier: (string) 'fps'
+                                    . '::' . 'gbp'
+                                    . '::' . $sortCode
+                                    . '::' . $accountNumber,
+                                customer_id: null,
+                                networkAccountName: null,
+                                label: (string) $label,
+                                currency_id: (int) $currency->id,
+                                balance: (int) 0,
+                            ),
+                        );
+                    }
+                }
+            }
+
+            // Build the customer DTO
             array_push(
                 $customerDTOs,
                 new \App\Http\Controllers\Customers\CustomerDTO(
                     // Build identifiers in importer/synchronizer!
                     // "customer"::customer_id::surname::surname_collision_increment::given_name_1::given_name_2
+                    state: \App\Models\Customers\States\Unverified::class,
                     identifier: (string) 'customer'
                         . '::' . $row['ID SURNAME']
                         . '::' . $row['GIVEN NAME 1']
@@ -105,6 +143,7 @@ class CustomerImportAdapterForCSV implements
                     givenName2: (string) $row['GIVEN NAME 2'],
                     companyName: (string) '',
                     preferredName: (string) $row['PREFERRED NAME'],
+                    accountDTOs: $accountDTOs
                 ),
             );
         }

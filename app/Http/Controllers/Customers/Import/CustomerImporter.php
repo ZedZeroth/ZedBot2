@@ -12,10 +12,14 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
      * Uses the DTOs to create Customers for
      * any that do not already exist.
      *
-     * @param array $DTOs
+     * @param array $modelDTOs
+     * @param CustomerUpdater $customerUpdater
+     * @param AccountUpdater $accountUpdater
      */
     public function import(
-        array $modelDTOs
+        array $modelDTOs,
+        \App\Http\Controllers\Customers\Update\CustomerUpdater $customerUpdater,
+        \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater
     ): bool {
         foreach ($modelDTOs as $customerDTO) {
             //Validate DTOs
@@ -24,6 +28,7 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                     dto: $customerDTO,
                     dtoName: 'customerDTO',
                     requiredProperties: [
+                        'state',
                         'identifier',
                         'type',
                         'familyName',
@@ -31,22 +36,18 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                         'givenName2',
                         'companyName',
                         'preferredName',
+                        'accountDTOs'
                     ]
                 );
 
             // Create customers
-            Customer::firstOrCreate(
-                ['identifier' => $customerDTO->identifier],
-                [
-                    'state'         => \App\Models\Customers\States\Unverified::class, // Testing
-                    'type'          => $customerDTO->type,
-                    'familyName'    => $customerDTO->familyName,
-                    'givenName1'    => $customerDTO->givenName1,
-                    'givenName2'    => $customerDTO->givenName2,
-                    'companyName'   => $customerDTO->companyName,
-                    'preferredName' => $customerDTO->preferredName,
-                ]
-            );
+            $customer = $customerUpdater->update($customerDTO);
+
+            // Create and assign accounts
+            foreach ($customerDTO->accountDTOs as $accountDTO) {
+                $accountDTO->customer_id = $customer->id;
+                $accountUpdater->update($accountDTO);
+            }
         }
         return true;
     }

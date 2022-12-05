@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('originator_id'); // Account
             $table->integer('beneficiary_id'); // Account
             $table->string('memo'); // e.g. Public payment reference
-            $table->timestamp('timestamp'); // On network
+            $table->timestamp('timestamp')->nullable(); // On network
             $table->timestamps(); // Laravel
         });
     }

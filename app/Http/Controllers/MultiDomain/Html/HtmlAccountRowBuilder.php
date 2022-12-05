@@ -21,6 +21,16 @@ class HtmlAccountRowBuilder implements
     ): string {
         $html = '<table>';
         foreach ($models as $account) {
+            $holderHTML = '<td style="font-style: italic;">'
+                . 'NO HOLDER'
+                . '</td>';
+            if ($account->customer) {
+                $holderHTML = '<td><a href="/customer/'
+                    . $account->customer->identifier
+                    . '">'
+                    . $account->customer->identifier
+                    . '</a></td>';
+            }
             $html .= '<tr>';
 
             $html = $html
@@ -30,11 +40,7 @@ class HtmlAccountRowBuilder implements
                 . $account->network
                 . '</a></td>'
 
-                . '<td><a href="/customer/'
-                . $account->customer()->firstOrFail()->identifier
-                . '">'
-                . $account->customer()->firstOrFail()->identifier
-                . '</a></td>'
+                . $holderHTML
 
                 . '<td>“' . $account->label . '”</td>'
 

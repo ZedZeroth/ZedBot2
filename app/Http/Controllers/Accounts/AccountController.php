@@ -111,7 +111,9 @@ class AccountController extends \App\Http\Controllers\Controller implements
                                     api: $syncCommandDTO->api
                                 ),
                         numberToFetch: $syncCommandDTO->numberToFetch
-                    )
+                    ),
+                accountUpdater:
+                    (new \App\Http\Controllers\Accounts\Update\AccountUpdater())
             );
         return;
     }

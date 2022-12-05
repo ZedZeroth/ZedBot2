@@ -34,6 +34,12 @@ class HtmlPaymentRowBuilder implements
                 $beneficiaryName = $payment->beneficiary->label;
             }
 
+            // Null timestamps
+            $timestampHTML = '<span style="font-style: italic;">UNKNOWN</span>';
+            if ($payment->timestamp) {
+                $timestampHTML = $payment->timestamp;
+            }
+
             // Center/pad payment money
             $money = $payment->currency->code
                 . ' ' . $payment->formatAmount();
@@ -51,7 +57,7 @@ class HtmlPaymentRowBuilder implements
                 . '</a></td>'
 
                 . '<td>'
-                . $payment->timestamp
+                . $timestampHTML
                 . '</td>'
 
                 . '<td>“' . $payment->memo . '”</td>'

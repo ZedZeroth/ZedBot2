@@ -32,7 +32,10 @@
             <h3><anchor id="accounts">Accounts held</h3>
             @if ($customer->accounts()->count())
                 @foreach ($customer->accounts()->get() as $account)
-                    <br>{{ $account->identifier }}
+                    <br>
+                    <a href="\account\{{ $account->identifier }}">
+                        {{ $account->identifier }}
+                    </a>
                 @endforeach
             @else
                 <p>None</p>

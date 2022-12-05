@@ -43,7 +43,7 @@ class PaymentSynchronizer
                     ]
                 );
 
-            // Create originator and beneficiary accounts for the payment
+            // Create the originator and beneficiary accounts for the payment
             $originatorAccount = $accountUpdater->update(
                 $paymentDTO->originatorAccountDTO
             );
@@ -53,7 +53,7 @@ class PaymentSynchronizer
             );
             $paymentDTO->beneficiary_id = $beneficiaryAccount->id;
 
-            // Create payment
+            // Create the payment
             $paymentUpdater->update($paymentDTO);
         }
 

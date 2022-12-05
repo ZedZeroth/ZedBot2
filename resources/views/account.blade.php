@@ -31,7 +31,8 @@
         <h3>Holder:
             @if ($account->customer)
                 <a href="/customer/{{ $account->customer->identifier}}">
-                    {{ $account->customer->familyName }}
+                    {{ $account->customer->familyName }},
+                    {{ $account->customer->givenName1 }}
                 </a>
             @else
                 <span style="font-style: italic;">NONE</span>

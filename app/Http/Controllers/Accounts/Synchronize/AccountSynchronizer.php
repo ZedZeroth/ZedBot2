@@ -12,11 +12,13 @@ class AccountSynchronizer
      * Uses the DTOs to create accounts for
      * any that do not already exist.
      *
-     * @param array $DTOs
+     * @param array $modelDTOs
+     * @param AccountUpdater $accountUpdater
      */
     public function sync(
-        array $modelDTOs
-    ): void {
+        array $modelDTOs,
+        \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater
+    ): bool {
         foreach ($modelDTOs as $accountDTO) {
             //Validate DTOs
             (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
@@ -38,33 +40,10 @@ class AccountSynchronizer
 
             // Accounts must be manually assigned to their holder?
 
-            // Create accounts
-            Account::firstOrCreate(
-                ['identifier' => $accountDTO->identifier],
-                [
-                    'network'       => $accountDTO->network,
-                    'customer_id'     => 1,
-                    'currency_id'   => $accountDTO->currency_id,
-                    'balance'       => $accountDTO->balance,
-                ]
-            );
-
-            // If a networkAccountName is passed then update it
-            if ($accountDTO->networkAccountName) {
-                Account::where('identifier', $accountDTO->identifier)
-                ->update(['networkAccountName' => $accountDTO->networkAccountName]);
-            }
-
-            // If a label is passed then update it
-            if ($accountDTO->label) {
-                Account::where('identifier', $accountDTO->identifier)
-                ->update(['label' => $accountDTO->label]);
-            } else {
-                Account::where('identifier', $accountDTO->identifier)
-                ->update(['label' => '[NO LABEL FOUND]']);
-            }
+            // Create account
+            $accountUpdater->update($accountDTO);
         }
 
-        return;
+        return true;
     }
 }

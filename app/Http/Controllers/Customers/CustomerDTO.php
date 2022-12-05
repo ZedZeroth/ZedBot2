@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Customers;
 
-class CustomerDTO
+class CustomerDTO implements
+    \App\Http\Controllers\MultiDomain\Interfaces\ModelDtoInterface
 {
     /**
      * The account data transfer object
@@ -20,6 +21,7 @@ class CustomerDTO
         public ?string $givenName2,
         public ?string $companyName,
         public ?string $preferredName,
+        public array $accountDTOs,
     ) {
     }
 }
