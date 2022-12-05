@@ -48,13 +48,13 @@ test('GIVEN no parameters
  */
 
 // POSITIVE TEST
-test('GIVEN "test::test" // replace with my name
+test('GIVEN env(ZED_TEST_CUSTOMER_IDENTIFIER)
 WHEN calling showByIdentifier()
 THEN the correct View is returned
 ', function () {
     // Generate the View
     $view = (new CustomerViewer())
-        ->showByIdentifier('test::test');
+        ->showByIdentifier(env('ZED_TEST_CUSTOMER_IDENTIFIER'));
     $this->assertInstanceOf(View::class, $view);
 
     // Check the "view" property is "customer"

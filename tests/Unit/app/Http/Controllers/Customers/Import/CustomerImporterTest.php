@@ -18,8 +18,19 @@ test('GIVEN a valid customerDTO
     THEN return true
     ', function () {
 
-    // Construct the DTO
-    $identifier = 'test::test50';
+    // Construct the account DTO
+    $accountDTO = new \App\Http\Controllers\Accounts\AccountDTO(
+        network: 'test',
+        identifier: 'account::test::test',
+        customer_id: null,
+        networkAccountName: null,
+        label: 'test',
+        currency_id: 1,
+        balance: 0,
+    );
+
+    // Construct the customer DTO
+    $identifier = 'customer::test::test';
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
         state: 'test',
         identifier: $identifier,
@@ -29,12 +40,27 @@ test('GIVEN a valid customerDTO
         givenName2: 'Test',
         companyName: 'Test Ltd',
         preferredName: 'T',
+        accountDTOs: [$accountDTO],
     );
+
+    // Build updater and model mocks
+    $customerUpdaterMock = mock(\App\Http\Controllers\Customers\Update\CustomerUpdater::class)
+        ->shouldReceive('update')
+        ->with($customerDTO)
+        ->andReturn('test') // How to mock models??
+        ->getMock();
+    $accountUpdaterMock = mock(\App\Http\Controllers\Accounts\Update\AccountUpdater::class)
+        ->shouldReceive('update')
+        ->with($accountDTO)
+        ->andReturn('test') // How to mock models??
+        ->getMock();
 
     // Inject into CustomerImporter's import()
     $this->assertTrue(
         (new CustomerImporter())->import(
-            modelDTOs: [$customerDTO]
+            modelDTOs: [$customerDTO],
+            customerUpdater: $customerUpdaterMock,
+            accountUpdater: $accountUpdaterMock
         )
     );
 

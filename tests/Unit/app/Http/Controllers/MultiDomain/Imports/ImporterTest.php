@@ -29,25 +29,27 @@ THEN return a CSV array
         ])
         ->getMock();
 
+    $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
+        state: 'test',
+        identifier: 'test::test',
+        type: 'test',
+        familyName: 'Test',
+        givenName1: 'Test',
+        givenName2: 'Test',
+        companyName: 'Test Ltd',
+        preferredName: 'T',
+        accountDTOs: [],
+    );
+
     $csvAdapterMock = mock(\App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV::class)
         ->shouldReceive('buildDTOs')
-        ->with($csvReaderMock)
-        ->andReturn([
-            new \App\Http\Controllers\Customers\CustomerDTO(
-                state: 'test',
-                identifier: 'test::test',
-                type: 'test',
-                familyName: 'Test',
-                givenName1: 'Test',
-                givenName2: 'Test',
-                companyName: 'Test Ltd',
-                preferredName: 'T',
-            )
-        ])
+        ->with($csvReaderMock->read('test.csv'))
+        ->andReturn([$customerDTO])
         ->getMock();
 
     // Inject into Importer's import()
-    $this->assertTrue(
+    $this->assertSame(
+        [$customerDTO],
         (new Importer())->import(
             readerArray: $csvReaderMock->read('test.csv'),
             importerAdapter: $csvAdapterMock
