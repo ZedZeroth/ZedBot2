@@ -27,7 +27,7 @@ test('GIVEN Customer id = 1
 
     // Expect the Customer to have at least one Account
     expect(
-        $customer->accounts()->firstOrFail()
+        $customer->accounts->firstOrFail()
     )->toBeInstanceOf(Account::class);
 });
 

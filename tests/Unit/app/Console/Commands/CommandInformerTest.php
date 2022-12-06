@@ -20,16 +20,16 @@ test('GIVEN a correctly mocked Command
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->with('source')->andReturn('cli')
-        ->shouldReceive('info')->with('[📟] test:test')->andReturn()
-        ->shouldReceive('info')->with('---------------------------------')->andReturn()
-        ->shouldReceive('argument')->with()->andReturn([])
-        ->shouldReceive('info')->with('... Running "test:test"')->andReturn()
-        ->shouldReceive('runThisCommand')->with()->andReturn()
-        ->shouldReceive('info')->with('... 0ms DONE')->andReturn()
-        ->shouldReceive('info')->with('No new models created.')->andReturn()
-        ->shouldReceive('info')->with('')->andReturn()
+        ->shouldReceive('argument')->times(3)->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->twice()->with('source')->andReturn('cli')
+        ->shouldReceive('info')->once()->with('[📟] test:test')->andReturn()
+        ->shouldReceive('info')->twice()->with('---------------------------------')->andReturn()
+        ->shouldReceive('argument')->twice()->with()->andReturn([])
+        ->shouldReceive('info')->once()->with('... Running "test:test"')->andReturn()
+        ->shouldReceive('runThisCommand')->once()->with()->andReturn()
+        ->shouldReceive('info')->once()->with('... 0ms DONE')->andReturn()
+        ->shouldReceive('info')->once()->with('No new models created.')->andReturn()
+        ->shouldReceive('info')->once()->with('')->andReturn()
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -46,7 +46,7 @@ test('GIVEN a mocked Command with "command" argument "t:t"
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('command')->andReturn('t:t')
+        ->shouldReceive('argument')->once()->with('command')->andReturn('t:t')
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -64,8 +64,8 @@ test('GIVEN a mocked Command with "source" argument "test"
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->with('source')->andReturn('test')
+        ->shouldReceive('argument')->once()->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->twice()->with('source')->andReturn('test')
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -86,16 +86,16 @@ test('GIVEN a correctly mocked Command
     ', function () {
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->with('source')->andReturn('cli')
-        ->shouldReceive('info')->with('[📟] test:test')->andReturn()
-        ->shouldReceive('info')->with('---------------------------------')->andReturn()
-        ->shouldReceive('argument')->with()->andReturn([])
-        ->shouldReceive('info')->with('... Running "test:test"')->andReturn()
-        ->shouldReceive('runThisCommand')->with()->andReturn()
-        ->shouldReceive('info')->with('... 0ms DONE')->andReturn()
-        ->shouldReceive('info')->with('No new models created.')->andReturn()
-        ->shouldReceive('info')->with('')->andReturn()
+        ->shouldReceive('argument')->times(3)->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->twice()->with('source')->andReturn('cli')
+        ->shouldReceive('info')->twice()->with('[📟] test:test')->andReturn()
+        ->shouldReceive('info')->twice()->with('---------------------------------')->andReturn()
+        ->shouldReceive('argument')->twice()->with()->andReturn([])
+        ->shouldReceive('info')->once()->with('... Running "test:test"')->andReturn()
+        ->shouldReceive('runThisCommand')->once()->with()->andReturn()
+        ->shouldReceive('info')->once()->with('... 0ms DONE')->andReturn()
+        ->shouldReceive('info')->once()->with('No new models created.')->andReturn()
+        ->shouldReceive('info')->once()->with('')->andReturn()
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -115,16 +115,16 @@ test('GIVEN a string of length 1000
     ', function () {
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->with('source')->andReturn('cli')
-        ->shouldReceive('info')->with('[📟] test:test')->andReturn()
-        ->shouldReceive('info')->with('---------------------------------')->andReturn()
-        ->shouldReceive('argument')->with()->andReturn([])
-        ->shouldReceive('info')->with('... Running "test:test"')->andReturn()
-        ->shouldReceive('runThisCommand')->with()->andReturn()
-        ->shouldReceive('info')->with('... 0ms DONE')->andReturn()
-        ->shouldReceive('info')->with('No new models created.')->andReturn()
-        ->shouldReceive('info')->with('')->andReturn()
+        ->shouldReceive('argument')->times(3)->with('command')->andReturn('test:test')
+        ->shouldReceive('argument')->twice()->with('source')->andReturn('cli')
+        ->shouldReceive('info')->once()->with('[📟] test:test')->andReturn()
+        ->shouldReceive('info')->twice()->with('---------------------------------')->andReturn()
+        ->shouldReceive('argument')->twice()->with()->andReturn([])
+        ->shouldReceive('info')->once()->with('... Running "test:test"')->andReturn()
+        ->shouldReceive('runThisCommand')->once()->with()->andReturn()
+        ->shouldReceive('info')->once()->with('... 0ms DONE')->andReturn()
+        ->shouldReceive('info')->once()->with('No new models created.')->andReturn()
+        ->shouldReceive('info')->once()->with('')->andReturn()
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method

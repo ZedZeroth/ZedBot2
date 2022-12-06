@@ -195,6 +195,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Zed's Service Providers...
+         */
+        //App\Models\ModelServiceProvider::class,
+
     ],
 
     /*

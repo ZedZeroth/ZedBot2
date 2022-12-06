@@ -44,23 +44,26 @@ test('GIVEN a valid customerDTO
     );
 
     // Build updater and model mocks
+    // MOCKING MODELS IS PROBLEMATIC
+    /*
     $customerUpdaterMock = mock(\App\Http\Controllers\Customers\Update\CustomerUpdater::class)
         ->shouldReceive('update')
         ->with($customerDTO)
-        ->andReturn('test') // How to mock models??
+        ->andReturn(mock(\App\Models\Customer::class)->makePartial())
         ->getMock();
     $accountUpdaterMock = mock(\App\Http\Controllers\Accounts\Update\AccountUpdater::class)
         ->shouldReceive('update')
         ->with($accountDTO)
-        ->andReturn('test') // How to mock models??
+        ->andReturn(mock(\App\Models\Account::class)->makePartial())
         ->getMock();
+    */
 
     // Inject into CustomerImporter's import()
     $this->assertTrue(
         (new CustomerImporter())->import(
             modelDTOs: [$customerDTO],
-            customerUpdater: $customerUpdaterMock,
-            accountUpdater: $accountUpdaterMock
+            customerUpdater: new \App\Http\Controllers\Customers\Update\CustomerUpdater(), //$customerUpdaterMock,
+            accountUpdater: new \App\Http\Controllers\Accounts\Update\AccountUpdater()//$accountUpdaterMock
         )
     );
 
