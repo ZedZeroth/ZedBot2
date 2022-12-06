@@ -43,9 +43,13 @@
 
         <h3>
             Balance:
-            <a href="/currency/{{ $account->currency()->first()->code }}">
-                {{ $account->currency()->first()->code }}</a>
-                {{ $account->formatBalance() }}
+            @if ($account->balance)
+                <a href="/currency/{{ $account->currency()->first()->code }}">
+                    {{ $account->currency()->first()->code }}</a>
+                    {{ $account->formatBalance() }}
+            @else
+                <span style="font-style: italic;">UNKNOWN</span>
+            @endif
         </h3>
 
         <h2><anchor id="model-data">Model data</h2>

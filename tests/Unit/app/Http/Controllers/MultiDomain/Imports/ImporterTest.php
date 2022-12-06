@@ -21,7 +21,8 @@ THEN return a CSV array
     // Build parameters
     $csvReaderMock = mock(\App\Http\Controllers\MultiDomain\Imports\CsvReader::class)
         ->shouldReceive('read')
-        ->with('test.csv')
+        ->once()
+        ->twice('test.csv')
         ->andReturn([
             ['header1', 'header2'],
             ['row1field1', ['row1field2']],
@@ -43,6 +44,7 @@ THEN return a CSV array
 
     $csvAdapterMock = mock(\App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV::class)
         ->shouldReceive('buildDTOs')
+        ->once()
         ->with($csvReaderMock->read('test.csv'))
         ->andReturn([$customerDTO])
         ->getMock();

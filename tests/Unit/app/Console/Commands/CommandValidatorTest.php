@@ -20,10 +20,10 @@ test('GIVEN a correctly mocked Command and $commandName
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('browser')
-        ->shouldReceive('argument')->with()->andReturn(['API' => 'ENM0', 'Number to fetch' => 10])
-        ->shouldReceive('argument')->with('API')->andReturn('ENM0')
-        ->shouldReceive('argument')->with('Number to fetch')->andReturn(10)
+        ->shouldReceive('argument')->once()->with('source')->andReturn('browser')
+        ->shouldReceive('argument')->once()->with()->andReturn(['API' => 'ENM0', 'Number to fetch' => 10])
+        ->shouldReceive('argument')->once()->with('API')->andReturn('ENM0')
+        ->shouldReceive('argument')->once()->with('Number to fetch')->andReturn(10)
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -43,7 +43,7 @@ test('GIVEN an invalid source
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('test')
+        ->shouldReceive('argument')->twice()->with('source')->andReturn('test')
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -64,9 +64,9 @@ test('GIVEN an invalid API
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('scheduler')
-        ->shouldReceive('argument')->with()->andReturn(['API' => 'XXX0'])
-        ->shouldReceive('argument')->with('API')->andReturn('XXX0')
+        ->shouldReceive('argument')->once()->with('source')->andReturn('scheduler')
+        ->shouldReceive('argument')->once()->with()->andReturn(['API' => 'XXX0'])
+        ->shouldReceive('argument')->once()->with('API')->andReturn('XXX0')
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
@@ -86,9 +86,9 @@ test('GIVEN an invalid "Number to fetch"
 
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
-        ->shouldReceive('argument')->with('source')->andReturn('scheduler')
-        ->shouldReceive('argument')->with()->andReturn(['Number to fetch' => -1])
-        ->shouldReceive('argument')->with('Number to fetch')->andReturn(-1)
+        ->shouldReceive('argument')->once()->with('source')->andReturn('scheduler')
+        ->shouldReceive('argument')->once()->with()->andReturn(['Number to fetch' => -1])
+        ->shouldReceive('argument')->once()->with('Number to fetch')->andReturn(-1)
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method

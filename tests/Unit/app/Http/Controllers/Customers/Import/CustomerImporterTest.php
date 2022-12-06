@@ -48,11 +48,13 @@ test('GIVEN a valid customerDTO
     /*
     $customerUpdaterMock = mock(\App\Http\Controllers\Customers\Update\CustomerUpdater::class)
         ->shouldReceive('update')
+        ->once()
         ->with($customerDTO)
         ->andReturn(mock(\App\Models\Customer::class)->makePartial())
         ->getMock();
     $accountUpdaterMock = mock(\App\Http\Controllers\Accounts\Update\AccountUpdater::class)
         ->shouldReceive('update')
+        ->once()
         ->with($accountDTO)
         ->andReturn(mock(\App\Models\Account::class)->makePartial())
         ->getMock();

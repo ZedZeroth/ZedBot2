@@ -33,42 +33,32 @@ class AccountUpdater implements
                 ]
             );
 
-        // firstOrCreate because nothing should be being overridden
-        // except null values or state (see below)
-        $account = Account::firstOrCreate(
-            ['identifier' => $modelDTO->identifier],
+        // Update these attributes if model already exists
+        $account = Account::firstOrNew(
+            ['identifier'   => $modelDTO->identifier],
             [
-                'network'       => $modelDTO->network,
-                'label'         => $modelDTO->label,
-                'currency_id'   => $modelDTO->currency_id,
-                'balance'       => $modelDTO->balance,
+                'network'                   => $modelDTO->network,
+                'networkAccountName'        => $modelDTO->networkAccountName,
+                'label'                     => $modelDTO->label,
+                'currency_id'               => $modelDTO->currency_id
             ]
         );
+        // Always update the balance
+        $account->balance = $modelDTO->balance;
+        // Only update these attributes if they were null
+        if ($account->exists()) {
+            if (is_null($account->networkAccountName)) {
+                $account->networkAccountName    = $modelDTO->networkAccountName;
+            }
+            if (is_null($account->customer_id)) {
+                $account->customer_id           = $modelDTO->customer_id;
+            }
+        }
+        // Save the updates
+        $account->save();
 
         // Cast the API state to the model
         // $account->state->transitionTo($modelDTO->state);
-
-        // If a networkAccountName is passed then override null
-        if (
-            !$account->networkAccountName // No existing name
-            and
-            $modelDTO->networkAccountName // New name is passed
-        ) {
-            $account->update(
-                ['networkAccountName' => $modelDTO->networkAccountName]
-            );
-        }
-
-        // If an account holder (customer) is passed then override null
-        if (
-            !$account->customer_id // No existing account holder
-            and
-            $modelDTO->customer_id // New account holder is passed
-        ) {
-            $account->update(
-                ['customer_id' => $modelDTO->customer_id]
-            );
-        }
 
         return $account;
     }

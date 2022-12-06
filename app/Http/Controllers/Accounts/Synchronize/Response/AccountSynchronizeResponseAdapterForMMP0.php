@@ -39,7 +39,7 @@ class AccountSynchronizeResponseAdapterForMMP0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $addressDetails['label'],
                 stringName: '$addressDetails[label]',
-                charactersToRemove: [' ', '-'],
+                charactersToRemove: [' ', '-', '’'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),
                 mustHaveUppercase: true,
@@ -113,7 +113,7 @@ class AccountSynchronizeResponseAdapterForMMP0 implements
                     identifier: (string) 'bitcoin'
                         . '::' . strtolower($currency->code)
                         . '::' . $response['address'],
-                    customer_id: (int) 1,
+                    customer_id: null,
                     networkAccountName: $response['address'],
                     label: (string) $addressDetails['label'],
                     currency_id: (int) $currency->id,

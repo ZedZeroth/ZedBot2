@@ -82,6 +82,7 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
     // Mock a PostAdapter to return a fake request response array
     $postAdapterMock = mock(\App\Http\Controllers\MultiDomain\Requests\PostAdapterForENM0::class)
         ->shouldReceive('post')
+        ->once()
         ->with(
             config('app.ZED_ENM0_BENEFICIARIES_ENDPOINT'),
             [
@@ -124,6 +125,7 @@ test('GIVEN a POST_ADAPTER with a mocked post() method
     // Mock an incorrect Adapter to return a fake request response array
     $postAdapterMock = mock(\App\Http\Controllers\MultiDomain\Requests\POST_ADAPTER::class)
         ->shouldReceive('post')
+        ->once()
         ->with(
             config('app.ZED_ENM0_BENEFICIARIES_ENDPOINT'),
             [
@@ -167,6 +169,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
     // Mock an incorrect GetAdapter to return a fake request response array
     $postAdapterMock = mock(\App\Http\Controllers\MultiDomain\Requests\GetAdapterForLCS0::class)
         ->shouldReceive('post')
+        ->times(0)
         ->with(
             config('app.ZED_ENM0_BENEFICIARIES_ENDPOINT'),
             [

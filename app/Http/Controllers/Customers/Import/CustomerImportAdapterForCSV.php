@@ -88,6 +88,11 @@ class CustomerImportAdapterForCSV implements
                 isHexadecimal: false
             );
 */
+            // Multi-Currency account DTOs
+            $accountDTOs = [];
+
+            // Build the GBP account DTOs
+
             // Determine the currency
             $currency = \App\Models\Currency::
             where(
@@ -95,18 +100,16 @@ class CustomerImportAdapterForCSV implements
                 'GBP'
             )->firstOrFail();
 
-            $accountDTOs = [];
-            // Build the account DTOs
-            $accountCell = $row['BANK 1/SURNAME/SORT CODE/ACCOUNT NO/BANK 2/SURNAME/SORT CODE/ACCOUNT NO ETC…'];
-            if ($accountCell) {
-                $accountArray   = explode('/', $accountCell);
-                if (count($accountArray) % 4 != 0) {
-                    throw new \Exception('$accountArray "' . $accountCell . '" is not divisible by 4');
+            $bankAccountCell = $row['BANK 1/SURNAME/SORT CODE/ACCOUNT NO/BANK 2/SURNAME/SORT CODE/ACCOUNT NO ETC…'];
+            if ($bankAccountCell) {
+                $bankAccountArray = explode('/', $bankAccountCell);
+                if (count($bankAccountArray) % 4 != 0) {
+                    throw new \Exception('$accountArray "' . $bankAccountCell . '" is not divisible by 4');
                 } else {
-                    for ($i = 0; $i < count($accountArray) / 4; $i++) {
-                        $label = $accountArray[4 * $i + 1];
-                        $sortCode = $accountArray[4 * $i + 2];
-                        $accountNumber = $accountArray[4 * $i + 3];
+                    for ($i = 0; $i < count($bankAccountArray) / 4; $i++) {
+                        $label = $bankAccountArray[4 * $i + 1];
+                        $sortCode = $bankAccountArray[4 * $i + 2];
+                        $accountNumber = $bankAccountArray[4 * $i + 3];
                         array_push(
                             $accountDTOs,
                             new \App\Http\Controllers\Accounts\AccountDTO(
@@ -119,10 +122,43 @@ class CustomerImportAdapterForCSV implements
                                 networkAccountName: null,
                                 label: (string) $label,
                                 currency_id: (int) $currency->id,
-                                balance: (int) 0,
+                                balance: null,
                             ),
                         );
                     }
+                }
+            }
+
+            // Build the CVC account DTOs
+
+            $blockchainAddressCell = $row['blockchain_addresses'];
+            if ($blockchainAddressCell) {
+                $blockchainAddressArray = explode('//', $blockchainAddressCell);
+                foreach ($blockchainAddressArray as $blockchainAddress) {
+                    $blockchainAddressDetail = explode('::', $blockchainAddress);
+
+                    // Determine the currency
+                    $currency = \App\Models\Currency::
+                    where(
+                        'code',
+                        $blockchainAddressDetail[1]
+                    )->firstOrFail();
+
+                    // Build the DTO
+                    array_push(
+                        $accountDTOs,
+                        new \App\Http\Controllers\Accounts\AccountDTO(
+                            network: (string) $blockchainAddressDetail[0],
+                            identifier: (string) strtolower($blockchainAddressDetail[0])
+                                . '::' . strtolower($blockchainAddressDetail[1])
+                                . '::' . $blockchainAddressDetail[2],
+                            customer_id: null,
+                            networkAccountName: $blockchainAddressDetail[2],
+                            label: (string) $blockchainAddressDetail[3],
+                            currency_id: (int) $currency->id,
+                            balance: null,
+                        ),
+                    );
                 }
             }
 

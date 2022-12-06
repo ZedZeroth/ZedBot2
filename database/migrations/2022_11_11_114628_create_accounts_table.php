@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('networkAccountName')->nullable();
             $table->string('label');
             $table->integer('currency_id');
-            $table->bigInteger('balance');
+            $table->bigInteger('balance')->nullable();
             $table->timestamps();
         });
     }

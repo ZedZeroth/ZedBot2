@@ -19,7 +19,7 @@ class AccountDTO implements
         public ?string $networkAccountName,
         public string $label,
         public int $currency_id,
-        public int $balance,
+        public ?int $balance,
     ) {
     }
 }

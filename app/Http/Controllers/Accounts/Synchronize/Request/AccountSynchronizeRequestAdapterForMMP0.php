@@ -48,14 +48,15 @@ class AccountSynchronizeRequestAdapterForMMP0 implements
          */
         $responseArray = [];
 
-        $addressDetailsCollection = \Illuminate\Support\Facades\DB::table('blockchain_addresses')
-                    ->where('network', 'Bitcoin')
-                    ->get();
+        //$addressDetailsCollection = \Illuminate\Support\Facades\DB::table('blockchain_addresses')
+        $addressDetailsCollection =
+            \App\Models\Account::where('network', 'Bitcoin')
+                ->get();
 
         foreach ($addressDetailsCollection->all() as $addressDetails) {
             // Validate $addressDetails->address & $addressDetails->network
             (new \App\Http\Controllers\MultiDomain\Validators\BlockchainAddressValidator())->validate(
-                address: $addressDetails->address,
+                address: $addressDetails->networkAccountName,
                 addressName: 'MempoolAddress',
                 network: $addressDetails->network
             );
@@ -64,7 +65,7 @@ class AccountSynchronizeRequestAdapterForMMP0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $addressDetails->label,
                 stringName: '$addressDetails->label',
-                charactersToRemove: [' ', '-'],
+                charactersToRemove: [' ', '-', '’'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),
                 mustHaveUppercase: true,
@@ -85,7 +86,7 @@ class AccountSynchronizeRequestAdapterForMMP0 implements
                     'response' => (new $getOrPostAdapter())
                         ->get(
                             endpoint: config('app.ZED_MMP0_ADDRESS_ENDPOINT')
-                            . $addressDetails->address
+                            . $addressDetails->networkAccountName
                         )
                 ]
             );
