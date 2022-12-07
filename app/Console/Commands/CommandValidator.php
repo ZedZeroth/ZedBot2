@@ -99,6 +99,7 @@ class CommandValidator
             'browser'   => '🖱️ ',
             'scheduler' => '🕑',
             'auto'      => '🤖',
+            'init'      => '▶️',
             default     => null
         };
     }

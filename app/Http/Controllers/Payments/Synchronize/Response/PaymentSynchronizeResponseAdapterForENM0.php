@@ -33,8 +33,9 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
 
         // Adapt each payment
         $paymentDTOs = [];
+        // Reverse array for most recent balance
         foreach (
-            $responseArray['results'] as $result
+            array_reverse($responseArray['results']) as $result
         ) {
             /*💬*/ //print_r($result);
 

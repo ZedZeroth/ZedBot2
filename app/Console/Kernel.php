@@ -29,9 +29,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('schedule:running')->everyMinute();
-        $schedule->command('payments:sync scheduler ENM0 10')->everyMinute();
-        $schedule->command('payments:sync scheduler MMP0 10')->everyMinute();
+        $schedule->command('schedule:running')
+            ->everyMinute()
+            ->withoutOverlapping();
+        $schedule->command('payments:sync scheduler ENM0 10')
+            ->everyMinute()
+            ->withoutOverlapping();
+        $schedule->command('payments:sync scheduler MMP0 10')
+            ->everyMinute()
+            ->withoutOverlapping();
+        $schedule->command('payments:sync scheduler TRS0 10')
+            ->everyMinute()
+            ->withoutOverlapping();
     }
 
     /**

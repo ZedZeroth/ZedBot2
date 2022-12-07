@@ -43,13 +43,15 @@ class InitializeModelsCommand extends \Illuminate\Console\Command
     {
         // Run the initialization commands
         Artisan::call('migrate:refresh');
-        Artisan::call('currencies:populate cli');
-        Artisan::call('customers:import cli');
-        Artisan::call('accounts:sync cli ENM0 100');
-        Artisan::call('accounts:sync cli LCS0 100');
-        Artisan::call('accounts:sync cli MMP0 100');
-        Artisan::call('payments:sync cli ENM0 100');
-        Artisan::call('payments:sync cli MMP0 100');
+        Artisan::call('currencies:populate init');
+        Artisan::call('customers:import init');
+        Artisan::call('accounts:sync init ENM0 100');
+        Artisan::call('accounts:sync init LCS0 100');
+        Artisan::call('accounts:sync init MMP0 100');
+        Artisan::call('accounts:sync init TRS0 100');
+        Artisan::call('payments:sync init ENM0 100');
+        Artisan::call('payments:sync init MMP0 100');
+        Artisan::call('payments:sync init TRS0 100');
         return true;
     }
 }

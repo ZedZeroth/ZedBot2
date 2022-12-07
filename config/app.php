@@ -251,6 +251,7 @@ return [
     'ZED_TRS0_DOMAIN' => (string) env('ZED_TRS0_DOMAIN'),
     'ZED_TRS0_PATH' => (string) env('ZED_TRS0_PATH'),
     'ZED_TRS0_ADDRESS_ENDPOINT' => (string) env('ZED_TRS0_ADDRESS_ENDPOINT'),
+    'ZED_TRS0_TRANSACTIONS_ENDPOINT' => (string) env('ZED_TRS0_TRANSACTIONS_ENDPOINT'),
 
     # MMP
     'ZED_MMP0_DOMAIN' => (string) env('ZED_MMP0_DOMAIN'),

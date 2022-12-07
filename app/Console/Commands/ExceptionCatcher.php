@@ -24,7 +24,7 @@ class ExceptionCatcher
         );
 
         // 'true' disables the catcher
-        if (false) {
+        if (false or $command->argument('source') == 'init') {
             (new CommandInformer())
                     ->run(command: $command);
         } else {

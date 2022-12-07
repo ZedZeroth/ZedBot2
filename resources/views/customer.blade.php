@@ -29,7 +29,7 @@
         {!! $modelTable !!}
 
         <span>
-            <h3><anchor id="accounts">Accounts held</h3>
+            <h3><anchor id="accounts">Accounts held ({{ $customer->accounts()->count() }})</h3>
                 {!! $accountsTable !!}
         </span>
 

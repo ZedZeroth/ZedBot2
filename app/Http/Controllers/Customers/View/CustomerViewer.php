@@ -54,20 +54,25 @@ class CustomerViewer implements
         // Build payment tables
         $creditsTable = 'No credits exist.';
         $debitsTable = 'No debits exist.';
-        foreach ($customer->accounts() as $account) {
-            // Build credits table
-            if ($account->credits()->count()) {
-                $creditsTable =
-                    (new HtmlPaymentRowBuilder())
-                        ->build($account->credits()->get());
-            }
+        $credits = collect();
+        $debits = collect();
+        foreach ($customer->accounts()->get() as $account) {
+            $credits = $credits->merge($account->credits()->get());
+            $debits = $debits->merge($account->debits()->get());
+        }
 
-            // Build debits table
-            if ($account->debits()->count()) {
-                $debitsTable =
-                    (new HtmlPaymentRowBuilder())
-                        ->build($account->debits()->get());
-            }
+        // Build credits table
+        if ($credits->count()) {
+            $creditsTable =
+                (new HtmlPaymentRowBuilder())
+                    ->build($credits);
+        }
+
+        // Build debits table
+        if ($debits->count()) {
+            $debitsTable =
+                (new HtmlPaymentRowBuilder())
+                    ->build($debits);
         }
 
         // Return the View

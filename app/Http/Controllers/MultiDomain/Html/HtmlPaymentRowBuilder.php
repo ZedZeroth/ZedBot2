@@ -28,7 +28,7 @@ class HtmlPaymentRowBuilder implements
             }
 
             // Null originator/beneficiary (and their networkAccountName)
-            $originatorLink = '<span style="font-style: italic;">MULTI</span>';
+            $originatorLink = '<span style="font-style: italic;">OTHER/MULTI</span>';
             if ($payment->originator) {
                 if ($payment->originator->networkAccountName) {
                     $originatorName = $payment->originator->networkAccountName;
@@ -40,7 +40,7 @@ class HtmlPaymentRowBuilder implements
                     . $payment->originator->identifier . '">'
                     . $originatorName . '</a>';
             }
-            $beneficiaryLink = '<span style="font-style: italic;">MULTI</span>';
+            $beneficiaryLink = '<span style="font-style: italic;">OTHER/MULTI</span>';
             if ($payment->beneficiary) {
                 if ($payment->beneficiary->networkAccountName) {
                     $beneficiaryName = $payment->beneficiary->networkAccountName;
@@ -57,7 +57,7 @@ class HtmlPaymentRowBuilder implements
             $money = $payment->currency->code
                 . ' ' . $payment->formatAmount();
             //$money = str_pad($money, 10 - (int) round(strlen($money) / 2), ' ', STR_PAD_LEFT);
-            $money = str_pad($money, 20, ' ', STR_PAD_BOTH);
+            $money = str_pad($money, 23, ' ', STR_PAD_BOTH);
             $money = str_replace(' ', '&nbsp;', $money);
 
             $html .= '<tr style="white-space: nowrap;">';

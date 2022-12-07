@@ -22,7 +22,7 @@ class GetAdapterForTRS0 implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $endpoint,
             stringName: 'endpoint',
-            charactersToRemove: ['/', '?', '='],
+            charactersToRemove: ['/', '?', '=', '&'],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),
             mustHaveUppercase: false,

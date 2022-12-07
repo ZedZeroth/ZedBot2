@@ -162,6 +162,16 @@ class CustomerImportAdapterForCSV implements
                 }
             }
 
+            // Customer type
+            $customerIdentifier = 'customer'
+                . '::' . $row['ID SURNAME']
+                . '::' . $row['GIVEN NAME 1']
+                . '::' . $row['GIVEN NAME 2'];
+            $type = 'individual';
+            if ($customerIdentifier == config('app.ZED_SELF_CUSTOMER_IDENTIFIER')) {
+                $type = 'self';
+            }
+
             // Build the customer DTO
             array_push(
                 $customerDTOs,
@@ -169,11 +179,8 @@ class CustomerImportAdapterForCSV implements
                     // Build identifiers in importer/synchronizer!
                     // "customer"::customer_id::surname::surname_collision_increment::given_name_1::given_name_2
                     state: \App\Models\Customers\States\Unverified::class,
-                    identifier: (string) 'customer'
-                        . '::' . $row['ID SURNAME']
-                        . '::' . $row['GIVEN NAME 1']
-                        . '::' . $row['GIVEN NAME 2'],
-                    type: (string) 'person', // Needs reviewing
+                    identifier: (string) $customerIdentifier,
+                    type: (string) $type, // Needs reviewing
                     familyName: (string) $row['ID SURNAME'],
                     givenName1: (string) $row['GIVEN NAME 1'],
                     givenName2: (string) $row['GIVEN NAME 2'],

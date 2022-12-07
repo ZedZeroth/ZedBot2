@@ -68,11 +68,41 @@ class AccountSynchronizeResponseAdapterForTRS0 implements
             );
             */
 
-            echo $addressDetails['response']['activePermissions'][0]['keys'][0]['address'] . PHP_EOL;
-            foreach ($addressDetails['response']['trc20token_balances'] as $balance) {
-                echo $balance['balance'] . ' ' . $balance['tokenAbbr'] . PHP_EOL;
+            $address = $addressDetails['response']['activePermissions'][0]['keys'][0]['address'];
+            $balances = [];
+            foreach ($addressDetails['response']['trc20token_balances'] as $trcTokens) {
+                if ($trcTokens['tokenAbbr'] == 'USDT') {
+                    $balances['USDT-TRC20'] = $trcTokens['balance'];
+                }
+            }
+            if ($addressDetails['response']['balances'][0]['tokenAbbr'] == 'trx') {
+                $balances['TRX'] = $addressDetails['response']['balances'][0]['balance'];
             }
 
+            foreach ($balances as $token => $balance) {
+                // Determine the currency
+                $currency = \App\Models\Currency::
+                where(
+                    'code',
+                    $token
+                )->firstOrFail();
+
+                // Build the DTO
+                array_push(
+                    $accountDTOs,
+                    new \App\Http\Controllers\Accounts\AccountDTO(
+                        network: (string) 'Tron',
+                        identifier: (string) 'tron'
+                            . '::' . strtolower($currency->code)
+                            . '::' . $address,
+                        customer_id: null,
+                        networkAccountName: (string) $address,
+                        label: (string) $addressDetails['label'],
+                        currency_id: (int) $currency->id,
+                        balance: (int) $balance,
+                    )
+                );
+            }
 /*
 
             //Shift focus to $addressDetails['response']
