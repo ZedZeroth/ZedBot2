@@ -2,24 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Payments\Synchronize\Request;
+namespace App\Http\Controllers\Accounts\Synchronize\Request;
 
 use App\Http\Controllers\MultiDomain\Interfaces\AdapterInterface;
 use App\Http\Controllers\MultiDomain\Interfaces\RequestAdapterInterface;
 
-class PaymentSynchronizeRequestAdapterForMMP0 implements
+class AccountSynchronizeRequestAdapterForTRS0 implements
     RequestAdapterInterface,
     AdapterInterface
 {
     /**
-     * Properties required to perform the request.
-     *
-     * @var int $numberToFetch
-     */
-    private int $numberToFetch;
-
-    /**
-     * Build the request parameters.
+     * Build the post parameters.
      *
      * @param int $numberToFetch
      * @return RequestAdapterInterface
@@ -27,15 +20,7 @@ class PaymentSynchronizeRequestAdapterForMMP0 implements
     public function buildRequestParameters(
         int $numberToFetch
     ): RequestAdapterInterface {
-        // Validate numberToFetch
-        (new \App\Http\Controllers\MultiDomain\Validators\IntegerValidator())->validate(
-            integer: $numberToFetch,
-            integerName: 'numberToFetch',
-            lowestValue: 1,
-            highestValue: pow(10, 3)
-        );
-
-        $this->numberToFetch = $numberToFetch;
+        // No request parameters
         return $this;
     }
 
@@ -54,7 +39,7 @@ class PaymentSynchronizeRequestAdapterForMMP0 implements
             adapter: $getOrPostAdapter,
             adapterName: 'getOrPostAdapter',
             requiredMethods: ['get'],
-            apiSuffix: 'MMP0'
+            apiSuffix: 'TRS0'
         );
 
         /**
@@ -63,18 +48,19 @@ class PaymentSynchronizeRequestAdapterForMMP0 implements
          */
         $responseArray = [];
 
-        //$addressDetailsCollection = \Illuminate\Support\Facades\DB::table('blockchain_addresses')
         $addressDetailsCollection =
-            \App\Models\Account::where('network', 'Bitcoin')
+            \App\Models\Account::where('network', 'Tron')
                 ->get();
 
         foreach ($addressDetailsCollection->all() as $addressDetails) {
             // Validate $addressDetails->address & $addressDetails->network
+            /*
             (new \App\Http\Controllers\MultiDomain\Validators\BlockchainAddressValidator())->validate(
                 address: $addressDetails->networkAccountName,
                 addressName: 'MempoolAddress',
                 network: $addressDetails->network
             );
+            */
 
             // Validate $addressDetails->label
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
@@ -97,14 +83,11 @@ class PaymentSynchronizeRequestAdapterForMMP0 implements
             array_push(
                 $responseArray,
                 [
-                    'address' => $addressDetails->networkAccountName,
                     'label' => $addressDetails->label,
-                    'numberToFetch' => $this->numberToFetch,
                     'response' => (new $getOrPostAdapter())
                         ->get(
-                            endpoint: config('app.ZED_MMP0_ADDRESS_ENDPOINT')
+                            endpoint: config('app.ZED_TRS0_ADDRESS_ENDPOINT')
                             . $addressDetails->networkAccountName
-                            . config('app.ZED_MMP0_ADDRESS_TRANSACTIONS_ENDPOINT_SUFFIX')
                         )
                 ]
             );

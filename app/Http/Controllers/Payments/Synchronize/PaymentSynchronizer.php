@@ -43,15 +43,20 @@ class PaymentSynchronizer
                     ]
                 );
 
-            // Create the originator and beneficiary accounts for the payment
-            $originatorAccount = $accountUpdater->update(
-                $paymentDTO->originatorAccountDTO
-            );
-            $paymentDTO->originator_id = $originatorAccount->id;
-            $beneficiaryAccount = $accountUpdater->update(
-                $paymentDTO->beneficiaryAccountDTO
-            );
-            $paymentDTO->beneficiary_id = $beneficiaryAccount->id;
+            // Create the originator and beneficiary accounts
+            // for the payment if they are passed
+            if ($paymentDTO->originatorAccountDTO) {
+                $originatorAccount = $accountUpdater->update(
+                    $paymentDTO->originatorAccountDTO
+                );
+                $paymentDTO->originator_id = $originatorAccount->id;
+            }
+            if ($paymentDTO->beneficiaryAccountDTO) {
+                $beneficiaryAccount = $accountUpdater->update(
+                    $paymentDTO->beneficiaryAccountDTO
+                );
+                $paymentDTO->beneficiary_id = $beneficiaryAccount->id;
+            }
 
             // Create the payment
             $paymentUpdater->update($paymentDTO);

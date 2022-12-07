@@ -21,23 +21,36 @@ class HtmlPaymentRowBuilder implements
     ): string {
         $html = '<table>';
         foreach ($models->sortByDesc('timestamp') as $payment) {
-            // Determine originator/beneficiary details
-            if ($payment->originator->networkAccountName) {
-                $originatorName = $payment->originator->networkAccountName;
-            } else {
-                $originatorName = $payment->originator->label;
-            }
-
-            if ($payment->beneficiary->networkAccountName) {
-                $beneficiaryName = $payment->beneficiary->networkAccountName;
-            } else {
-                $beneficiaryName = $payment->beneficiary->label;
-            }
-
             // Null timestamps
             $timestampHTML = '<span style="font-style: italic;">UNKNOWN</span>';
             if ($payment->timestamp) {
                 $timestampHTML = $payment->timestamp;
+            }
+
+            // Null originator/beneficiary (and their networkAccountName)
+            $originatorLink = '<span style="font-style: italic;">MULTI</span>';
+            if ($payment->originator) {
+                if ($payment->originator->networkAccountName) {
+                    $originatorName = $payment->originator->networkAccountName;
+                } else {
+                    $originatorName = $payment->originator->label;
+                }
+                $originatorName = (new HtmlStringShortener())->shorten($originatorName, 23);
+                $originatorLink = '<a href="/account/'
+                    . $payment->originator->identifier . '">'
+                    . $originatorName . '</a>';
+            }
+            $beneficiaryLink = '<span style="font-style: italic;">MULTI</span>';
+            if ($payment->beneficiary) {
+                if ($payment->beneficiary->networkAccountName) {
+                    $beneficiaryName = $payment->beneficiary->networkAccountName;
+                } else {
+                    $beneficiaryName = $payment->beneficiary->label;
+                }
+                $beneficiaryName = (new HtmlStringShortener())->shorten($beneficiaryName, 23);
+                $beneficiaryLink = '<a href="/account/'
+                    . $payment->beneficiary->identifier . '">'
+                    . $beneficiaryName . '</a>';
             }
 
             // Center/pad payment money
@@ -62,11 +75,9 @@ class HtmlPaymentRowBuilder implements
 
                 . '<td>“' . $payment->memo . '”</td>'
 
-                . '<td style="text-align: right;"><a href="/account/'
-                . $payment->originator->identifier
-                . '">'
-                . (new HtmlStringShortener())->shorten($originatorName, 23)
-                . '</a></td>'
+                . '<td style="text-align: right;">'
+                . $originatorLink
+                . '</td>'
 
                 . '<td style="text-align: center; color: '
                 . $payment->state->getColor()
@@ -78,11 +89,9 @@ class HtmlPaymentRowBuilder implements
                 . $payment->state->getEmoji()
                 . '</td>'
 
-                . '<td><a href="/account/'
-                . $payment->beneficiary->identifier
-                . '">'
-                . (new HtmlStringShortener())->shorten($beneficiaryName, 23)
-                . '</a></td>';
+                . '<td>'
+                . $beneficiaryLink
+                . '</td>';
 
             $html .= '</tr>';
         }

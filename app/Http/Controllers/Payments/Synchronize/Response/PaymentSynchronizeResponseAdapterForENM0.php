@@ -184,6 +184,19 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                 $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
             }
 
+            if ($originatorAccountIdentifier == config('app.ZED_SELF_ENM_ACCOUNT_IDENTIFIER')) {
+                $balance = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
+                ->convert(
+                    amount: round(
+                        abs($result['accountBalance']),
+                        $currency->decimalPlaces
+                    ),
+                    currency: $currency
+                );
+            } else {
+                $balance = null;
+            }
+
             // Create the originator DTO
             $originatorAccountDTO = new AccountDTO(
                 network: (string) 'FPS',
@@ -192,8 +205,21 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                 networkAccountName: (string) $originatorNetworkAccountName,
                 label: (string) $originatorLabel,
                 currency_id: (int) $currency->id,
-                balance: (int) 0
+                balance: $balance
             );
+
+            if ($beneficiaryAccountIdentifier == config('app.ZED_SELF_ENM_ACCOUNT_IDENTIFIER')) {
+                $balance = (new \App\Http\Controllers\MultiDomain\Money\MoneyConverter())
+                ->convert(
+                    amount: round(
+                        abs($result['accountBalance']),
+                        $currency->decimalPlaces
+                    ),
+                    currency: $currency
+                );
+            } else {
+                $balance = null;
+            }
 
             // Create the beneficiary DTO
             $beneficiaryAccountDTO = new AccountDTO(
@@ -203,7 +229,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                 networkAccountName: (string) $beneficiaryNetworkAccountName,
                 label: (string) $beneficiaryLabel,
                 currency_id: (int) $currency->id,
-                balance: (int) 0
+                balance: $balance
             );
 
             // Convert amount to base units

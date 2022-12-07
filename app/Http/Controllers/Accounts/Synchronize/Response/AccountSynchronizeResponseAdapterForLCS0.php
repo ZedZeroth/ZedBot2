@@ -80,8 +80,11 @@ class AccountSynchronizeResponseAdapterForLCS0 implements
                 . '::' . strtolower($currency->code)
                 . '::' . $username
                 . '::' . $walletType,
-            customer_id: (int) 1,
-            networkAccountName: '',
+            customer_id: \App\Models\Customer::where(
+                'identifier',
+                config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
+            )->first()->id,
+            networkAccountName: $responseArray['hdaddresses'][0]['address'],
             label: (string) $username . ' ' . $currency->code . ' ' . $walletType,
             currency_id: (int) $currency->id,
             balance: (int) $balance,

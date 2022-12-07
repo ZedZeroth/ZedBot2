@@ -227,6 +227,10 @@ return [
     */
 
     #CSVs
+    'ZED_SELF_CUSTOMER_IDENTIFIER' => env('ZED_SELF_CUSTOMER_IDENTIFIER'),
+    'ZED_SELF_ENM_ACCOUNT_IDENTIFIER' => env('ZED_SELF_ENM_ACCOUNT_IDENTIFIER'),
+
+    #CSVs
     'ZED_CUSTOMER_RECORDS_CSV_HEADERS' => (array) explode(',', env('ZED_CUSTOMER_RECORDS_CSV_HEADERS')),
 
     # Connections
@@ -242,6 +246,11 @@ return [
     'ZED_MARKET_API_LIST' => (array) explode(',', env('ZED_MARKET_API_LIST')),
     'ZED_PAYMENT_API_LIST' => (array) explode(',', env('ZED_PAYMENT_API_LIST')),
     'ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING' => (array) explode(',', env('ZED_APIS_THAT_USE_POST_REQUESTS_FOR_FETCHING')),
+
+    # TRS
+    'ZED_TRS0_DOMAIN' => (string) env('ZED_TRS0_DOMAIN'),
+    'ZED_TRS0_PATH' => (string) env('ZED_TRS0_PATH'),
+    'ZED_TRS0_ADDRESS_ENDPOINT' => (string) env('ZED_TRS0_ADDRESS_ENDPOINT'),
 
     # MMP
     'ZED_MMP0_DOMAIN' => (string) env('ZED_MMP0_DOMAIN'),

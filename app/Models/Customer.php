@@ -39,4 +39,22 @@ class Customer extends \Illuminate\Database\Eloquent\Model
     {
         return $this->hasMany(Account::class);
     }
+
+    /**
+     * Returns their full name
+     *
+     * @return string
+     */
+    public function fullName(): string
+    {
+        $fullName =
+            $this->familyName . ', '
+            . $this->givenName1;
+
+        if ($this->givenName2) {
+            $fullName .= ' ' . $this->givenName2;
+        }
+
+        return $fullName;
+    }
 }

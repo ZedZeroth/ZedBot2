@@ -12,11 +12,12 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
 
-        Commands\PopulateCurrenciesCommand::class,
         Commands\SchedulerIsRunningCommand::class,
+        Commands\InitializeModelsCommand::class,
+        Commands\PopulateCurrenciesCommand::class,
+        Commands\ImportCustomersCommand::class,
         Commands\SyncAccountsCommand::class,
         Commands\SyncPaymentsCommand::class,
-        Commands\ImportCustomersCommand::class,
 
     ];
 
@@ -28,8 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('schedule:running')->everyMinute();//->appendOutputTo('zedlog');
-        $schedule->command('currencies:populate')->everyMinute();//->appendOutputTo('zedlog');
+        $schedule->command('schedule:running')->everyMinute();
+        $schedule->command('payments:sync scheduler ENM0 10')->everyMinute();
+        $schedule->command('payments:sync scheduler MMP0 10')->everyMinute();
     }
 
     /**

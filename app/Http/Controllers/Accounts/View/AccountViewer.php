@@ -49,18 +49,32 @@ class AccountViewer implements
         // Verify account exists
         $account = Account::where('identifier', $identifier)->firstOrFail();
 
+        // Build payment tables
+        $creditsTable = 'No credits exist.';
+        $debitsTable = 'No debits exist.';
+
+        // Build credits table
+        if ($account->credits()->count()) {
+            $creditsTable =
+                (new HtmlPaymentRowBuilder())
+                    ->build($account->credits()->get());
+        }
+
+        // Build debits table
+        if ($account->debits()->count()) {
+            $debitsTable =
+                (new HtmlPaymentRowBuilder())
+                    ->build($account->debits()->get());
+        }
+
         // Return the View
         return view('account', [
             'account' => $account,
             'modelTable' =>
             (new \App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder())
                 ->build($account),
-            'creditsTable' =>
-                (new HtmlPaymentRowBuilder())
-                    ->build($account->credits()->get()),
-            'debitsTable' =>
-                (new HtmlPaymentRowBuilder())
-                    ->build($account->debits()->get()),
+            'creditsTable' => $creditsTable,
+            'debitsTable' => $debitsTable
         ]);
     }
 

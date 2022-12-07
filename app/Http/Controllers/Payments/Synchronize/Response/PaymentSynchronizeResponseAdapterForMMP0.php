@@ -52,7 +52,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $addressDetails['label'],
                 stringName: '$addressDetails[label]',
-                charactersToRemove: [' ', '-'],
+                charactersToRemove: [' ', '-', '’'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),
                 mustHaveUppercase: true,
@@ -116,6 +116,13 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                     isHexadecimal: true
                 );
 
+                // Determine the currency
+                $currency = \App\Models\Currency::
+                        where(
+                            'code',
+                            'BTC'
+                        )->firstOrFail();
+
                 $isCredit = false;
                 $isDebit = false;
 
@@ -131,6 +138,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         $addressDetails['address']
                     ) {
                         $isDebit = true;
+                        $value = $input['prevout']['value'];
                     }
                 }
 
@@ -146,20 +154,57 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         $addressDetails['address']
                     ) {
                         $isCredit = true;
+                        $value = $output['value'];
                     }
                 }
-
-                // Determine the currency
-                $currency = \App\Models\Currency::
-                        where(
-                            'code',
-                            'BTC'
-                        )->firstOrFail();
 
                 if (!$isDebit and !$isCredit) {
                     throw new \Exception('Must be originator or beneficiary');
                 }
 
+                // New system
+                $originator_id = null;
+                $beneficiary_id = null;
+                $accountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
+                $account_id = Account::where('identifier', $accountIdentifier)
+                    ->firstOrFail()->id;
+                if ($isDebit) {
+                    $originator_id = $account_id;
+                    $memo = 'From ' . $addressDetails['label'];
+                    if ($isCredit) {
+                        $beneficiary_id = $originator_id;
+                        $memo = 'To/from ' . $addressDetails['label'];
+                    }
+                } elseif ($isCredit) {
+                    $beneficiary_id = $account_id;
+                    $memo = 'To ' . $addressDetails['label'];
+                }
+
+                $state = \App\Models\Payments\States\Unconfirmed::class;
+                if ($txDetails['status']['confirmed']) {
+                    $state = \App\Models\Payments\States\Settled::class;
+                }
+
+                // Create the payment DTO
+                array_push(
+                    $paymentDTOs,
+                    new \App\Http\Controllers\Payments\PaymentDTO(
+                        state: $state,
+                        network: (string) 'Bitcoin',
+                        identifier: (string) 'bitcoin::btc'
+                        . '::' . $txDetails['txid'],
+                        amount: (int) $value,
+                        currency_id: (int) $currency->id,
+                        originator_id: (int) $originator_id,
+                        beneficiary_id: (int) $beneficiary_id,
+                        memo: (string) $memo,
+                        timestamp: date("Y-m-d H:i:s", $txDetails['status']['block_time']),
+                        originatorAccountDTO: null,
+                        beneficiaryAccountDTO: null,
+                    )
+                );
+
+                /*
                 // This condition also deals with self-payments
                 if ($isDebit) {
                     $originatorAccountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
@@ -172,7 +217,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         networkAccountName: (string) $addressDetails['address'],
                         label: (string) $addressDetails['label'],
                         currency_id: (int) $currency->id,
-                        balance: (int) 0
+                        balance: null
                     );
 
                     foreach ($vout as $output) {
@@ -265,6 +310,7 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                         );
                     }
                 }
+*/
             }
         }
 

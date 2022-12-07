@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Customers\View;
 
 use Illuminate\View\View;
 use App\Models\Customer;
+use App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder;
+use App\Http\Controllers\MultiDomain\Html\HtmlAccountRowBuilder;
 
 class CustomerViewer implements
     \App\Http\Controllers\MultiDomain\Interfaces\ViewerInterface
@@ -17,8 +19,13 @@ class CustomerViewer implements
      */
     public function showAll(): View
     {
+        $customers = Customer::all()
+            ->sortBy('givenName2')
+            ->sortBy('givenName1')
+            ->sortBy('familyName');
+
         return view('customers', [
-            'customers' => Customer::all()
+            'customers' => $customers
         ]);
     }
 
@@ -35,12 +42,43 @@ class CustomerViewer implements
         // Verify customer exists
         $customer = Customer::where('identifier', $identifier)->firstOrFail();
 
+        // Build accounts table
+        if ($customer->accounts()->count()) {
+            $accountsTable =
+                (new HtmlAccountRowBuilder())
+                    ->build($customer->accounts()->get());
+        } else {
+            $accountsTable = 'No accounts exist.';
+        }
+
+        // Build payment tables
+        $creditsTable = 'No credits exist.';
+        $debitsTable = 'No debits exist.';
+        foreach ($customer->accounts() as $account) {
+            // Build credits table
+            if ($account->credits()->count()) {
+                $creditsTable =
+                    (new HtmlPaymentRowBuilder())
+                        ->build($account->credits()->get());
+            }
+
+            // Build debits table
+            if ($account->debits()->count()) {
+                $debitsTable =
+                    (new HtmlPaymentRowBuilder())
+                        ->build($account->debits()->get());
+            }
+        }
+
         // Return the View
         return view('customer', [
-            'customer' => $customer,
-            'modelTable' =>
+            'customer'      => $customer,
+            'modelTable'    =>
                 (new \App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder())
                     ->build($customer),
+            'accountsTable' => $accountsTable,
+            'creditsTable'  => $creditsTable,
+            'debitsTable'   => $debitsTable
         ]);
     }
 }

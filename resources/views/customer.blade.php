@@ -23,23 +23,24 @@
 
         <h2><anchor id="details">Details</h2>
 
-        Name: {{ $customer->familyName }}
+        Name: {{ $customer->fullName() }}
 
         <h2><anchor id="model-data">Model data</h2>
         {!! $modelTable !!}
 
         <span>
             <h3><anchor id="accounts">Accounts held</h3>
-            @if ($customer->accounts()->count())
-                @foreach ($customer->accounts()->get() as $account)
-                    <br>
-                    <a href="\account\{{ $account->identifier }}">
-                        {{ $account->identifier }}
-                    </a>
-                @endforeach
-            @else
-                <p>None</p>
-            @endif
+                {!! $accountsTable !!}
+        </span>
+
+        <span style="color: green;">
+            <h3><anchor id="credits">Credits to this customer's accounts</h3>
+                {!! $creditsTable !!}
+        </span>
+
+        <span style="color: red;">
+            <h3><anchor id="debits">Debits from this customer's accounts</h3>
+                {!! $debitsTable !!}
         </span>
 
     </body>

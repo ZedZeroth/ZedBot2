@@ -31,8 +31,7 @@
         <h3>Holder:
             @if ($account->customer)
                 <a href="/customer/{{ $account->customer->identifier}}">
-                    {{ $account->customer->familyName }},
-                    {{ $account->customer->givenName1 }}
+                    {{ $account->customer->fullName() }}
                 </a>
             @else
                 <span style="font-style: italic;">NONE</span>
@@ -43,12 +42,12 @@
 
         <h3>
             Balance:
-            @if ($account->balance)
+            @if (is_null($account->balance))
+                <span style="font-style: italic;">UNKNOWN</span>
+            @else
                 <a href="/currency/{{ $account->currency()->first()->code }}">
                     {{ $account->currency()->first()->code }}</a>
                     {{ $account->formatBalance() }}
-            @else
-                <span style="font-style: italic;">UNKNOWN</span>
             @endif
         </h3>
 
@@ -57,20 +56,12 @@
 
         <span style="color: green;">
             <h3><anchor id="credits">Credits to this account</h3>
-            @if ($account->credits()->count())
                 {!! $creditsTable !!}
-            @else
-                <p>None</p>
-            @endif
         </span>
 
         <span style="color: red;">
             <h3><anchor id="debits">Debits from this account</h3>
-            @if ($account->debits()->count())
                 {!! $debitsTable !!}
-            @else
-                <p>None</p>
-            @endif
         </span>
 
     </body>
