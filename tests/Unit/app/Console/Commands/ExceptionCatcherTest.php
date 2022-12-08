@@ -15,7 +15,7 @@ use App\Console\Commands\ExceptionCatcher;
 // POSITIVE TEST
 test('GIVEN a Command mocked to throw an Exception
     WHEN calling catch()
-    THEN it returns null
+    THEN return null
     ', function () {
 
     $exceptionType = \Exception::class;
@@ -23,7 +23,7 @@ test('GIVEN a Command mocked to throw an Exception
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
         ->shouldReceive('argument')->times(5)->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->times(4)->with('source')->andReturn('cli')
+        ->shouldReceive('argument')->times(5)->with('source')->andReturn('cli')
         ->shouldReceive('argument')->times(4)->with()->andReturn([])
         ->shouldReceive('runThisCommand')->once()->with()->andThrow(new $exceptionType('test'))
         ->shouldReceive('warn')->twice()->with('')->andReturn()
@@ -36,17 +36,17 @@ test('GIVEN a Command mocked to throw an Exception
         ->shouldReceive('info')->times(3)->andReturn()
         ->getMock();
 
-    expect(
+    $this->assertNull(
         (new ExceptionCatcher())->catch(
             $commandMock
         )
-    )->toBeNull();
+    );
 });
 
 // POSITIVE TEST
 test('GIVEN a Command mocked to throw a StringValidationException
     WHEN calling catch()
-    THEN it returns null
+    THEN return null
     ', function () {
 
     $exceptionType = \App\Http\Controllers\MultiDomain\Validators\StringValidationException::class;
@@ -54,7 +54,7 @@ test('GIVEN a Command mocked to throw a StringValidationException
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
         ->shouldReceive('argument')->times(5)->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->times(4)->with('source')->andReturn('cli')
+        ->shouldReceive('argument')->times(5)->with('source')->andReturn('cli')
         ->shouldReceive('argument')->times(4)->with()->andReturn([])
         ->shouldReceive('runThisCommand')->once()->with()->andThrow(new $exceptionType('test'))
         ->shouldReceive('warn')->twice()->with('')->andReturn()
@@ -67,17 +67,17 @@ test('GIVEN a Command mocked to throw a StringValidationException
         ->shouldReceive('info')->times(3)->andReturn()
         ->getMock();
 
-    expect(
+    $this->assertNull(
         (new ExceptionCatcher())->catch(
             $commandMock
         )
-    )->toBeNull();
+    );
 });
 
 // POSITIVE TEST
 test('GIVEN a Command mocked to throw an unknown exception
     WHEN calling catch()
-    THEN it returns null
+    THEN return null
     ', function () {
 
     $exceptionType = \App\Http\Controllers\MultiDomain\Validators\TestException::class;
@@ -85,7 +85,7 @@ test('GIVEN a Command mocked to throw an unknown exception
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
         ->shouldReceive('argument')->times(5)->with('command')->andReturn('test:test')
-        ->shouldReceive('argument')->times(4)->with('source')->andReturn('cli')
+        ->shouldReceive('argument')->times(5)->with('source')->andReturn('cli')
         ->shouldReceive('argument')->times(4)->with()->andReturn([])
         ->shouldReceive('runThisCommand')->once()->with()->andThrow(new $exceptionType('test'))
         ->shouldReceive('warn')->twice()->with('')->andReturn()
@@ -98,9 +98,9 @@ test('GIVEN a Command mocked to throw an unknown exception
         ->shouldReceive('info')->times(3)->andReturn()
         ->getMock();
 
-    expect(
+    $this->assertNull(
         (new ExceptionCatcher())->catch(
             $commandMock
         )
-    )->toBeNull();
+    );
 });

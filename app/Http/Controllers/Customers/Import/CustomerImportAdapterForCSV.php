@@ -168,8 +168,8 @@ class CustomerImportAdapterForCSV implements
                 . '::' . $row['GIVEN NAME 1']
                 . '::' . $row['GIVEN NAME 2'];
             $type = 'individual';
-            if ($customerIdentifier == config('app.ZED_SELF_CUSTOMER_IDENTIFIER')) {
-                $type = 'self';
+            if ($row['customer_type']) {
+                $type = $row['customer_type'];
             }
 
             // Build the customer DTO

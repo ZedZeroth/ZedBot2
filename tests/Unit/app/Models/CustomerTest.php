@@ -14,12 +14,15 @@ use App\Models\Account;
  */
 
  // POSITIVE TEST
-test('GIVEN Customer id = 1
+test('GIVEN Customer identifier = env(ZED_TEST_CUSTOMER_IDENTIFIER)
     WHEN calling accounts()
     THEN an Account is returned
     ', function () {
 
-    $customer = Customer::where('id', 1)->firstOrFail();
+    $customer = Customer::where(
+        'identifier',
+        env('ZED_TEST_CUSTOMER_IDENTIFIER')
+    )->firstOrFail();
 
     // Expect at least one Customer to exist
     expect($customer)

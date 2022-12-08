@@ -54,13 +54,11 @@ class AccountSynchronizeRequestAdapterForTRS0 implements
 
         foreach ($addressDetailsCollection->all() as $addressDetails) {
             // Validate $addressDetails->address & $addressDetails->network
-            /*
             (new \App\Http\Controllers\MultiDomain\Validators\BlockchainAddressValidator())->validate(
                 address: $addressDetails->networkAccountName,
-                addressName: 'MempoolAddress',
+                addressName: $addressDetails->label,
                 network: $addressDetails->network
             );
-            */
 
             // Validate $addressDetails->label
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
@@ -84,7 +82,7 @@ class AccountSynchronizeRequestAdapterForTRS0 implements
                 $responseArray,
                 [
                     'label' => $addressDetails->label,
-                    'response' => (new $getOrPostAdapter())
+                    'response' => $getOrPostAdapter
                         ->get(
                             endpoint: config('app.ZED_TRS0_ADDRESS_ENDPOINT')
                             . $addressDetails->networkAccountName

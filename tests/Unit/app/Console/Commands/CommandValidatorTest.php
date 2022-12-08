@@ -15,7 +15,7 @@ use App\Console\Commands\CommandValidator;
 // POSITIVE TEST
 test('GIVEN a correctly mocked Command and $commandName
     WHEN calling validate()
-    THEN it returns true
+    THEN return true
     ', function () {
 
     // Mock a Command
@@ -27,12 +27,12 @@ test('GIVEN a correctly mocked Command and $commandName
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertTrue(
         (new CommandValidator())->validate(
             $commandMock,
             'test:test'
         )
-    )->toBeTrue();
+    );
 });
 
 // NEGATIVE TEST
@@ -47,12 +47,12 @@ test('GIVEN an invalid source
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertTrue(
         (new CommandValidator())->validate(
             $commandMock,
             'test:test'
         )
-    )->toBeTrue();
+    );
 })
 ->expectException(\App\Console\Commands\CommandValidationException::class);
 
@@ -70,12 +70,12 @@ test('GIVEN an invalid API
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertTrue(
         (new CommandValidator())->validate(
             $commandMock,
             'test:test'
         )
-    )->toBeTrue();
+    );
 })->expectException(\App\Http\Controllers\MultiDomain\Validators\ApiValidationException::class);
 
 // NEGATIVE TEST
@@ -92,12 +92,12 @@ test('GIVEN an invalid "Number to fetch"
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertTrue(
         (new CommandValidator())->validate(
             $commandMock,
             'test:test'
         )
-    )->toBeTrue();
+    );
 })->expectException(\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException::class);
 
 /**
@@ -107,27 +107,24 @@ test('GIVEN an invalid "Number to fetch"
 // POSITIVE TEST
 test('GIVEN the source "auto"
     WHEN calling getEmojiFromCommandSource()
-    THEN it returns 🤖
+    THEN return "🤖"
     ', function () {
 
-    expect(
-        (new CommandValidator())->getEmojiFromCommandSource(
-            'auto'
-        )
-    )->toBe('🤖');
+    $this->assertSame(
+        '🤖',
+        (new CommandValidator())->getEmojiFromCommandSource('auto')
+    );
 });
 
 // POSITIVE TEST
 test('GIVEN the source "test"
     WHEN calling getEmojiFromCommandSource()
-    THEN it returns 🤖
+    THEN return 🤖
     ', function () {
 
-    expect(
-        (new CommandValidator())->getEmojiFromCommandSource(
-            'test'
-        )
-    )->toBeNull();
+    $this->assertNull(
+        (new CommandValidator())->getEmojiFromCommandSource('test')
+    );
 });
 
 // NEGATIVE TEST
@@ -136,9 +133,8 @@ test('GIVEN the source ""
     THEN throw a StringValidationException
     ', function () {
 
-    expect(
-        (new CommandValidator())->getEmojiFromCommandSource(
-            ''
-        )
-    )->toBe('🤖');
+    $this->assertSame(
+        '🤖',
+        (new CommandValidator())->getEmojiFromCommandSource('')
+    );
 })->expectException(\App\Http\Controllers\MultiDomain\Validators\StringValidationException::class);

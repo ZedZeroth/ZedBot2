@@ -12,7 +12,7 @@ class SchedulerIsRunningCommand extends \Illuminate\Console\Command
      * @var string
      */
     protected /* Do not define */ $signature =
-        'schedule:running';
+        'schedule:running {start_stop}';
 
     /**
      * The console command description.
@@ -29,7 +29,11 @@ class SchedulerIsRunningCommand extends \Illuminate\Console\Command
     public function handle(): void
     {
         /* Output messages */
-        $output = 'The scheduler is running ...';
+        if ($this->argument('start_stop') == 'start') {
+            $output = 'The scheduler is starting ...';
+        } else {
+            $output = 'The scheduler is stopping ...';
+        }
         $this->info($output);
         \Illuminate\Support\Facades\Log::info($output);
     }

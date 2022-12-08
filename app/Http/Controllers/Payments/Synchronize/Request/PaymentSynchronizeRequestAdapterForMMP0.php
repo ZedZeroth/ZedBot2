@@ -100,7 +100,7 @@ class PaymentSynchronizeRequestAdapterForMMP0 implements
                     'address' => $addressDetails->networkAccountName,
                     'label' => $addressDetails->label,
                     'numberToFetch' => $this->numberToFetch,
-                    'response' => (new $getOrPostAdapter())
+                    'response' => $getOrPostAdapter
                         ->get(
                             endpoint: config('app.ZED_MMP0_ADDRESS_ENDPOINT')
                             . $addressDetails->networkAccountName

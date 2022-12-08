@@ -10,14 +10,11 @@
     </head>
 
     <body>
-
-        <h1>ZedBot v1.0.1</h1>
-
         <table>
             <tr>
                 <td>
 
-                    <h2>Models</h2>
+                    <h3>Models</h3>
 
                     <table>
                         <tr>
@@ -57,11 +54,23 @@
                 </td>
 
                 <td>
-                    <h2>Rates</h2>
+                    <h3>Rates</h3>
                     DISABLED
                     <!--
                         <livewire:rates-chart-component />
                     -->
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h3>Recent Payments</h3>
+                    <livewire:recent-payments-component />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h3>Held Payments</h3>
+                    <livewire:held-payments-component />
                 </td>
             </tr>
         </table>

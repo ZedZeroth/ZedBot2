@@ -101,9 +101,13 @@ class StringValidator
                 message: $prefix . '"' . $string . '" cannot have lowercase characters'
             );
         } elseif ($string and $isAlphabetical and !ctype_alpha($string)) {
-            throw new StringValidationException(message: $prefix . 'is not alphabetical');
+            throw new StringValidationException(
+                message: $prefix . '"' . $string . '" is not alphabetical'
+            );
         } elseif ($string and $isNumeric and !is_numeric($string)) {
-            throw new StringValidationException(message: $prefix . 'is not numerical');
+            throw new StringValidationException(
+                message: $prefix . '"' . $string . '" is not numerical'
+            );
         } elseif ($string and $isAlphanumeric and !ctype_alnum($string)) {
             throw new StringValidationException(
                 message: $prefix . '"' . $string . '" is not alphanumeric'

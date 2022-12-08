@@ -42,7 +42,7 @@ class AccountSynchronizeRequestAdapterForLCS0 implements
             apiSuffix: 'LCS0'
         );
 
-        return (new $getOrPostAdapter())
+        return $getOrPostAdapter
             ->get(
                 endpoint: config('app.ZED_LCS0_WALLETS_ENDPOINT')
             );

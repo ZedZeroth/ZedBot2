@@ -57,7 +57,7 @@ class AccountSynchronizeRequestAdapterForMMP0 implements
             // Validate $addressDetails->address & $addressDetails->network
             (new \App\Http\Controllers\MultiDomain\Validators\BlockchainAddressValidator())->validate(
                 address: $addressDetails->networkAccountName,
-                addressName: 'MempoolAddress',
+                addressName: $addressDetails->label,
                 network: $addressDetails->network
             );
 
@@ -83,7 +83,7 @@ class AccountSynchronizeRequestAdapterForMMP0 implements
                 $responseArray,
                 [
                     'label' => $addressDetails->label,
-                    'response' => (new $getOrPostAdapter())
+                    'response' => $getOrPostAdapter
                         ->get(
                             endpoint: config('app.ZED_MMP0_ADDRESS_ENDPOINT')
                             . $addressDetails->networkAccountName

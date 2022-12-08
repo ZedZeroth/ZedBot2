@@ -15,20 +15,19 @@ use App\Http\Controllers\Accounts\Synchronize\Request\AccountSynchronizeRequestA
 // POSITIVE TEST
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
-    THEN an AccountSynchronizeRequestAdapterForENM0 is returned
+    THEN return an AccountSynchronizeRequestAdapterForENM0
     ', function () {
-    expect(
+    $this->assertInstanceOf(
+        AccountSynchronizeRequestAdapterForENM0::class,
         (new AccountSynchronizeRequestAdapterForENM0())
             ->buildRequestParameters(numberToFetch: 1)
-    )->toBeInstanceOf(
-        AccountSynchronizeRequestAdapterForENM0::class
     );
 });
 
 // POSITIVE TEST
 test('GIVEN numberToFetch: 1
     WHEN calling buildRequestParameters()
-    THEN the returned AccountSynchronizeRequestAdapterForENM0 holds the correct requestParameters
+    THEN return an AccountSynchronizeRequestAdapterForENM0 holding the correct requestParameters
     ', function () {
 
     // Build the RequestAdapter's postParameters property
@@ -43,12 +42,13 @@ test('GIVEN numberToFetch: 1
      * Check that postParameters holds the correct account number
      * and that numberToFetch has been adapted to 'take'.
      */
-    expect(
+    $this->assertSame(
+        [
+            'accountERN' => config('app.ZED_ENM0_ACCOUNT_ERN'),
+            'take' => 1
+        ],
         $property->getValue($builtRequestAdapter)
-    )->toBe([
-        'accountERN' => config('app.ZED_ENM0_ACCOUNT_ERN'),
-        'take' => 1
-    ]);
+    );
 });
 
 // NEGATIVE TEST
@@ -56,11 +56,10 @@ test('GIVEN numberToFetch: 0
     WHEN calling buildRequestParameters()
     THEN throw an IntegerValidationException
     ', function () {
-    expect(
+    $this->assertInstanceOf(
+        AccountSynchronizeRequestAdapterForENM0::class,
         (new AccountSynchronizeRequestAdapterForENM0())
             ->buildRequestParameters(numberToFetch: 0)
-    )->toBeInstanceOf(
-        AccountSynchronizeRequestAdapterForENM0::class
     );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\IntegerValidationException::class);
@@ -102,56 +101,26 @@ test('GIVEN a PostAdapterForENM0 with a mocked post() method
      * Inject the mocked PostAdapter into the RequestAdapter
      * to check that the response array is passed back successfully.
      */
-    expect(
-        ($builtRequestAdapter)->fetchResponse($postAdapterMock)
-    )->toBe(['results' =>
-        [
-            'accountNumber' => '00000000',
-            'etc' => 'etc'
-        ]
-    ]);
-});
-
-/* Reinstate when another PostAdapter exists
-test('GIVEN a POST_ADAPTER with a mocked post() method
-    WHEN calling fetchResponse()
-    THEN throw \'...is not an adapter for...\'
-    ', function () {
-
-    // Build the RequestAdapter's postParameters property
-    $builtRequestAdapter = (new AccountSynchronizeRequestAdapterForENM0())
-        ->buildRequestParameters(numberToFetch: 1);
-
-    // Mock an incorrect Adapter to return a fake request response array
-    $postAdapterMock = mock(\App\Http\Controllers\MultiDomain\Requests\POST_ADAPTER::class)
-        ->shouldReceive('post')
-        ->once()
-        ->with(
-            config('app.ZED_ENM0_BENEFICIARIES_ENDPOINT'),
-            [
-                'accountERN' => config('app.ZED_ENM0_ACCOUNT_ERN'),
-                'take' => 1
-            ]
-        )
-        ->andReturn(['results' =>
+    $this->assertSame(
+        ['results' =>
             [
                 'accountNumber' => '00000000',
                 'etc' => 'etc'
             ]
-        ])
-        ->getMock();
-
-    // Inject the mocked PostAdapter into the RequestAdapter
-    // to check if the response array is passed back successfully.
-    expect(
+        ],
         ($builtRequestAdapter)->fetchResponse($postAdapterMock)
-    )->toBe(['results' =>
-        [
-            'accountNumber' => '00000000',
-            'etc' => 'etc'
-        ]
-    ]);
-})
+    );
+});
+
+/* Reinstate when another PostAdapter exists
+// Negative
+test('GIVEN a PstAdapterForXXX0 with a mocked post() method
+WHEN calling fetchResponse()
+THEN throw \'...is not an adapter for...\'
+', function () {
+
+    ...
+
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException::class)
 ->expectExceptionMessage('is not an adapter for');
 */
@@ -167,7 +136,7 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
         ->buildRequestParameters(numberToFetch: 1);
 
     // Mock an incorrect GetAdapter to return a fake request response array
-    $postAdapterMock = mock(\App\Http\Controllers\MultiDomain\Requests\GetAdapterForLCS0::class)
+    $getAdapterMock = mock(\App\Http\Controllers\MultiDomain\Requests\GetAdapterForLCS0::class)
         ->shouldReceive('post')
         ->times(0)
         ->with(
@@ -189,14 +158,15 @@ test('GIVEN a GetAdapterForLCS with a mocked post() method
      * Inject the mocked PostAdapter into the RequestAdapter
      * to check if the response array is passed back successfully.
      */
-    expect(
-        ($builtRequestAdapter)->fetchResponse($postAdapterMock)
-    )->toBe(['results' =>
-        [
-            'accountNumber' => '00000000',
-            'etc' => 'etc'
-        ]
-    ]);
+    $this->assertSame(
+        ['results' =>
+            [
+                'accountNumber' => '00000000',
+                'etc' => 'etc'
+            ]
+        ],
+        ($builtRequestAdapter)->fetchResponse($getAdapterMock)
+    );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException::class)
 ->expectExceptionMessage('does not contain these methods');

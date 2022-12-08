@@ -100,7 +100,7 @@ class PaymentSynchronizeRequestAdapterForTRS0 implements
                 [
                     'address' => $addressDetails->networkAccountName,
                     'label' => $addressDetails->label,
-                    'response' => (new $getOrPostAdapter())
+                    'response' => $getOrPostAdapter
                         ->get(
                             endpoint: config('app.ZED_TRS0_TRANSACTIONS_ENDPOINT')
                             . $addressDetails->networkAccountName

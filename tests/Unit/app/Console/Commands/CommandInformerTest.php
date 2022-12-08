@@ -15,7 +15,7 @@ use App\Console\Commands\CommandInformer;
 // POSITIVE TEST
 test('GIVEN a correctly mocked Command
     WHEN calling run()
-    THEN it returns null
+    THEN return null
     ', function () {
 
     // Mock a Command
@@ -33,9 +33,9 @@ test('GIVEN a correctly mocked Command
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertNull(
         (new CommandInformer())->run($commandMock)
-    )->toBeNull();
+    );
 });
 
 // NEGATIVE TEST
@@ -50,9 +50,9 @@ test('GIVEN a mocked Command with "command" argument "t:t"
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertNull(
         (new CommandInformer())->run($commandMock)
-    )->toBeNull();
+    );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\StringValidationException::class);
 
@@ -69,9 +69,9 @@ test('GIVEN a mocked Command with "source" argument "test"
         ->getMock();
 
     // Inject the mock into a new CommandInformer's run() method
-    expect(
+    $this->assertNull(
         (new CommandInformer())->run($commandMock)
-    )->toBeNull();
+    );
 })
 ->expectException(\App\Console\Commands\CommandValidationException::class);
 
@@ -82,7 +82,7 @@ test('GIVEN a mocked Command with "source" argument "test"
 // POSITIVE TEST
 test('GIVEN a correctly mocked Command
     WHEN calling ouput("[📟] test:test")
-    THEN it returns null
+    THEN return null
     ', function () {
     // Mock a Command
     $commandMock = mock(Illuminate\Console\Command::class)
@@ -103,9 +103,9 @@ test('GIVEN a correctly mocked Command
     $injectedCommandInformer->run($commandMock);
 
     // Call output('test') on the CommandInformer
-    expect(
+    $this->assertNull(
         $injectedCommandInformer->output('[📟] test:test')
-    )->toBeNull();
+    );
 });
 
 // NEGATIVE TEST
@@ -132,8 +132,8 @@ test('GIVEN a string of length 1000
     $injectedCommandInformer->run($commandMock);
 
     // Call output('test') on the CommandInformer
-    expect(
+    $this->assertNull(
         $injectedCommandInformer->output(str_pad('', pow(10, 3)))
-    )->toBeNull();
+    );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\StringValidationException::class);

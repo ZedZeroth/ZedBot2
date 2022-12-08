@@ -62,7 +62,7 @@ class PaymentSynchronizeRequestAdapterForENM0 implements
             apiSuffix: 'ENM0'
         );
 
-        return ($getOrPostAdapter)
+        return $getOrPostAdapter
             ->post(
                 endpoint: config('app.ZED_ENM0_TRANSACTIONS_ENDPOINT'),
                 requestParameters: $this->requestParameters

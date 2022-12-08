@@ -27,6 +27,13 @@ class HtmlPaymentRowBuilder implements
                 $timestampHTML = $payment->timestamp;
             }
 
+            $customerName = '<span style="font-style: italic;">UNKNOWN</span>';
+            if ($payment->currency->code == 'GBP') {
+                $customerName = '<span style="font-weight: bold;">⚠️ UNKNOWN ⚠️</span>';
+            }
+            $customer = null;
+            $directionEmoji = '❓';
+            $directionColor = 'grey';
             // Null originator/beneficiary (and their networkAccountName)
             $originatorLink = '<span style="font-style: italic;">OTHER/MULTI</span>';
             if ($payment->originator) {
@@ -39,6 +46,17 @@ class HtmlPaymentRowBuilder implements
                 $originatorLink = '<a href="/account/'
                     . $payment->originator->identifier . '">'
                     . $originatorName . '</a>';
+                if ($payment->originator->customer) {
+                    if (
+                        $payment->originator->customer->identifier
+                        != config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
+                    ) {
+                        $customer = $payment->originator->customer;
+                        $directionColor = 'green';
+                    } else {
+                        $directionEmoji = '📤';
+                    }
+                }
             }
             $beneficiaryLink = '<span style="font-style: italic;">OTHER/MULTI</span>';
             if ($payment->beneficiary) {
@@ -51,6 +69,39 @@ class HtmlPaymentRowBuilder implements
                 $beneficiaryLink = '<a href="/account/'
                     . $payment->beneficiary->identifier . '">'
                     . $beneficiaryName . '</a>';
+                if ($payment->beneficiary->customer) {
+                    if (
+                        $payment->beneficiary->customer->identifier
+                        != config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
+                    ) {
+                        $customer = $payment->beneficiary->customer;
+                        $directionColor = 'red';
+                    } else {
+                        $directionEmoji = '📥';
+                    }
+                }
+            }
+            $customerHTML = $directionEmoji . ' ' . $customerName;
+            if ($customer) {
+                $customerName = (
+                    new HtmlStringShortener())->shorten(
+                        $customer->familyName . ', ' . $customer->givenName1,
+                        23
+                    );
+                $customerHTML = $directionEmoji
+                    . ' <a style="color: '
+                    . $directionColor
+                    . ';" href="/customer/'
+                    . $customer->identifier
+                    . '">'
+                    . $customerName
+                    . '</a>';
+            }
+
+            // Null account holder
+            $timestampHTML = '<span style="font-style: italic;">UNKNOWN</span>';
+            if ($payment->timestamp) {
+                $timestampHTML = $payment->timestamp;
             }
 
             // Center/pad payment money
@@ -71,6 +122,10 @@ class HtmlPaymentRowBuilder implements
 
                 . '<td>'
                 . $timestampHTML
+                . '</td>'
+
+                . '<td>'
+                . $customerHTML
                 . '</td>'
 
                 . '<td>“' . $payment->memo . '”</td>'

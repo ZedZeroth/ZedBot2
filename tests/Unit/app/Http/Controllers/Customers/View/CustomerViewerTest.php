@@ -71,7 +71,13 @@ THEN the correct View is returned
     $dataProperty->setAccessible(true);
     $dataProperty->getValue($view);
     $this->assertSame(
-        ['customer', 'modelTable'],
+        [
+            'customer',
+            'modelTable',
+            'accountsTable',
+            'creditsTable',
+            'debitsTable',
+        ],
         array_keys($dataProperty->getValue($view))
     );
 });

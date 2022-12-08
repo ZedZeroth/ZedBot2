@@ -9,7 +9,7 @@ declare(strict_types=1);
 use App\Console\Commands\ExceptionInformer;
 
 /**
- * Testing the warn method
+ * Testing the warn() method
  */
 
 // POSITIVE TEST
