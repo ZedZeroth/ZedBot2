@@ -23,7 +23,7 @@ class BlockchainAddressValidator
         (new StringValidator())->validate(
             string: $addressName,
             stringName: 'addressName',
-            charactersToRemove: [' ', '-'],
+            charactersToRemove: [' ', '-', '’'],
             shortestLength: 4,
             longestLength: pow(10, 2),
             mustHaveUppercase: false,

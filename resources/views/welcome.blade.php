@@ -56,9 +56,7 @@
                 <td>
                     <h3>Rates</h3>
                     DISABLED
-                    <!--
-                        <livewire:rates-chart-component />
-                    -->
+                    <!--livewire:rates-chart-component /-->
                 </td>
             </tr>
             <tr>
@@ -69,7 +67,6 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <h3>Held Payments</h3>
                     <livewire:held-payments-component />
                 </td>
             </tr>

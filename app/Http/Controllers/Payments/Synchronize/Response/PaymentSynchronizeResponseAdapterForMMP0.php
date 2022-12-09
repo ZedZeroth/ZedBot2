@@ -24,7 +24,6 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
         array $responseArray
     ): array {
         /*💬*/ //print_r($responseArray);
-        //\Illuminate\Support\Facades\Log::error($responseArray);
 
         $paymentDTOs = [];
         foreach ($responseArray as $addressDetails) {
@@ -72,8 +71,6 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                 lowestValue: 1,
                 highestValue: pow(10, 3)
             );
-
-            /*💬*/ //echo PHP_EOL . '"' . $addressDetails['label'] . '" ' . $addressDetails['address'] . PHP_EOL . PHP_EOL;
 
             // Built most recent payment DTOs for specified numberToFetch
             $numberToFetch = $addressDetails['numberToFetch'];
@@ -123,194 +120,92 @@ class PaymentSynchronizeResponseAdapterForMMP0 implements
                             'BTC'
                         )->firstOrFail();
 
-                $isCredit = false;
-                $isDebit = false;
+                // Determine the associated account
+                $accountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
+                $account_id = Account::where('identifier', $accountIdentifier)
+                    ->firstOrFail()->id;
+
+                // Comfirmation status
+                $state = \App\Models\Payments\States\Unconfirmed::class;
+                if ($txDetails['status']['confirmed']) {
+                    $state = \App\Models\Payments\States\Settled::class;
+                }
+
+                // Confirmation time (now if unconfirmed)
+                $timestamp = date("Y-m-d H:i:s");
+                if (array_key_exists('block_time', $txDetails['status'])) {
+                    $timestamp = date("Y-m-d H:i:s", $txDetails['status']['block_time']);
+                }
 
                 //Shift focus to $response['vin']
                 $vin = $txDetails['vin'];
 
-                // Originator addresses
+                // Originators: From address to TX
+                $incrementer = 0;
                 foreach ($vin as $input) {
-                    /*💬*/ //echo 'IN:  ' . $input['prevout']['scriptpubkey_address'] . ' ' . $input['prevout']['value'] . PHP_EOL;
                     if (
                         $input['prevout']['scriptpubkey_address']
                         ==
                         $addressDetails['address']
                     ) {
-                        $isDebit = true;
-                        $value = $input['prevout']['value'];
+                        // Create a payment DTO
+                        array_push(
+                            $paymentDTOs,
+                            new \App\Http\Controllers\Payments\PaymentDTO(
+                                state: $state,
+                                network: (string) 'Bitcoin',
+                                identifier: (string) 'bitcoin::btc'
+                                . '::' . $addressDetails['address']
+                                . '::' . $txDetails['txid']
+                                . '::' . $incrementer,
+                                amount: (int) $input['prevout']['value'],
+                                currency_id: (int) $currency->id,
+                                originator_id: $account_id,
+                                beneficiary_id: null,
+                                memo: (string) 'From ' . $addressDetails['label'],
+                                timestamp: $timestamp,
+                                originatorAccountDTO: null,
+                                beneficiaryAccountDTO: null,
+                            )
+                        );
                     }
+                    $incrementer++;
                 }
 
                 //Shift focus to $response['vout']
                 $vout = $txDetails['vout'];
 
                 // Beneficiary addresses
+                $incrementer = 0;
                 foreach ($vout as $output) {
-                    /*💬*/ //echo 'OUT: ' . $output['scriptpubkey_address'] . ' ' . $output['value'] . PHP_EOL;
                     if (
                         $output['scriptpubkey_address']
                         ==
                         $addressDetails['address']
                     ) {
-                        $isCredit = true;
-                        $value = $output['value'];
-                    }
-                }
-
-                if (!$isDebit and !$isCredit) {
-                    throw new \Exception('Must be originator or beneficiary');
-                }
-
-                // New system
-                $originator_id = null;
-                $beneficiary_id = null;
-                $accountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
-                $account_id = Account::where('identifier', $accountIdentifier)
-                    ->firstOrFail()->id;
-                if ($isDebit) {
-                    $originator_id = $account_id;
-                    $memo = 'From ' . $addressDetails['label'];
-                    if ($isCredit) {
-                        $beneficiary_id = $originator_id;
-                        $memo = 'To/from ' . $addressDetails['label'];
-                    }
-                } elseif ($isCredit) {
-                    $beneficiary_id = $account_id;
-                    $memo = 'To ' . $addressDetails['label'];
-                }
-
-                $state = \App\Models\Payments\States\Unconfirmed::class;
-                if ($txDetails['status']['confirmed']) {
-                    $state = \App\Models\Payments\States\Settled::class;
-                }
-
-                // Create the payment DTO
-                array_push(
-                    $paymentDTOs,
-                    new \App\Http\Controllers\Payments\PaymentDTO(
-                        state: $state,
-                        network: (string) 'Bitcoin',
-                        identifier: (string) 'bitcoin::btc'
-                        . '::' . $txDetails['txid'],
-                        amount: (int) $value,
-                        currency_id: (int) $currency->id,
-                        originator_id: (int) $originator_id,
-                        beneficiary_id: (int) $beneficiary_id,
-                        memo: (string) $memo,
-                        timestamp: date("Y-m-d H:i:s", $txDetails['status']['block_time']),
-                        originatorAccountDTO: null,
-                        beneficiaryAccountDTO: null,
-                    )
-                );
-
-                /*
-                // This condition also deals with self-payments
-                if ($isDebit) {
-                    $originatorAccountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
-
-                    // Build originator account DTO and sync
-                    $originatorAccountDTO = new AccountDTO(
-                        network: (string) 'Bitcoin',
-                        identifier: (string) $originatorAccountIdentifier,
-                        customer_id: null,
-                        networkAccountName: (string) $addressDetails['address'],
-                        label: (string) $addressDetails['label'],
-                        currency_id: (int) $currency->id,
-                        balance: null
-                    );
-
-                    foreach ($vout as $output) {
-                        $beneficiaryAccountIdentifier = 'bitcoin::btc::' . $output['scriptpubkey_address'];
-                        // Build beneficiary account DTOs and sync
-                        $beneficiaryAccountDTO = new AccountDTO(
-                            network: (string) 'Bitcoin',
-                            identifier: (string) $beneficiaryAccountIdentifier,
-                            customer_id: null,
-                            networkAccountName: (string) $output['scriptpubkey_address'],
-                            label: (string) 'Beneficiary of payment from ' . $addressDetails['label'],
-                            currency_id: (int) $currency->id,
-                            balance: (int) 0
-                        );
-
-                        // Create the payment DTOs
-                        $memo = 'Payment from ' . $addressDetails['label'];
-                        if ($originatorAccountIdentifier == $beneficiaryAccountIdentifier) {
-                            $memo = 'Self-payment to/from ' . $addressDetails['label'];
-                        }
+                        // Create a payment DTO
                         array_push(
                             $paymentDTOs,
                             new \App\Http\Controllers\Payments\PaymentDTO(
-                                state: \App\Models\Payments\States\Unconfirmed::class,
+                                state: $state,
                                 network: (string) 'Bitcoin',
                                 identifier: (string) 'bitcoin::btc'
+                                . '::' . $txDetails['txid']
                                 . '::' . $addressDetails['address']
-                                . '::' . $txDetails['txid']
-                                . '::' . $output['scriptpubkey_address'],
-                                amount: (int) 0,
+                                . '::' . $incrementer,
+                                amount: (int) $output['value'],
                                 currency_id: (int) $currency->id,
                                 originator_id: null,
-                                beneficiary_id: null,
-                                memo: (string) $memo,
-                                timestamp: null,
-                                originatorAccountDTO: $originatorAccountDTO,
-                                beneficiaryAccountDTO: $beneficiaryAccountDTO,
+                                beneficiary_id: $account_id,
+                                memo: (string) 'To ' . $addressDetails['label'],
+                                timestamp: $timestamp,
+                                originatorAccountDTO: null,
+                                beneficiaryAccountDTO: null,
                             )
                         );
                     }
+                    $incrementer++;
                 }
-
-                // Self-payments are dealt with above
-                if ($isCredit and !$isDebit) {
-                    $beneficiaryAccountIdentifier = 'bitcoin::btc::' . $addressDetails['address'];
-
-                    // Build the beneficiary account DTO and sync
-                    $beneficiaryAccountDTO = new AccountDTO(
-                        network: (string) 'Bitcoin',
-                        identifier: (string) $beneficiaryAccountIdentifier,
-                        customer_id: null,
-                        networkAccountName: (string) $addressDetails['address'],
-                        label: (string) $addressDetails['label'],
-                        currency_id: (int) $currency->id,
-                        balance: (int) 0
-                    );
-
-                    foreach ($vin as $input) {
-                        $originatorAccountIdentifier = 'bitcoin::btc::' . $input['prevout']['scriptpubkey_address'];
-                        // Build the originator account DTOs and sync
-                        $originatorAccountDTO = new AccountDTO(
-                            network: (string) 'Bitcoin',
-                            identifier: (string) $originatorAccountIdentifier,
-                            customer_id: null,
-                            networkAccountName: (string) $input['prevout']['scriptpubkey_address'],
-                            label: (string) 'Originator of payment to ' . $addressDetails['label'],
-                            currency_id: (int) $currency->id,
-                            balance: (int) 0
-                        );
-
-                        // Create the payment DTOs
-                        array_push(
-                            $paymentDTOs,
-                            new \App\Http\Controllers\Payments\PaymentDTO(
-                                state: \App\Models\Payments\States\Unconfirmed::class,
-                                network: (string) 'Bitcoin',
-                                identifier: (string) 'bitcoin::btc'
-                                . '::' . $input['prevout']['scriptpubkey_address']
-                                . '::' . $txDetails['txid']
-                                . '::' . $addressDetails['address'],
-                                amount: (int) 0,
-                                currency_id: (int) $currency->id,
-                                originator_id: null,
-                                beneficiary_id: null,
-                                memo: (string) 'Payment to ' . $addressDetails['label'],
-                                timestamp: null,
-                                originatorAccountDTO: $originatorAccountDTO,
-                                beneficiaryAccountDTO: $beneficiaryAccountDTO,
-                            )
-                        );
-                    }
-                }
-*/
             }
         }
 

@@ -27,15 +27,11 @@ class HtmlPaymentRowBuilder implements
                 $timestampHTML = $payment->timestamp;
             }
 
-            $customerName = '<span style="font-style: italic;">UNKNOWN</span>';
-            if ($payment->currency->code == 'GBP') {
-                $customerName = '<span style="font-weight: bold;">⚠️ UNKNOWN ⚠️</span>';
-            }
             $customer = null;
             $directionEmoji = '❓';
             $directionColor = 'grey';
             // Null originator/beneficiary (and their networkAccountName)
-            $originatorLink = '<span style="font-style: italic;">OTHER/MULTI</span>';
+            $originatorLink = '<span style="font-style: italic;">COUNTERPARTY</span>';
             if ($payment->originator) {
                 if ($payment->originator->networkAccountName) {
                     $originatorName = $payment->originator->networkAccountName;
@@ -47,18 +43,19 @@ class HtmlPaymentRowBuilder implements
                     . $payment->originator->identifier . '">'
                     . $originatorName . '</a>';
                 if ($payment->originator->customer) {
+                    // If the originator is SELF
                     if (
                         $payment->originator->customer->identifier
-                        != config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
+                            == config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
                     ) {
-                        $customer = $payment->originator->customer;
-                        $directionColor = 'green';
-                    } else {
                         $directionEmoji = '📤';
+                        $directionColor = 'red';
+                    } elseif ($payment->beneficiary) {
+                        $customer = $payment->originator->customer;
                     }
                 }
             }
-            $beneficiaryLink = '<span style="font-style: italic;">OTHER/MULTI</span>';
+            $beneficiaryLink = '<span style="font-style: italic;">COUNTERPARTY</span>';
             if ($payment->beneficiary) {
                 if ($payment->beneficiary->networkAccountName) {
                     $beneficiaryName = $payment->beneficiary->networkAccountName;
@@ -70,18 +67,18 @@ class HtmlPaymentRowBuilder implements
                     . $payment->beneficiary->identifier . '">'
                     . $beneficiaryName . '</a>';
                 if ($payment->beneficiary->customer) {
+                    // If the beneficiary is SELF
                     if (
                         $payment->beneficiary->customer->identifier
-                        != config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
+                            == config('app.ZED_SELF_CUSTOMER_IDENTIFIER')
                     ) {
-                        $customer = $payment->beneficiary->customer;
-                        $directionColor = 'red';
-                    } else {
                         $directionEmoji = '📥';
+                        $directionColor = 'green';
+                    } elseif ($payment->originator) {
+                        $customer = $payment->beneficiary->customer;
                     }
                 }
             }
-            $customerHTML = $directionEmoji . ' ' . $customerName;
             if ($customer) {
                 $customerName = (
                     new HtmlStringShortener())->shorten(
@@ -96,6 +93,18 @@ class HtmlPaymentRowBuilder implements
                     . '">'
                     . $customerName
                     . '</a>';
+            } else {
+                if ($payment->currency->code == 'GBP') {
+                    $customerHTML = $directionEmoji
+                        . ' <span style="font-weight: bold; color: '
+                        . $directionColor
+                        . ';">⚠️ COUNTERPARTY ⚠️</a>';
+                } else {
+                    $customerHTML = $directionEmoji
+                        . ' <span style="font-style: italic; color: '
+                        . $directionColor
+                        . ';">UNKNOWN</a>';
+                }
             }
 
             // Null account holder

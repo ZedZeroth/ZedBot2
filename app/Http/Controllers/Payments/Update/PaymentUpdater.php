@@ -43,6 +43,8 @@ class PaymentUpdater implements
             foreach ($existingPayment->toArray() as $key => $value) {
                 if (
                     $key != 'id' and
+                    $key != 'state' and
+                    $key != 'timestamp' and
                     $key != 'created_at' and
                     $key != 'updated_at'
                 ) {
@@ -73,6 +75,17 @@ class PaymentUpdater implements
 
         // Cast the API state to the model
         $payment->state->transitionTo($modelDTO->state);
+
+        // Only update these attributes if they were null
+        if (is_null($payment->timestamp)) {
+            $payment->timestamp    = $modelDTO->timestamp;
+            $payment->save();
+        } elseif ($payment->timestamp != $modelDTO->timestamp) {
+            throw new \Exception(
+                'Model[' . $key . '] = ' . $value
+                . ' vs modelDTO[' . $key . '] = ' . $modelDTO->$key
+            );
+        }
 
         return $payment;
     }

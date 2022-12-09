@@ -49,9 +49,9 @@ class InitializeModelsCommand extends \Illuminate\Console\Command
         Artisan::call('accounts:sync init LCS0 100');
         Artisan::call('accounts:sync init MMP0 100');
         Artisan::call('accounts:sync init TRS0 100');
-        Artisan::call('payments:sync init ENM0 100');
-        Artisan::call('payments:sync init MMP0 100');
-        Artisan::call('payments:sync init TRS0 100');
+        Artisan::call('payments:sync init ENM0 1000');
+        Artisan::call('payments:sync init MMP0 1000');
+        Artisan::call('payments:sync init TRS0 1000');
         return true;
     }
 }

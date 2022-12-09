@@ -111,6 +111,7 @@ class PaymentSynchronizeResponseAdapterForTRS0 implements
                 $isDebit = false;
 
                 $token = null;
+                $counterpartyAddress = null;
                 if (array_key_exists('trigger_info', $txDetails)) {
                     if (
                         $contractInfo[
@@ -122,18 +123,22 @@ class PaymentSynchronizeResponseAdapterForTRS0 implements
                     $amount = $txDetails['trigger_info']['parameter']['_value'];
                     if ($txDetails['ownerAddress'] == $addressDetails['address']) {
                         $isDebit = true;
+                        $counterpartyAddress = $txDetails['trigger_info']['parameter']['_to'];
                     }
                     if ($txDetails['trigger_info']['parameter']['_to'] == $addressDetails['address']) {
                         $isCredit = true;
+                        $counterpartyAddress = $txDetails['ownerAddress'];
                     }
                 } else {
                     $token = 'TRX';
                     $amount = $txDetails['contractData']['amount'];
                     if ($txDetails['ownerAddress'] == $addressDetails['address']) {
                         $isDebit = true;
+                        $counterpartyAddress = $txDetails['toAddress'];
                     }
                     if ($txDetails['toAddress'] == $addressDetails['address']) {
                         $isCredit = true;
+                        $counterpartyAddress = $txDetails['ownerAddress'];
                     }
                 }
                 if (!$isDebit and !$isCredit) {
@@ -162,12 +167,20 @@ class PaymentSynchronizeResponseAdapterForTRS0 implements
                                 $beneficiary_id = $originator_id;
                                 $memo = 'To/from ' . $addressDetails['label'];
                             }
+                            $originatorAddress = $addressDetails['address'];
+                            $beneficiaryAddress = $counterpartyAddress;
                         } elseif ($isCredit) {
                             $beneficiary_id = $account_id;
                             $memo = 'To ' . $addressDetails['label'];
+                            $originatorAddress = $counterpartyAddress;
+                            $beneficiaryAddress = $addressDetails['address'];
                         }
 
+                        // Comfirmation status
                         $state = \App\Models\Payments\States\Unconfirmed::class;
+                        if ($txDetails['confirmed']) {
+                            $state = \App\Models\Payments\States\Settled::class;
+                        }
 
                         // Create the payment DTO
                         array_push(
@@ -176,7 +189,9 @@ class PaymentSynchronizeResponseAdapterForTRS0 implements
                                 state: $state,
                                 network: (string) 'Tron',
                                 identifier: (string) 'tron::' . strtolower($token)
-                                . '::' . $txDetails['hash'],
+                                . '::' . $originatorAddress
+                                . '::' . $txDetails['hash']
+                                . '::' . $beneficiaryAddress,
                                 amount: (int) $amount,
                                 currency_id: (int) $currency->id,
                                 originator_id: (int) $originator_id,

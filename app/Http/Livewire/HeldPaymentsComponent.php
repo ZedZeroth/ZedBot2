@@ -7,6 +7,7 @@ namespace App\Http\Livewire;
 class HeldPaymentsComponent extends \Livewire\Component
 {
     public string $paymentTable;
+    public int $paymentCount;
 
     /**
      * Renders the view component.
@@ -19,6 +20,8 @@ class HeldPaymentsComponent extends \Livewire\Component
             'state',
             'App\Models\Payments\States\Held'
         )->get()->sortByDesc('timestamp');
+
+        $this->paymentCount = $payments->count();
 
         if ($payments->count()) {
             $this->paymentsTable =

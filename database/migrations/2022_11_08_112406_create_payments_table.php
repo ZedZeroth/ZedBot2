@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('identifier'); // For FPS this is currently ENM-specific
             $table->bigInteger('amount'); // Wei amounts make exceed 2^63...?
             $table->integer('currency_id'); // Currency
-            $table->integer('originator_id'); // Account
-            $table->integer('beneficiary_id'); // Account
+            $table->integer('originator_id')->nullable(); // Account
+            $table->integer('beneficiary_id')->nullable(); // Account
             $table->string('memo'); // e.g. Public payment reference
             $table->timestamp('timestamp')->nullable(); // On network
             $table->timestamps(); // Laravel

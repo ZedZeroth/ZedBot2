@@ -180,8 +180,8 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
                 $originatorLabel = $counterparty[0];
                 $originatorAccountIdentifier = $this->convertIbanToAccountIdentifier($counterparty[1]);
 
-                $beneficiaryNetworkAccountName = $beneficiary[0];
-                $beneficiaryLabel = $beneficiary[0];
+                $beneficiaryNetworkAccountName = config('app.ZED_ENM0_ACCOUNT_NAME');
+                $beneficiaryLabel = config('app.ZED_ENM0_ACCOUNT_NAME');
                 $beneficiaryAccountIdentifier = $this->convertIbanToAccountIdentifier($beneficiary[1]);
             }
 
