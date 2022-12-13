@@ -19,8 +19,9 @@
         </ul>
 
         <h2><anchor id="details">Details</h2>
-        {!! $paymentTable !!}
-
+        <table>
+            {!! $payment->tableRow() !!}
+        </table>
         <h2><anchor id="model-data">Model data</h2>
         {!! $modelTable !!}
 

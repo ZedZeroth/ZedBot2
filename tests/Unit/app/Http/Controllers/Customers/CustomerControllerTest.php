@@ -75,12 +75,10 @@ THEN the correct View is returned
             'customer',
             'modelTable',
             'accountsTable',
-            'creditsTable',
-            'debitsTable',
         ],
         array_keys($dataProperty->getValue($view))
     );
-});
+})->group('requiresModels');
 
 // NEGATIVE TEST
 test('GIVEN "test::test::test"

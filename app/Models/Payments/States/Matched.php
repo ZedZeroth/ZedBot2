@@ -13,6 +13,6 @@ class Matched extends PaymentState
 
     public function getEmoji(): string
     {
-        return '┣━▶ 🔗';
+        return '💰🔗⏳';
     }
 }

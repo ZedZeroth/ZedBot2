@@ -41,6 +41,38 @@ class Customer extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
+    * Get the contacts for this customer.
+    */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class);
+    }
+
+    /**
+    * Get the credits for this customer.
+    */
+    public function credits()
+    {
+        $credits = collect();
+        foreach ($this->accounts()->get() as $account) {
+            $credits = $credits->merge($account->credits()->get());
+        }
+        return $credits;
+    }
+
+    /**
+    * Get the debits for this customer.
+    */
+    public function debits()
+    {
+        $debits = collect();
+        foreach ($this->accounts()->get() as $account) {
+            $debits = $debits->merge($account->debits()->get());
+        }
+        return $debits;
+    }
+
+    /**
      * Returns their full name
      *
      * @return string
@@ -56,5 +88,29 @@ class Customer extends \Illuminate\Database\Eloquent\Model
         }
 
         return $fullName;
+    }
+
+    /**
+     * Returns an HTML link to a customer.
+     *
+     * @param int $length
+     * @return string
+     */
+    public function linkTo(
+        int $length
+    ): string {
+        // VALIDATION
+
+        $name = (
+            new \App\Http\Controllers\MultiDomain\Html\HtmlStringShortener())
+            ->shorten(
+                $this->familyName . ', ' . $this->givenName1,
+                $length
+            );
+        return '🗿 <a href="/customer/'
+            . $this->identifier
+            . '">'
+            . $name
+            . '</a>';
     }
 }

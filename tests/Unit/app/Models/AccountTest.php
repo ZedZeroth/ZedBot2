@@ -34,7 +34,7 @@ test('GIVEN a real customer account identifier
         Payment::class,
         $account->debits->firstOrFail()
     );
-});
+})->group('requiresModels');
 
 // POSITIVE TEST
 test('GIVEN a real customer account identifier
@@ -55,7 +55,7 @@ test('GIVEN a real customer account identifier
         Customer::class,
         $account->customer
     );
-});
+})->group('requiresModels');
 
 // POSITIVE TEST
 test('GIVEN a real customer account identifier
@@ -76,7 +76,7 @@ test('GIVEN a real customer account identifier
         Currency::class,
         $account->currency
     );
-});
+})->group('requiresModels');
 
 // NEGATIVE TEST
 test('GIVEN account identifier "test::test::test"

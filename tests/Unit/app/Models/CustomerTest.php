@@ -32,7 +32,7 @@ test('GIVEN Customer identifier = env(ZED_TEST_CUSTOMER_IDENTIFIER)
     expect(
         $customer->accounts->firstOrFail()
     )->toBeInstanceOf(Account::class);
-});
+})->group('requiresModels');
 
 // NEGATIVE TEST
 test('GIVEN Customer familyName ""

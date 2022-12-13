@@ -70,6 +70,7 @@ class CommandInformer
         //Count models and record current time
         $models = [
             'Account' => \App\Models\Account::all()->count(),
+            'Contact' => \App\Models\Contact::all()->count(),
             'Currency' => \App\Models\Currency::all()->count(),
             'Customer' => \App\Models\Customer::all()->count(),
             'Payment' => \App\Models\Payment::all()->count(),

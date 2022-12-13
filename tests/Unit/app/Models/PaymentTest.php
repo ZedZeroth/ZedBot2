@@ -39,7 +39,7 @@ test('GIVEN a real payment identifier
         Account::class,
         $payment->beneficiary->firstOrFail()
     );
-});
+})->group('requiresModels');
 
 // POSITIVE TEST
 test('GIVEN a real customer payment identifier
@@ -60,7 +60,7 @@ test('GIVEN a real customer payment identifier
         Currency::class,
         $payment->currency
     );
-});
+})->group('requiresModels');
 
 // NEGATIVE TEST
 test('GIVEN payment identifier "test::test::test"

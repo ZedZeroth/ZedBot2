@@ -29,6 +29,15 @@ test('GIVEN a valid customerDTO
         balance: 0,
     );
 
+    // Construct the contact DTO
+    $contactDTO = new \App\Http\Controllers\Contacts\ContactDTO(
+        state: '',
+        identifier: 'email::test@test.com',
+        type: 'email',
+        handle: 'test@test.com',
+        customer_id: null
+    );
+
     // Construct the customer DTO
     $identifier = 'customer::test::test';
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
@@ -41,6 +50,7 @@ test('GIVEN a valid customerDTO
         companyName: 'Test Ltd',
         preferredName: 'T',
         accountDTOs: [$accountDTO],
+        contactDTOs: [$contactDTO],
     );
 
     // Build updater and model mocks
@@ -64,8 +74,9 @@ test('GIVEN a valid customerDTO
     $this->assertTrue(
         (new CustomerImporter())->import(
             modelDTOs: [$customerDTO],
-            customerUpdater: new \App\Http\Controllers\Customers\Update\CustomerUpdater(), //$customerUpdaterMock,
-            accountUpdater: new \App\Http\Controllers\Accounts\Update\AccountUpdater()//$accountUpdaterMock
+            customerUpdater: new \App\Http\Controllers\Customers\Update\CustomerUpdater(),
+            accountUpdater: new \App\Http\Controllers\Accounts\Update\AccountUpdater(),
+            contactUpdater: new \App\Http\Controllers\Contacts\Update\ContactUpdater()
         )
     );
 

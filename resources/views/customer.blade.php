@@ -35,12 +35,28 @@
 
         <span style="color: green;">
             <h3><anchor id="credits">Credits to this customer's accounts</h3>
-                {!! $creditsTable !!}
+            <table>
+                @if ($customer->credits())
+                    @foreach ($customer->credits() as $credit)
+                        {!! $credit->tableRow() !!}
+                    @endforeach
+                @else
+                    No credits exist for this customer.
+                @endif
+            </table>
         </span>
 
         <span style="color: red;">
             <h3><anchor id="debits">Debits from this customer's accounts</h3>
-                {!! $debitsTable !!}
+            <table>
+                @if ($customer->debits())
+                    @foreach ($customer->debits() as $debit)
+                        {!! $debit->tableRow() !!}
+                    @endforeach
+                @else
+                    No debits exist for this customer.
+                @endif
+            </table>
         </span>
 
     </body>

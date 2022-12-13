@@ -6,7 +6,7 @@ namespace App\Http\Livewire;
 
 class HeldPaymentsComponent extends \Livewire\Component
 {
-    public string $paymentTable;
+    public \Illuminate\Database\Eloquent\Collection $payments;
     public int $paymentCount;
 
     /**
@@ -16,20 +16,12 @@ class HeldPaymentsComponent extends \Livewire\Component
      */
     public function render(): \Illuminate\View\View
     {
-        $payments = \App\Models\Payment::where(
+        $this->payments = \App\Models\Payment::where(
             'state',
             'App\Models\Payments\States\Held'
         )->get()->sortByDesc('timestamp');
 
-        $this->paymentCount = $payments->count();
-
-        if ($payments->count()) {
-            $this->paymentsTable =
-                (new \App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder())
-                    ->build($payments);
-        } else {
-            $this->paymentsTable = 'No held payments.';
-        }
+        $this->paymentCount = $this->payments->count();
 
         return view('livewire.held-payments-component');
     }

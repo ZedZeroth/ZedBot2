@@ -43,6 +43,8 @@ class HtmlStringShortener
             highestValue: pow(10, 2)
         );
 
+        $string = str_replace('’', '', $string);
+
         if (strlen($string) > $length) {
             return substr($string, 0, (int) ceil(($length - 3) / 2))
                 . '...' . substr($string, (int) (-1 * floor(($length - 3) / 2)));

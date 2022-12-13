@@ -13,6 +13,6 @@ class AmountError extends PaymentState
 
     public function getEmoji(): string
     {
-        return '┣━▶ 🫘';
+        return '🫘🫘🫘';
     }
 }

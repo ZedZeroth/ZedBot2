@@ -21,7 +21,7 @@ test('GIVEN Currency code = GBP
     $currency = Currency::where('code', 'GBP')->firstOrFail();
 
     $this->assertInstanceOf(Currency::class, $currency);
-});
+})->group('requiresModels');
 
 // NEGATIVE TEST
 test('GIVEN Currency code = TEST

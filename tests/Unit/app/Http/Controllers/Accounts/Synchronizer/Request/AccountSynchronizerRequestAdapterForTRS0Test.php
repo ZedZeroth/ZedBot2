@@ -82,7 +82,7 @@ test('GIVEN a GetAdapterForTRS0 with a mocked post() method
         $returnArray,
         ($builtRequestAdapter)->fetchResponse($getAdapterMock)
     );
-});
+})->group('slow', 'requiresModels');
 
 // NOTE: Test invalid addresses at the validator-level as
 // account attributes can't be easily modified here.
@@ -147,7 +147,8 @@ THEN throw \'...is not an adapter for...\'
     );
 })
 ->expectException(\App\Http\Controllers\MultiDomain\Validators\AdapterValidationException::class)
-->expectExceptionMessage('is not an adapter for');
+->expectExceptionMessage('is not an adapter for')
+->group('requiresModels');
 
 // NEGATIVE TEST
 test('GIVEN a PostAdapterForENM0 with a mocked post() method

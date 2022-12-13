@@ -40,6 +40,7 @@ THEN return a CSV array
         companyName: 'Test Ltd',
         preferredName: 'T',
         accountDTOs: [],
+        contactDTOs: [],
     );
 
     $csvAdapterMock = mock(\App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV::class)

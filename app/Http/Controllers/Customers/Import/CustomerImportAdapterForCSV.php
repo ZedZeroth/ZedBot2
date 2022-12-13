@@ -162,6 +162,34 @@ class CustomerImportAdapterForCSV implements
                 }
             }
 
+            // Build the contact DTOs
+            $contactDTOs = [];
+            if ($row['EMAIL']) {
+                array_push(
+                    $contactDTOs,
+                    new \App\Http\Controllers\Contacts\ContactDTO(
+                        state: '',
+                        identifier: 'email::' . $row['EMAIL'],
+                        type: 'email',
+                        handle: $row['EMAIL'],
+                        customer_id: null
+                    )
+                );
+            }
+            if ($row['phone_no']) {
+                array_push(
+                    $contactDTOs,
+                    new \App\Http\Controllers\Contacts\ContactDTO(
+                        state: '',
+                        identifier: 'phone::'
+                            . str_replace(['+', ' '], '', $row['phone_no']),
+                        type: 'phone',
+                        handle: $row['phone_no'],
+                        customer_id: null
+                    )
+                );
+            }
+
             // Customer type
             $customerIdentifier = 'customer'
                 . '::' . $row['ID SURNAME']
@@ -186,7 +214,8 @@ class CustomerImportAdapterForCSV implements
                     givenName2: (string) $row['GIVEN NAME 2'],
                     companyName: (string) '',
                     preferredName: (string) $row['PREFERRED NAME'],
-                    accountDTOs: $accountDTOs
+                    accountDTOs: $accountDTOs,
+                    contactDTOs: $contactDTOs
                 ),
             );
         }

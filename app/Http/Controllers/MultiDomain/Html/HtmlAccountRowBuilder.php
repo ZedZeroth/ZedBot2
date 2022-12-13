@@ -9,8 +9,7 @@ namespace App\Http\Controllers\MultiDomain\Html;
  * information about a collection of
  * accounts.
  */
-class HtmlAccountRowBuilder implements
-    HtmlModelRowBuilderInterface
+class HtmlAccountRowBuilder
 {
     /**
      * @param Collection $models
@@ -25,11 +24,9 @@ class HtmlAccountRowBuilder implements
                 . 'NO HOLDER'
                 . '</td>';
             if ($account->customer) {
-                $holderHTML = '<td><a href="/customer/'
-                    . $account->customer->identifier
-                    . '">'
-                    . $account->customer->identifier
-                    . '</a></td>';
+                $holderHTML = '<td>'
+                    . $account->customer->linkTo(25)
+                    . '</td>';
             }
             $html .= '<tr>';
 

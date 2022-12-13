@@ -31,7 +31,8 @@ class CustomerUpdater implements
                     'givenName2',
                     'companyName',
                     'preferredName',
-                    'accountDTOs'
+                    'accountDTOs',
+                    'contactDTOs'
                 ]
             );
 

@@ -13,6 +13,6 @@ class Reciprocated extends PaymentState
 
     public function getEmoji(): string
     {
-        return '┣━▶ 🫱🏽‍🫲🏿';
+        return '💰🔗🫱🏽‍🫲🏿';
     }
 }

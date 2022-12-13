@@ -1,4 +1,5 @@
 <span wire:poll.5s>
+    👛 <a href="accounts">Accounts</a>
     ({{ $accounts->count() }})
     <form>
         <button wire:click="sync('ENM0')">ENM0</button>

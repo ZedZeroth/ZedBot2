@@ -24,18 +24,7 @@ class PaymentViewer implements
     {
         $payments = Payment::all()->sortByDesc('timestamp');
 
-        if ($payments->count()) {
-            $paymentsTable =
-                (new HtmlPaymentRowBuilder())
-                    ->build($payments);
-        } else {
-            $paymentsTable = 'No payments exist.';
-        }
-
-        return view('payments', [
-            'payments' => $payments,
-            'paymentsTable' => $paymentsTable
-        ]);
+        return view('payments', ['payments' => $payments]);
     }
 
     /**
@@ -56,10 +45,7 @@ class PaymentViewer implements
             'payment' => $payment,
             'modelTable' =>
             (new HtmlModelTableBuilder())
-                ->build($payment),
-            'paymentTable' =>
-                (new HtmlPaymentRowBuilder())
-                    ->build(collect([$payment])),
+                ->build($payment)
         ]);
     }
 

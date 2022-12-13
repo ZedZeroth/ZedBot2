@@ -13,6 +13,6 @@ class Held extends PaymentState
 
     public function getEmoji(): string
     {
-        return '┃&nbsp;&nbsp;&nbsp;🏦';
+        return '🏦🏦🏦';
     }
 }

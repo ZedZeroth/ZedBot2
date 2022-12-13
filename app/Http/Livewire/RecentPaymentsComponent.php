@@ -6,7 +6,7 @@ namespace App\Http\Livewire;
 
 class RecentPaymentsComponent extends \Livewire\Component
 {
-    public string $paymentTable;
+    public \Illuminate\Database\Eloquent\Collection $payments;
 
     /**
      * Renders the view component.
@@ -15,15 +15,7 @@ class RecentPaymentsComponent extends \Livewire\Component
      */
     public function render(): \Illuminate\View\View
     {
-        $payments = \App\Models\Payment::all()->sortByDesc('timestamp')->take(10);
-
-        if ($payments->count()) {
-            $this->paymentsTable =
-                (new \App\Http\Controllers\MultiDomain\Html\HtmlPaymentRowBuilder())
-                    ->build($payments);
-        } else {
-            $this->paymentsTable = 'No payments exist.';
-        }
+        $this->payments = \App\Models\Payment::all()->sortByDesc('timestamp')->take(10);
 
         return view('livewire.recent-payments-component');
     }

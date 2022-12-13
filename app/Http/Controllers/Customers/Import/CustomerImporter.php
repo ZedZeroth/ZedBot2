@@ -15,11 +15,13 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
      * @param array $modelDTOs
      * @param CustomerUpdater $customerUpdater
      * @param AccountUpdater $accountUpdater
+     * @param ContactUpdater $contactUpdater
      */
     public function import(
         array $modelDTOs,
         \App\Http\Controllers\Customers\Update\CustomerUpdater $customerUpdater,
-        \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater
+        \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater,
+        \App\Http\Controllers\Contacts\Update\ContactUpdater $contactUpdater
     ): bool {
         foreach ($modelDTOs as $customerDTO) {
             //Validate DTOs
@@ -36,7 +38,8 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                         'givenName2',
                         'companyName',
                         'preferredName',
-                        'accountDTOs'
+                        'accountDTOs',
+                        'contactDTOs'
                     ]
                 );
 
@@ -47,6 +50,12 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
             foreach ($customerDTO->accountDTOs as $accountDTO) {
                 $accountDTO->customer_id = $customer->id;
                 $accountUpdater->update($accountDTO);
+            }
+
+            // Create and assign contacts
+            foreach ($customerDTO->contactDTOs as $contactDTO) {
+                $contactDTO->customer_id = $customer->id;
+                $contactUpdater->update($contactDTO);
             }
         }
         return true;

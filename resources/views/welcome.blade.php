@@ -10,64 +10,66 @@
     </head>
 
     <body>
+        <h3>Recent Payments</h3>
+        <livewire:recent-payments-component />
+        <livewire:held-payments-component />
+
         <table>
             <tr>
-                <td>
-
-                    <h3>Models</h3>
-
-                    <table>
-                        <tr>
-                            <td>
-                                &bull; <a href="accounts">Accounts</a>
-                            </td>
-                            <td>
-                                <livewire:account-synchronizer-component />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                &bull; <a href="customers">Customers</a>
-                            </td>
-                            <td>
-                                <livewire:customer-importer-component />
-                            </td>
-                        </tr>
-                        <tr>
-                        <tr>
-                            <td>
-                                &bull; <a href="currencies">Currencies</a>
-                            </td>
-                            <td>
-                                <livewire:currency-populator-component />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                &bull; <a href="payments">Payments</a>
-                            </td>
-                            <td>
-                                <livewire:payment-synchronizer-component />
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-
-                <td>
-                    <h3>Rates</h3>
-                    DISABLED
-                    <!--livewire:rates-chart-component /-->
-                </td>
+                <td style="width: 300px;"><h3>CUSTOMER</h3></td>
+                <td style="width: 300px;"><h3>EXCHANGE</h3></td>
+                <td style="width: 600px;"><h3>NETWORK</h3></td>
+                <td style="width: 300px;"><h3>MARKET</h3></td>
             </tr>
-            <tr>
-                <td colspan="2">
-                    <h3>Recent Payments</h3>
-                    <livewire:recent-payments-component />
+                <td>
+                    🗿 <a href="/customers">Customers</a>
+                    <livewire:customer-importer-component />
+
+                    <p>
+                    📞 Contacts
+                    </p>
+
+                    <p>
+                    🛂 IdentityDocuments
+                    </p>
+
+                    <p>
+                    📒 RiskAssessments
+                    </p>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <livewire:held-payments-component />
+                <td>
+                    🥸 <a href="/profiles">Profiles</a>
+
+                    <p>
+                    🪧 Offers
+                    </p>
+
+                    <p>
+                    💱 Trades
+                    </p>
+
+                    <p>
+                    💬 Messages
+                    </p>
+
+                    <p>
+                    🧾 Invoices
+                    </p>
+                </td>
+                <td>
+                    <livewire:account-synchronizer-component />
+
+                    <p>
+                    <livewire:payment-synchronizer-component />
+                    </p>
+                </td>
+                <td>
+                    💹 Rates                    
+                
+                    <h3>OTHER</h3>
+
+                    💷 <a href="currencies">Currencies</a>
+                    <livewire:currency-populator-component />
                 </td>
             </tr>
         </table>

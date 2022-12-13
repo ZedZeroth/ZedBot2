@@ -82,7 +82,7 @@ test('GIVEN a GetAdapterForMMP0 with a mocked post() method
         $returnArray,
         ($builtRequestAdapter)->fetchResponse($getAdapterMock)
     );
-});
+})->group('requiresModels');
 
 // Negative
 test('GIVEN a GetAdapterForLCS0 with a mocked get() method

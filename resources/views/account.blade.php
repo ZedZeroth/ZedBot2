@@ -56,12 +56,28 @@
 
         <span style="color: green;">
             <h3><anchor id="credits">Credits to this account</h3>
-                {!! $creditsTable !!}
+            <table>
+            @if ($account->credits)
+                @foreach ($account->credits as $credit)
+                    {!! $credit->tableRow() !!}
+                @endforeach
+            @else
+                No credits exist for this account.
+            @endif
+            </table>
         </span>
 
         <span style="color: red;">
             <h3><anchor id="debits">Debits from this account</h3>
-                {!! $debitsTable !!}
+            <table>
+            @if ($account->debits)
+                @foreach ($account->debits as $debit)
+                    {!! $debit->tableRow() !!}
+                @endforeach
+            @else
+                No debits exist for this account.
+            @endif
+            </table>
         </span>
 
     </body>

@@ -13,6 +13,6 @@ class OriginatorError extends PaymentState
 
     public function getEmoji(): string
     {
-        return '┣━▶ 🥸';
+        return '👺👺👺';
     }
 }

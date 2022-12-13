@@ -53,20 +53,6 @@ class AccountViewer implements
         $creditsTable = 'No credits exist.';
         $debitsTable = 'No debits exist.';
 
-        // Build credits table
-        if ($account->credits()->count()) {
-            $creditsTable =
-                (new HtmlPaymentRowBuilder())
-                    ->build($account->credits()->get());
-        }
-
-        // Build debits table
-        if ($account->debits()->count()) {
-            $debitsTable =
-                (new HtmlPaymentRowBuilder())
-                    ->build($account->debits()->get());
-        }
-
         // Return the View
         return view('account', [
             'account' => $account,

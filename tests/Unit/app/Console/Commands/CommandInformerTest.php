@@ -81,7 +81,7 @@ test('GIVEN a mocked Command with "source" argument "test"
 
 // POSITIVE TEST
 test('GIVEN a correctly mocked Command
-    WHEN calling ouput("[📟] test:test")
+    WHEN calling output("[📟] test:test")
     THEN return null
     ', function () {
     // Mock a Command

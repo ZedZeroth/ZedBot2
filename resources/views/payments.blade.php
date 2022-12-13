@@ -15,8 +15,14 @@
             View payments by network instead
         </a>
         </li></ul>
-
-        {!! $paymentsTable !!}
-
+        <table>
+            @if ($payments->count())
+                @foreach ($payments as $payment)
+                    {!! $payment->tableRow() !!}
+                @endforeach
+            @else
+                No payments exist.
+            @endif
+        </table>
     </body>
 </html>

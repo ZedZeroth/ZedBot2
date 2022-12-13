@@ -8,11 +8,11 @@ class Settled extends PaymentState
 {
     public function getColor(): string
     {
-        return '#CC0';
+        return '#C90';
     }
 
     public function getEmoji(): string
     {
-        return '┣━▶ 💰';
+        return '💰⏳⏳';
     }
 }
