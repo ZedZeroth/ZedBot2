@@ -6,6 +6,7 @@ namespace App\Models;
 
 class Account extends \Illuminate\Database\Eloquent\Model
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
     use \Spatie\ModelStates\HasStates;
 
     /**

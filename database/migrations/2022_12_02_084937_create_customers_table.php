@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('companyName')->nullable();
             $table->string('preferredName')->nullable(); // If preferred over givenName1
             $table->timestamps(); // Laravel
+            $table->softDeletes(); // Allow softDeletes
         });
     }
 

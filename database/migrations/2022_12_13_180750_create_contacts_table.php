@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id(); // Laravel
-            $table->string('state'); // type::handle
+            $table->string('state'); // e.g. primary, active, disabled
             $table->string('identifier'); // type::handle
-            $table->string('type'); // phone, email, discord etc.
+            $table->tinyText('type'); // phone, email, discord etc.
             $table->string('handle'); // e.g. the actual phone number or email address
-            $table->foreignId('customer_id')->nullable(); // Contact owner
+            $table->foreignId('customer_id'); // Contact owner
             $table->timestamps(); // Laravel
             $table->softDeletes(); // Allow softDeletes
         });

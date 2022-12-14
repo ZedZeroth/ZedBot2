@@ -61,7 +61,9 @@ class CustomerController extends \App\Http\Controllers\Controller
                 accountUpdater:
                     (new \App\Http\Controllers\Accounts\Update\AccountUpdater()),
                 contactUpdater:
-                    (new \App\Http\Controllers\Contacts\Update\ContactUpdater())
+                    (new \App\Http\Controllers\Contacts\Update\ContactUpdater()),
+                identityDocumentUpdater:
+                    (new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater())
             );
     }
 }

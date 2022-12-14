@@ -24,7 +24,7 @@ test('GIVEN a valid contactDTO
         identifier: 'email::test@test.com::ContactUpdaterTest',
         type: 'email',
         handle: 'test@test.com',
-        customer_id: null
+        customer_id: 1
     );
 
     $newContact = (new ContactUpdater())->update($contactDTO);
@@ -40,11 +40,12 @@ test('GIVEN a valid contactDTO
 
     // Delete any test contacts
     Contact::where('handle', 'test@test.com')
-        ->delete();
+        ->forceDelete();
 
-    // Expect the contact to no longer exist in the Eloquent ORM
+    // Expect the contact to no longer exist in the database
     $this->assertNull(
-        Contact::where('handle', 'test@test.com')
+        Contact::withTrashed()
+            ->where('handle', 'test@test.com')
             ->first()
     );
 });

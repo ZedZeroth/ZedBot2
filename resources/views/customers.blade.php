@@ -10,17 +10,26 @@
 
         <h1>Customers</h1>
 
-        <ul>
+        <table>
         @foreach ($customers as $customer)
-            <li>
-                {!! $customer->linkTo(30) !!}
+            <tr>
+                <td>{!! $customer->linkTo(30) !!}</td>
+                <td>{{ $customer->location() }}</td>
+                <td>
+                @foreach ($customer->identityDocuments as $identityDocument)
+                    {{ $identityDocument->emoji() }}
+                    {{ $identityDocument->dateOfExpiry }}
+                @endforeach
+                </td>
+                <td>
                 @foreach ($customer->contacts as $contact)
                     {{ $contact->emoji() }}
                     {{ $contact->handle }}
                 @endforeach
-            </li>
+                </td>
+            </tr>
         @endforeach
-        </ul>
+</table>
 
     </body>
 </html>

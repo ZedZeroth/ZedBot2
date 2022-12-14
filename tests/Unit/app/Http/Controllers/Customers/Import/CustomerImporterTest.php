@@ -7,6 +7,10 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Customers\Import\CustomerImporter;
+use App\Models\Account;
+use App\Models\Contact;
+use App\Models\Customer;
+use App\Models\IdentityDocument;
 
 /**
  * Testing import() method
@@ -40,6 +44,19 @@ test('GIVEN a valid customerDTO
         customer_id: null
     );
 
+    // Construct the identity document DTO
+    $identityDocumentIdentifier = 'pp::test::test::CustomerImporterTest';
+    $identityDocumentDTO = new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
+        state: '',
+        identifier: $identityDocumentIdentifier,
+        type: 'pp',
+        nationality: 'gb',
+        placeOfBirth: 'gb',
+        dateOfBirth: '2000-01-01',
+        dateOfExpiry: '2030-01-01',
+        customer_id: null
+    );
+
     // Construct the customer DTO
     $customerIdentifier = 'customer::test::CustomerImporterTest';
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
@@ -53,6 +70,7 @@ test('GIVEN a valid customerDTO
         preferredName: 'T',
         accountDTOs: [$accountDTO],
         contactDTOs: [$contactDTO],
+        identityDocumentDTOs: [$identityDocumentDTO],
     );
 
     // Build updater and model mocks
@@ -78,14 +96,38 @@ test('GIVEN a valid customerDTO
             modelDTOs: [$customerDTO],
             customerUpdater: new \App\Http\Controllers\Customers\Update\CustomerUpdater(),
             accountUpdater: new \App\Http\Controllers\Accounts\Update\AccountUpdater(),
-            contactUpdater: new \App\Http\Controllers\Contacts\Update\ContactUpdater()
+            contactUpdater: new \App\Http\Controllers\Contacts\Update\ContactUpdater(),
+            identityDocumentUpdater: new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater()
         )
     );
 
     // Delete any test entries
-    \App\Models\Account::where('identifier', $accountIdentifier)->delete();
-    \App\Models\Contact::where('identifier', $contactIdentifier)->delete();
-    \App\Models\Customer::where('identifier', $customerIdentifier)->delete();
+    Account::where('identifier', $accountIdentifier)->forceDelete();
+    Contact::where('identifier', $contactIdentifier)->forceDelete();
+    Customer::where('identifier', $customerIdentifier)->forceDelete();
+    IdentityDocument::where('identifier', $identityDocumentIdentifier)->forceDelete();
+
+    // Expect the models to no longer exist in the database
+    $this->assertNull(
+        Account::withTrashed()
+            ->where('identifier', $accountIdentifier)
+            ->first()
+    );
+    $this->assertNull(
+        Contact::withTrashed()
+            ->where('identifier', $contactIdentifier)
+            ->first()
+    );
+    $this->assertNull(
+        Customer::withTrashed()
+            ->where('identifier', $customerIdentifier)
+            ->first()
+    );
+    $this->assertNull(
+        IdentityDocument::withTrashed()
+            ->where('identifier', $identityDocumentIdentifier)
+            ->first()
+    );
 });
 
 // NEGATIVE TEST

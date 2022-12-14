@@ -26,14 +26,6 @@
                     <livewire:customer-importer-component />
 
                     <p>
-                    📞 Contacts
-                    </p>
-
-                    <p>
-                    🛂 IdentityDocuments
-                    </p>
-
-                    <p>
                     📒 RiskAssessments
                     </p>
                 </td>

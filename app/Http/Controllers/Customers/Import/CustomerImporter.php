@@ -16,12 +16,14 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
      * @param CustomerUpdater $customerUpdater
      * @param AccountUpdater $accountUpdater
      * @param ContactUpdater $contactUpdater
+     * @param IdentityDocumentUpdater $identityDocumentUpdater
      */
     public function import(
         array $modelDTOs,
         \App\Http\Controllers\Customers\Update\CustomerUpdater $customerUpdater,
         \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater,
-        \App\Http\Controllers\Contacts\Update\ContactUpdater $contactUpdater
+        \App\Http\Controllers\Contacts\Update\ContactUpdater $contactUpdater,
+        \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater $identityDocumentUpdater
     ): bool {
         foreach ($modelDTOs as $customerDTO) {
             //Validate DTOs
@@ -39,7 +41,8 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                         'companyName',
                         'preferredName',
                         'accountDTOs',
-                        'contactDTOs'
+                        'contactDTOs',
+                        'identityDocumentDTOs'
                     ]
                 );
 
@@ -56,6 +59,12 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
             foreach ($customerDTO->contactDTOs as $contactDTO) {
                 $contactDTO->customer_id = $customer->id;
                 $contactUpdater->update($contactDTO);
+            }
+
+            // Create and assign identity documents
+            foreach ($customerDTO->identityDocumentDTOs as $identityDocumentDTO) {
+                $identityDocumentDTO->customer_id = $customer->id;
+                $identityDocumentUpdater->update($identityDocumentDTO);
             }
         }
         return true;

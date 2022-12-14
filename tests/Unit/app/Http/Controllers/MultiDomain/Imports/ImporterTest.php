@@ -41,6 +41,7 @@ THEN return a CSV array
         preferredName: 'T',
         accountDTOs: [],
         contactDTOs: [],
+        identityDocumentDTOs: [],
     );
 
     $csvAdapterMock = mock(\App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV::class)

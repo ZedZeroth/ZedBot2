@@ -190,6 +190,77 @@ class CustomerImportAdapterForCSV implements
                 );
             }
 
+            // Build the identity document DTOs
+            $identityDocumentDTOs = [];
+            if ($row['doc_type']) {
+                // If nationality assume a passport or brp exists
+                if ($row['loc_nat']) {
+                    if ($row['doc_type'] == 'dl') {
+                        // Create an empty passport
+                        array_push(
+                            $identityDocumentDTOs,
+                            new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
+                                state: '',
+                                identifier: 'pp'
+                                . '::' . $row['ID SURNAME']
+                                . '::' . $row['GIVEN NAME 1']
+                                . '::' . $row['doc_expiry'],
+                                type: 'pp',
+                                nationality: $row['loc_nat'],
+                                placeOfBirth: null,
+                                dateOfBirth: null,
+                                dateOfExpiry: null,
+                                customer_id: null
+                            )
+                        );
+                    } elseif (
+                        $row['doc_type'] == 'pp'
+                        or $row['doc_type'] == 'brp'
+                    ) {
+                        // Create an complete passport/brp
+                        array_push(
+                            $identityDocumentDTOs,
+                            new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
+                                state: '',
+                                identifier: $row['doc_type']
+                                . '::' . $row['ID SURNAME']
+                                . '::' . $row['GIVEN NAME 1']
+                                . '::' . $row['doc_expiry'],
+                                type: $row['doc_type'],
+                                nationality: $row['loc_nat'],
+                                placeOfBirth: $row['loc_pob'],
+                                dateOfBirth: $row['dob'],
+                                dateOfExpiry: $row['doc_expiry'],
+                                customer_id: null
+                            )
+                        );
+                    } else {
+                        throw new \Exception('Invalid document type: ' . $row['doc_type']);
+                    }
+                }
+                if ($row['doc_type'] == 'dl') {
+                    // Create a dl
+                    array_push(
+                        $identityDocumentDTOs,
+                        new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
+                            state: '',
+                            identifier: $row['doc_type']
+                            . '::' . $row['ID SURNAME']
+                            . '::' . $row['GIVEN NAME 1']
+                            . '::' . $row['doc_expiry'],
+                            type: $row['doc_type'],
+                            nationality: null,
+                            placeOfBirth: $row['loc_pob'],
+                            dateOfBirth: $row['dob'],
+                            dateOfExpiry: $row['doc_expiry'],
+                            customer_id: null
+                        )
+                    );
+                } elseif (!$row['loc_nat']) {
+                    throw new \Exception('Identity document is not a driving license but there is also no nationality: ' . $row['ID SURNAME']);
+                }
+            }
+
             // Customer type
             $customerIdentifier = 'customer'
                 . '::' . $row['ID SURNAME']
@@ -215,7 +286,8 @@ class CustomerImportAdapterForCSV implements
                     companyName: (string) '',
                     preferredName: (string) $row['PREFERRED NAME'],
                     accountDTOs: $accountDTOs,
-                    contactDTOs: $contactDTOs
+                    contactDTOs: $contactDTOs,
+                    identityDocumentDTOs: $identityDocumentDTOs
                 ),
             );
         }

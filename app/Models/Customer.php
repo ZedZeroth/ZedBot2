@@ -6,6 +6,7 @@ namespace App\Models;
 
 class Customer extends \Illuminate\Database\Eloquent\Model
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
     use \Spatie\ModelStates\HasStates;
 
     /**
@@ -46,6 +47,14 @@ class Customer extends \Illuminate\Database\Eloquent\Model
     public function contacts()
     {
         return $this->hasMany(Contact::class);
+    }
+
+    /**
+    * Get the identity documents for this customer.
+    */
+    public function identityDocuments()
+    {
+        return $this->hasMany(IdentityDocument::class);
     }
 
     /**
@@ -112,5 +121,110 @@ class Customer extends \Illuminate\Database\Eloquent\Model
             . '">'
             . $name
             . '</a>';
+    }
+
+    /**
+     * Returns information from their identity documents
+     *
+     * @param string $info
+     * @return string
+     */
+    public function identityInfo(
+        string $info
+    ): string {
+        foreach ($this->identityDocuments as $identityDocument) {
+            if ($identityDocument->$info) {
+                return $identityDocument->$info;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Returns their date of birth
+     *
+     * @return string
+     */
+    public function dateOfBirth(): string
+    {
+        return $this->identityInfo(info: 'dateOfBirth');
+    }
+
+    /**
+     * Returns their nationality
+     *
+     * @return string
+     */
+    public function nationality(): string
+    {
+        return $this->identityInfo(info: 'nationality');
+    }
+
+    /**
+     * Returns their country of birth
+     *
+     * @return string
+     */
+    public function placeOfBirth(): string
+    {
+        return $this->identityInfo(info: 'placeOfBirth');
+    }
+
+    /**
+     * Returns their residency
+     *
+     * @return string
+     */
+    public function residency(): string
+    {
+        return '';
+    }
+
+    /**
+     * Returns their age
+     *
+     * @return int
+     */
+    public function age(): int
+    {
+        return (new \DateTime($this->dateOfBirth()))
+            ->diff(now())
+            ->y;
+    }
+
+    /**
+     * Returns country flag emoji
+     *
+     * @param string $code
+     * @return string
+     */
+    public function flag(
+        string $code
+    ): string {
+        if (!$code) {
+            return '🏴‍☠️';
+        }
+        $emoji = [];
+        foreach (str_split($code) as $c) {
+            if (($o = ord($c)) > 64 && $o % 32 < 27) {
+                $emoji[] = hex2bin("f09f87" . dechex($o % 32 + 165));
+                continue;
+            }
+            $emoji[] = $c;
+        }
+        return join($emoji);
+    }
+
+    /**
+     * Returns a customer's location data
+     *
+     * @return string
+     */
+    public function location(): string
+    {
+        return '🏠 ' . $this->flag($this->residency()) . ' • '
+            . '👶🏽 ' . $this->flag($this->placeOfBirth()) . ' • '
+            . '🏝️ ' . $this->flag($this->nationality());
     }
 }

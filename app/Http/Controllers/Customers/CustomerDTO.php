@@ -23,6 +23,7 @@ class CustomerDTO implements
         public ?string $preferredName,
         public array $accountDTOs,
         public array $contactDTOs,
+        public array $identityDocumentDTOs,
     ) {
     }
 }

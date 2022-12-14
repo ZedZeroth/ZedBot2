@@ -22,9 +22,22 @@
         </ul>
 
         <h2><anchor id="details">Details</h2>
-
-        Name: {{ $customer->fullName() }}
-
+        <ul>
+        <li>Name: {{ $customer->fullName() }}</li>
+        <li>Age: {{ $customer->age() }} ({{ $customer->dateOfBirth() }})</li>
+        <li>{{ $customer->location() }}</li>
+        <li>Identity Documents:
+            @foreach ($customer->identityDocuments as $identityDocument)
+                {{ $identityDocument->emoji() }}
+                {{ $identityDocument->dateOfExpiry }}
+            @endforeach
+        <li>Contacts:
+            @foreach ($customer->contacts as $contact)
+                {{ $contact->emoji() }}
+                {{ $contact->handle }}
+            @endforeach
+        </li>
+        </ul>
         <h2><anchor id="model-data">Model data</h2>
         {!! $modelTable !!}
 

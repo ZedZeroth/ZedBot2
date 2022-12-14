@@ -32,7 +32,8 @@ class CustomerUpdater implements
                     'companyName',
                     'preferredName',
                     'accountDTOs',
-                    'contactDTOs'
+                    'contactDTOs',
+                    'identityDocumentDTOs'
                 ]
             );
 

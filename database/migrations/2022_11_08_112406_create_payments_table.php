@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('memo'); // e.g. Public payment reference
             $table->timestamp('timestamp')->nullable(); // On network
             $table->timestamps(); // Laravel
+            $table->softDeletes(); // Allow softDeletes
         });
     }
 

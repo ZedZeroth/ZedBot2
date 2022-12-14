@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('currency_id');
             $table->bigInteger('balance')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // Allow softDeletes
         });
     }
 
