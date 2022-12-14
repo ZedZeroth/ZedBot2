@@ -20,7 +20,7 @@ class ContactUpdater implements
             string: $modelDTO->type,
             stringName: '$modelDTO->type',
             charactersToRemove: [],
-            shortestLength: 5,
+            shortestLength: 4,
             longestLength: 5,
             mustHaveUppercase: false,
             canHaveUppercase: false,
@@ -49,14 +49,27 @@ class ContactUpdater implements
             isHexadecimal: false
         );
 
+        // Validate contact type
+        if (
+            !in_array(
+                $modelDTO->type,
+                [
+                    'phone',
+                    'email'
+                ]
+            )
+        ) {
+            throw new \Exception('Invalid contact type: ' . $modelDTO->type);
+        }
+
         // Create
         $contact = \App\Models\Contact::firstOrCreate(
             ['identifier' => $modelDTO->identifier],
             [
-                'state'     => $modelDTO->state,
-                'type'      => $modelDTO->type,
-                'handle'    => $modelDTO->handle,
-                'customer_id'    => $modelDTO->customer_id
+                'state'         => $modelDTO->state,
+                'type'          => $modelDTO->type,
+                'handle'        => $modelDTO->handle,
+                'customer_id'   => $modelDTO->customer_id
             ]
         );
 

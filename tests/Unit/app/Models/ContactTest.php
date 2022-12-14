@@ -19,10 +19,10 @@ test('GIVEN a real phone number contact
     THEN return a customer
     ', function () {
 
-    $contact = Contact::where(
-        'identifier',
-        env('ZED_SELF_PHONE_NUMBER')
-    )->firstOrFail();
+    $contact = Contact::
+        where('type', 'phone')
+        ->where('handle', env('ZED_SELF_PHONE_NUMBER'))
+        ->firstOrFail();
 
     // Expect the contact to exist
     $this->assertInstanceOf(Contact::class, $contact);
@@ -32,7 +32,7 @@ test('GIVEN a real phone number contact
         Customer::class,
         $contact->customer->firstOrFail()
     );
-});
+})->group('requiresModels');
 
 // POSITIVE TEST
 test('GIVEN a real email address contact
@@ -40,10 +40,10 @@ test('GIVEN a real email address contact
     THEN return a customer
     ', function () {
 
-    $contact = Contact::where(
-        'identifier',
-        env('ZED_SELF_EMAIL_ADDRESS')
-    )->firstOrFail();
+    $contact = Contact::
+        where('type', 'email')
+        ->where('handle', env('ZED_SELF_EMAIL_ADDRESS'))
+        ->firstOrFail();
 
     // Expect the contact to exist
     $this->assertInstanceOf(Contact::class, $contact);
@@ -53,4 +53,44 @@ test('GIVEN a real email address contact
         Customer::class,
         $contact->customer->firstOrFail()
     );
-});
+})->group('requiresModels');
+
+// NEGATIVE TEST
+test('GIVEN a false email address contact
+    WHEN calling customer()
+    THEN throw a ModelNotFoundException
+    ', function () {
+
+    $contact = Contact::
+        where('type', 'email')
+        ->where('handle', 'test@test.com')
+        ->firstOrFail();
+
+    // Expect the contact to exist
+    $this->assertInstanceOf(Contact::class, $contact);
+})->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+
+/**
+ * Testing the emoji() method
+ */
+
+// POSITIVE TEST
+test('GIVEN a real email address contact
+    WHEN calling emoji()
+    THEN return "📧"
+    ', function () {
+
+    $contact = Contact::
+        where('type', 'email')
+        ->where('handle', env('ZED_SELF_EMAIL_ADDRESS'))
+        ->firstOrFail();
+
+    // Expect the contact to exist
+    $this->assertInstanceOf(Contact::class, $contact);
+
+    // Expect the correct emoji
+    $this->assertSame(
+        '📧',
+        $contact->emoji()
+    );
+})->group('requiresModels');

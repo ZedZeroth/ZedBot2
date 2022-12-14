@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('handle'); // e.g. the actual phone number or email address
             $table->foreignId('customer_id')->nullable(); // Contact owner
             $table->timestamps(); // Laravel
+            $table->softDeletes(); // Allow softDeletes
         });
     }
 

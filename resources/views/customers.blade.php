@@ -13,9 +13,11 @@
         <ul>
         @foreach ($customers as $customer)
             <li>
-                <a href="/customer/{{ $customer->identifier }}">
-                    {{ $customer->fullName() }}
-                </a>
+                {!! $customer->linkTo(30) !!}
+                @foreach ($customer->contacts as $contact)
+                    {{ $contact->emoji() }}
+                    {{ $contact->handle }}
+                @endforeach
             </li>
         @endforeach
         </ul>

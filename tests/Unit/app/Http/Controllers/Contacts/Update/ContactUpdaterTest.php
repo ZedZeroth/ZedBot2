@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Contacts\Update\ContactUpdater;
+use App\Models\Contact;
 
 /**
  * Testing the update() method
@@ -20,7 +21,7 @@ test('GIVEN a valid contactDTO
 
     $contactDTO = new \App\Http\Controllers\Contacts\ContactDTO(
         state: '',
-        identifier: 'email::test@test.com',
+        identifier: 'email::test@test.com::ContactUpdaterTest',
         type: 'email',
         handle: 'test@test.com',
         customer_id: null
@@ -30,13 +31,43 @@ test('GIVEN a valid contactDTO
 
     // Expect a contact to have been returned
     $this->assertInstanceOf(
-        \App\Models\Contact::class,
+        Contact::class,
         $newContact
     );
 
     // Expect the contact to exist in the Eloquent ORM
     $this->assertTrue($newContact->exists());
 
-    // Delete the new contact
-    $newContact->delete();
+    // Delete any test contacts
+    Contact::where('handle', 'test@test.com')
+        ->delete();
+
+    // Expect the contact to no longer exist in the Eloquent ORM
+    $this->assertNull(
+        Contact::where('handle', 'test@test.com')
+            ->first()
+    );
 });
+
+// NEGATIVE TEST
+test('GIVEN an invalid contact type
+    WHEN calling update()
+    THEN throw a StringValidationException
+    ', function () {
+
+    $contactDTO = new \App\Http\Controllers\Contacts\ContactDTO(
+        state: '',
+        identifier: 'email::test@test.com',
+        type: 'test',
+        handle: 'test@test.com',
+        customer_id: null
+    );
+
+    $newContact = (new ContactUpdater())->update($contactDTO);
+
+    // Expect a contact to have been returned
+    $this->assertInstanceOf(
+        Contact::class,
+        $newContact
+    );
+})->expectExceptionMessage('Invalid contact type');

@@ -19,9 +19,10 @@ test('GIVEN a valid customerDTO
     ', function () {
 
     // Construct the account DTO
+    $accountIdentifier = 'account::test::CustomerImporterTest';
     $accountDTO = new \App\Http\Controllers\Accounts\AccountDTO(
         network: 'test',
-        identifier: 'account::test::test',
+        identifier: $accountIdentifier,
         customer_id: null,
         networkAccountName: null,
         label: 'test',
@@ -30,19 +31,20 @@ test('GIVEN a valid customerDTO
     );
 
     // Construct the contact DTO
+    $contactIdentifier = 'email::test@test.com::CustomerImporterTest';
     $contactDTO = new \App\Http\Controllers\Contacts\ContactDTO(
         state: '',
-        identifier: 'email::test@test.com',
+        identifier: $contactIdentifier,
         type: 'email',
         handle: 'test@test.com',
         customer_id: null
     );
 
     // Construct the customer DTO
-    $identifier = 'customer::test::test';
+    $customerIdentifier = 'customer::test::CustomerImporterTest';
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
         state: 'test',
-        identifier: $identifier,
+        identifier: $customerIdentifier,
         type: 'test',
         familyName: 'Test',
         givenName1: 'Test',
@@ -80,9 +82,10 @@ test('GIVEN a valid customerDTO
         )
     );
 
-    // Delete the test entry
-    $customer = \App\Models\Customer::where('identifier', $identifier)->firstOrFail();
-    $customer->delete();
+    // Delete any test entries
+    \App\Models\Account::where('identifier', $accountIdentifier)->delete();
+    \App\Models\Contact::where('identifier', $contactIdentifier)->delete();
+    \App\Models\Customer::where('identifier', $customerIdentifier)->delete();
 });
 
 // NEGATIVE TEST
