@@ -65,6 +65,7 @@
                 </td>
             </tr>
         </table>
+        PHP {{ PHP_VERSION }}
 
     </body>
 </html>

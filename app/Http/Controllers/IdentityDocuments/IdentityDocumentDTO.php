@@ -16,9 +16,6 @@ class IdentityDocumentDTO implements
         public string $state,
         public string $identifier,
         public string $type,
-        public ?string $nationality,
-        public ?string $placeOfBirth, // nullable while importing
-        public ?string $dateOfBirth, // nullable while importing
         public ?string $dateOfExpiry, // nullable while importing
         public ?int $customer_id,
     ) {

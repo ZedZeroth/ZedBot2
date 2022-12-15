@@ -24,9 +24,6 @@ test('GIVEN a valid identityDocumentDTO
         state: '',
         identifier: $identityDocumentIdentifier,
         type: 'pp',
-        nationality: 'gb',
-        placeOfBirth: 'gb',
-        dateOfBirth: '2000-01-01',
         dateOfExpiry: '2030-01-01',
         customer_id: 1
     );
@@ -65,10 +62,7 @@ test('GIVEN an invalid date of birth
         state: '',
         identifier: $identityDocumentIdentifier,
         type: 'pp',
-        nationality: 'gb',
-        placeOfBirth: 'gb',
-        dateOfBirth: '20000-01-01',
-        dateOfExpiry: '2030-01-01',
+        dateOfExpiry: '20000-01-01',
         customer_id: null
     );
 

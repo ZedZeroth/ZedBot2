@@ -82,4 +82,45 @@ class Account extends \Illuminate\Database\Eloquent\Model
             currency: $this->currency()->first()
         );
     }
+
+    /**
+     * Returns an HTML table row for the account.
+     *
+     * @return string
+     */
+    public function tableRow(): string
+    {
+        // VALIDATION
+
+        if ($this->customer) {
+            $holderHTML = '<td>'
+                . $this->customer->linkTo(25)
+                . '</td>';
+        } else {
+            $holderHTML = '<td style="font-style: italic;">'
+            . 'NO HOLDER'
+            . '</td>';
+        }
+        $html = '<tr>';
+        $html .= '<tr>'
+            . '<td><a href="/'
+            . $this->network
+            . '/accounts">'
+            . $this->network
+            . '</a></td>'
+
+            . $holderHTML
+
+            . '<td>“' . $this->label . '”</td>'
+
+            . '<td>' . $this->networkAccountName . '</td>'
+
+            . '<td><a href="/account/'
+            . $this->identifier
+            . '">'
+            . $this->identifier
+            . '</a></td>'
+            . '</tr>';
+        return $html;
+    }
 }

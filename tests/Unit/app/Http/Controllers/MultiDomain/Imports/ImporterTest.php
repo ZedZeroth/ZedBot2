@@ -31,17 +31,22 @@ THEN return a CSV array
         ->getMock();
 
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
-        state: 'test',
-        identifier: 'test::test',
-        type: 'test',
-        familyName: 'Test',
-        givenName1: 'Test',
-        givenName2: 'Test',
-        companyName: 'Test Ltd',
-        preferredName: 'T',
-        accountDTOs: [],
-        contactDTOs: [],
-        identityDocumentDTOs: [],
+        state:                  'test',
+        identifier:             'test::test',
+        type:                   'test',
+        familyName:             'Test',
+        givenName1:             'Test',
+        givenName2:             'Test',
+        companyName:            'Test Ltd',
+        preferredName:          'T',
+        dateOfBirth:            '2000-01-01',
+        placeOfBirth:           'gb',
+        nationality:            'gb',
+        residency:              'gb',
+        volumeSnapshot:         1000,
+        accountDTOs:            [],
+        contactDTOs:            [],
+        identityDocumentDTOs:   [],
     );
 
     $csvAdapterMock = mock(\App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV::class)
@@ -60,4 +65,3 @@ THEN return a CSV array
         )
     );
 });
-//})->expectException(\TypeError::class);

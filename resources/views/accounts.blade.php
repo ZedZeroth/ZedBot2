@@ -15,8 +15,15 @@
             View accounts by network instead
         </a>
         </li></ul>
-
-        {!! $accountsTable !!}
+        <table>
+            @if ($accounts->count())
+                @foreach ($accounts as $account)
+                    {!! $account->tableRow() !!}
+                @endforeach
+            @else
+                No accounts exist.
+            @endif
+        </table>
 
     </body>
 </html>

@@ -14,7 +14,9 @@
         @foreach ($customers as $customer)
             <tr>
                 <td>{!! $customer->linkTo(30) !!}</td>
-                <td>{{ $customer->location() }}</td>
+                <td>{!! $customer->ageEmojis() !!}</td>
+                <td>{!! $customer->location() !!}</td>
+                <td>{!! $customer->volumeEmojis() !!}</td>
                 <td>
                 @foreach ($customer->identityDocuments as $identityDocument)
                     {{ $identityDocument->emoji() }}

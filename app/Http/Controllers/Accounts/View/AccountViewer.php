@@ -22,17 +22,8 @@ class AccountViewer implements
     {
         $accounts = Account::all()->sortBy('identifier');
 
-        if ($accounts->count()) {
-            $accountsTable =
-                (new HtmlAccountRowBuilder())
-                    ->build($accounts);
-        } else {
-            $accountsTable = 'No accounts exist.';
-        }
-
         return view('accounts', [
-            'accounts' => $accounts,
-            'accountsTable' => $accountsTable
+            'accounts' => $accounts
         ]);
     }
 
@@ -49,18 +40,12 @@ class AccountViewer implements
         // Verify account exists
         $account = Account::where('identifier', $identifier)->firstOrFail();
 
-        // Build payment tables
-        $creditsTable = 'No credits exist.';
-        $debitsTable = 'No debits exist.';
-
         // Return the View
         return view('account', [
             'account' => $account,
             'modelTable' =>
             (new \App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder())
                 ->build($account),
-            'creditsTable' => $creditsTable,
-            'debitsTable' => $debitsTable
         ]);
     }
 
@@ -94,14 +79,7 @@ class AccountViewer implements
 
         // Verify network
         if (!in_array($network, config('app.ZED_NETWORK_LIST'))) {
-            $html = 'No such network exists.';
-        } else {
-            $accounts = Account::where('network', $network)->get();
-            if ($accounts->count()) {
-                $html = (new HtmlAccountRowBuilder())->build($accounts);
-            } else {
-                $html = 'No accounts exist on this network.';
-            }
+            throw new \Exception('No such network exists.');
         }
 
         // Return the View
@@ -109,7 +87,7 @@ class AccountViewer implements
             'network-accounts',
             [
                 'network' => $network,
-                'accountsTable' => $html
+                'accounts' => Account::where('network', $network)->get()
             ]
         );
     }

@@ -15,6 +15,20 @@ class IdentityDocumentUpdater implements
     public function update(
         \App\Http\Controllers\MultiDomain\Interfaces\ModelDtoInterface $modelDTO
     ): \Illuminate\Database\Eloquent\Model {
+        //Validate DTO
+        (new \App\Http\Controllers\MultiDomain\Validators\DtoValidator())
+            ->validate(
+                dto: $modelDTO,
+                dtoName: 'modelDTO',
+                requiredProperties: [
+                    'state',
+                    'identifier',
+                    'type',
+                    'dateOfExpiry',
+                    'customer_id',
+                ]
+            );
+
         // Validate type
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $modelDTO->type,
@@ -58,9 +72,6 @@ class IdentityDocumentUpdater implements
             [
                 'state'         => $modelDTO->state,
                 'type'          => $modelDTO->type,
-                'nationality'   => $modelDTO->nationality,
-                'placeOfBirth'  => $modelDTO->placeOfBirth,
-                'dateOfBirth'   => $modelDTO->dateOfBirth,
                 'dateOfExpiry'  => $modelDTO->dateOfExpiry,
                 'customer_id'   => $modelDTO->customer_id
             ]

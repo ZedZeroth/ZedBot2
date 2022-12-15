@@ -31,6 +31,11 @@ class CustomerUpdater implements
                     'givenName2',
                     'companyName',
                     'preferredName',
+                    'dateOfBirth',
+                    'placeOfBirth',
+                    'nationality',
+                    'residency',
+                    'volumeSnapshot',
                     'accountDTOs',
                     'contactDTOs',
                     'identityDocumentDTOs'
@@ -41,13 +46,18 @@ class CustomerUpdater implements
         $customer = Customer::firstOrCreate(
             ['identifier' => $modelDTO->identifier],
             [
-                'state'         => \App\Models\Customers\States\Unverified::class, // Testing
-                'type'          => $modelDTO->type,
-                'familyName'    => $modelDTO->familyName,
-                'givenName1'    => $modelDTO->givenName1,
-                'givenName2'    => $modelDTO->givenName2,
-                'companyName'   => $modelDTO->companyName,
-                'preferredName' => $modelDTO->preferredName,
+                'state'             => \App\Models\Customers\States\Unverified::class, // Testing
+                'type'              => $modelDTO->type,
+                'familyName'        => $modelDTO->familyName,
+                'givenName1'        => $modelDTO->givenName1,
+                'givenName2'        => $modelDTO->givenName2,
+                'companyName'       => $modelDTO->companyName,
+                'preferredName'     => $modelDTO->preferredName,
+                'dateOfBirth'       => $modelDTO->dateOfBirth,
+                'placeOfBirth'      => $modelDTO->placeOfBirth,
+                'nationality'       => $modelDTO->nationality,
+                'residency'         => $modelDTO->residency,
+                'volumeSnapshot'    => $modelDTO->volumeSnapshot,
             ]
         );
 

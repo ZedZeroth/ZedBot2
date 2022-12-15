@@ -193,72 +193,20 @@ class CustomerImportAdapterForCSV implements
             // Build the identity document DTOs
             $identityDocumentDTOs = [];
             if ($row['doc_type']) {
-                // If nationality assume a passport or brp exists
-                if ($row['loc_nat']) {
-                    if ($row['doc_type'] == 'dl') {
-                        // Create an empty passport
-                        array_push(
-                            $identityDocumentDTOs,
-                            new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
-                                state: '',
-                                identifier: 'pp'
-                                . '::' . $row['ID SURNAME']
-                                . '::' . $row['GIVEN NAME 1']
-                                . '::' . $row['doc_expiry'],
-                                type: 'pp',
-                                nationality: $row['loc_nat'],
-                                placeOfBirth: null,
-                                dateOfBirth: null,
-                                dateOfExpiry: null,
-                                customer_id: null
-                            )
-                        );
-                    } elseif (
-                        $row['doc_type'] == 'pp'
-                        or $row['doc_type'] == 'brp'
-                    ) {
-                        // Create an complete passport/brp
-                        array_push(
-                            $identityDocumentDTOs,
-                            new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
-                                state: '',
-                                identifier: $row['doc_type']
-                                . '::' . $row['ID SURNAME']
-                                . '::' . $row['GIVEN NAME 1']
-                                . '::' . $row['doc_expiry'],
-                                type: $row['doc_type'],
-                                nationality: $row['loc_nat'],
-                                placeOfBirth: $row['loc_pob'],
-                                dateOfBirth: $row['dob'],
-                                dateOfExpiry: $row['doc_expiry'],
-                                customer_id: null
-                            )
-                        );
-                    } else {
-                        throw new \Exception('Invalid document type: ' . $row['doc_type']);
-                    }
-                }
-                if ($row['doc_type'] == 'dl') {
-                    // Create a dl
-                    array_push(
-                        $identityDocumentDTOs,
-                        new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
-                            state: '',
-                            identifier: $row['doc_type']
-                            . '::' . $row['ID SURNAME']
-                            . '::' . $row['GIVEN NAME 1']
-                            . '::' . $row['doc_expiry'],
-                            type: $row['doc_type'],
-                            nationality: null,
-                            placeOfBirth: $row['loc_pob'],
-                            dateOfBirth: $row['dob'],
-                            dateOfExpiry: $row['doc_expiry'],
-                            customer_id: null
-                        )
-                    );
-                } elseif (!$row['loc_nat']) {
-                    throw new \Exception('Identity document is not a driving license but there is also no nationality: ' . $row['ID SURNAME']);
-                }
+                // Create a dl
+                array_push(
+                    $identityDocumentDTOs,
+                    new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
+                        state: '',
+                        identifier: $row['doc_type']
+                        . '::' . $row['ID SURNAME']
+                        . '::' . $row['GIVEN NAME 1']
+                        . '::' . $row['doc_expiry'],
+                        type: $row['doc_type'],
+                        dateOfExpiry: $row['doc_expiry'],
+                        customer_id: null
+                    )
+                );
             }
 
             // Customer type
@@ -272,22 +220,47 @@ class CustomerImportAdapterForCSV implements
             }
 
             // Build the customer DTO
+            $dateOfBirth = null;
+            if ($row['dob']) {
+                $dateOfBirth = $row['dob'];
+            }
+            $placeOfBirth = null;
+            if ($row['loc_pob']) {
+                $placeOfBirth = $row['loc_pob'];
+            }
+            $nationality = null;
+            if ($row['loc_nat']) {
+                $nationality = $row['loc_nat'];
+            }
+            $residency = null;
+            if ($row['loc_reside']) {
+                $residency = $row['loc_reside'];
+            }
+            $volumeSnapshot = null;
+            if ($row['bank_vol']) {
+                $volumeSnapshot = (int) $row['bank_vol'];
+            }
             array_push(
                 $customerDTOs,
                 new \App\Http\Controllers\Customers\CustomerDTO(
                     // Build identifiers in importer/synchronizer!
                     // "customer"::customer_id::surname::surname_collision_increment::given_name_1::given_name_2
-                    state: \App\Models\Customers\States\Unverified::class,
-                    identifier: (string) $customerIdentifier,
-                    type: (string) $type, // Needs reviewing
-                    familyName: (string) $row['ID SURNAME'],
-                    givenName1: (string) $row['GIVEN NAME 1'],
-                    givenName2: (string) $row['GIVEN NAME 2'],
-                    companyName: (string) '',
-                    preferredName: (string) $row['PREFERRED NAME'],
-                    accountDTOs: $accountDTOs,
-                    contactDTOs: $contactDTOs,
-                    identityDocumentDTOs: $identityDocumentDTOs
+                    state:                  \App\Models\Customers\States\Unverified::class,
+                    identifier:             (string) $customerIdentifier,
+                    type:                   (string) $type, // Needs reviewing
+                    familyName:             (string) $row['ID SURNAME'],
+                    givenName1:             (string) $row['GIVEN NAME 1'],
+                    givenName2:             $row['GIVEN NAME 2'],
+                    companyName:            null,
+                    preferredName:          $row['PREFERRED NAME'],
+                    dateOfBirth:            $dateOfBirth,
+                    placeOfBirth:           $placeOfBirth,
+                    nationality:            $nationality,
+                    residency:              $residency,
+                    volumeSnapshot:         $volumeSnapshot,
+                    accountDTOs:            (array) $accountDTOs,
+                    contactDTOs:            (array) $contactDTOs,
+                    identityDocumentDTOs:   (array) $identityDocumentDTOs
                 ),
             );
         }

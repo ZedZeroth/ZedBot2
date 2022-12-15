@@ -23,6 +23,11 @@ return new class extends Migration
             $table->string('givenName2')->nullable(); // first middle name
             $table->string('companyName')->nullable();
             $table->string('preferredName')->nullable(); // If preferred over givenName1
+            $table->date('dateOfBirth')->nullable(); // nullable while importing
+            $table->tinyText('placeOfBirth')->nullable(); // 2-character country ISO  // nullable while importing
+            $table->tinyText('residency')->nullable(); // 2-character country ISO  // nullable while importing
+            $table->tinyText('nationality')->nullable(); // 2-character country ISO
+            $table->integer('volumeSnapshot')->nullable(); // Usually a monthly in+out GBP volume on bank statement
             $table->timestamps(); // Laravel
             $table->softDeletes(); // Allow softDeletes
         });

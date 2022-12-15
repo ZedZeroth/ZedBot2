@@ -21,6 +21,11 @@ class CustomerDTO implements
         public ?string $givenName2,
         public ?string $companyName,
         public ?string $preferredName,
+        public ?string $dateOfBirth, // nullable while importing
+        public ?string $placeOfBirth, // nullable while importing
+        public ?string $nationality,
+        public ?string $residency,
+        public ?int $volumeSnapshot,
         public array $accountDTOs,
         public array $contactDTOs,
         public array $identityDocumentDTOs,

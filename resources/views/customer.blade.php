@@ -24,8 +24,9 @@
         <h2><anchor id="details">Details</h2>
         <ul>
         <li>Name: {{ $customer->fullName() }}</li>
-        <li>Age: {{ $customer->age() }} ({{ $customer->dateOfBirth() }})</li>
-        <li>{{ $customer->location() }}</li>
+        <li>Age: {{ $customer->age() }} ({{ $customer->dateOfBirth }})</li>
+        <li>{!! $customer->location() !!}</li>
+        <li>Volume: {{ $customer->volumeEmojis() }}</li>
         <li>Identity Documents:
             @foreach ($customer->identityDocuments as $identityDocument)
                 {{ $identityDocument->emoji() }}
@@ -43,14 +44,22 @@
 
         <span>
             <h3><anchor id="accounts">Accounts held ({{ $customer->accounts()->count() }})</h3>
-                {!! $accountsTable !!}
+            <table>
+                @if ($customer->accounts->count())
+                    @foreach ($customer->accounts as $account)
+                        {!! $account->tableRow() !!}
+                    @endforeach
+                @else
+                    No accounts held.
+                @endif
+            </table>
         </span>
 
         <span style="color: green;">
             <h3><anchor id="credits">Credits to this customer's accounts</h3>
             <table>
                 @if ($customer->credits())
-                    @foreach ($customer->credits() as $credit)
+                    @foreach ($customer->credits()->sortByDesc('timestamp') as $credit)
                         {!! $credit->tableRow() !!}
                     @endforeach
                 @else
@@ -63,7 +72,7 @@
             <h3><anchor id="debits">Debits from this customer's accounts</h3>
             <table>
                 @if ($customer->debits())
-                    @foreach ($customer->debits() as $debit)
+                    @foreach ($customer->debits()->sortByDesc('timestamp') as $debit)
                         {!! $debit->tableRow() !!}
                     @endforeach
                 @else

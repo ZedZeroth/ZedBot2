@@ -16,7 +16,14 @@
         </a>
         </li></ul>
 
-        {!! $accountsTable !!}
-
+        <table>
+        @if ($accounts->count())
+            @foreach ($accounts as $account)
+                {!! $account->tableRow() !!}
+            @endforeach
+        @else
+            No accounts on this network.
+        @endif
+        </table>
     </body>
 </html>

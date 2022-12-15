@@ -42,22 +42,12 @@ class CustomerViewer implements
         // Verify customer exists
         $customer = Customer::where('identifier', $identifier)->firstOrFail();
 
-        // Build accounts table
-        if ($customer->accounts()->count()) {
-            $accountsTable =
-                (new HtmlAccountRowBuilder())
-                    ->build($customer->accounts()->get());
-        } else {
-            $accountsTable = 'No accounts exist.';
-        }
-
         // Return the View
         return view('customer', [
             'customer'      => $customer,
             'modelTable'    =>
                 (new \App\Http\Controllers\MultiDomain\Html\HtmlModelTableBuilder())
-                    ->build($customer),
-            'accountsTable' => $accountsTable
+                    ->build($customer)
         ]);
     }
 }

@@ -50,9 +50,6 @@ test('GIVEN a valid customerDTO
         state: '',
         identifier: $identityDocumentIdentifier,
         type: 'pp',
-        nationality: 'gb',
-        placeOfBirth: 'gb',
-        dateOfBirth: '2000-01-01',
         dateOfExpiry: '2030-01-01',
         customer_id: null
     );
@@ -60,17 +57,22 @@ test('GIVEN a valid customerDTO
     // Construct the customer DTO
     $customerIdentifier = 'customer::test::CustomerImporterTest';
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
-        state: 'test',
-        identifier: $customerIdentifier,
-        type: 'test',
-        familyName: 'Test',
-        givenName1: 'Test',
-        givenName2: 'Test',
-        companyName: 'Test Ltd',
-        preferredName: 'T',
-        accountDTOs: [$accountDTO],
-        contactDTOs: [$contactDTO],
-        identityDocumentDTOs: [$identityDocumentDTO],
+        state:                  'test',
+        identifier:             $customerIdentifier,
+        type:                   'test',
+        familyName:             'Test',
+        givenName1:             'Test',
+        givenName2:             'Test',
+        companyName:            'Test Ltd',
+        preferredName:          'T',
+        dateOfBirth:            '2000-01-01',
+        placeOfBirth:           'gb',
+        nationality:            'gb',
+        residency:              'gb',
+        volumeSnapshot:         1000,
+        accountDTOs:            [$accountDTO],
+        contactDTOs:            [$contactDTO],
+        identityDocumentDTOs:   [$identityDocumentDTO],
     );
 
     // Build updater and model mocks

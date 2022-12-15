@@ -73,8 +73,7 @@ THEN the correct View is returned
     $this->assertSame(
         [
             'customer',
-            'modelTable',
-            'accountsTable',
+            'modelTable'
         ],
         array_keys($dataProperty->getValue($view))
     );

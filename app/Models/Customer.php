@@ -124,86 +124,32 @@ class Customer extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Returns information from their identity documents
-     *
-     * @param string $info
-     * @return string
-     */
-    public function identityInfo(
-        string $info
-    ): string {
-        foreach ($this->identityDocuments as $identityDocument) {
-            if ($identityDocument->$info) {
-                return $identityDocument->$info;
-            }
-        }
-
-        return '';
-    }
-
-    /**
-     * Returns their date of birth
-     *
-     * @return string
-     */
-    public function dateOfBirth(): string
-    {
-        return $this->identityInfo(info: 'dateOfBirth');
-    }
-
-    /**
-     * Returns their nationality
-     *
-     * @return string
-     */
-    public function nationality(): string
-    {
-        return $this->identityInfo(info: 'nationality');
-    }
-
-    /**
-     * Returns their country of birth
-     *
-     * @return string
-     */
-    public function placeOfBirth(): string
-    {
-        return $this->identityInfo(info: 'placeOfBirth');
-    }
-
-    /**
-     * Returns their residency
-     *
-     * @return string
-     */
-    public function residency(): string
-    {
-        return '';
-    }
-
-    /**
      * Returns their age
      *
-     * @return int
+     * @return string
      */
-    public function age(): int
+    public function age(): string
     {
-        return (new \DateTime($this->dateOfBirth()))
+        if ($this->dateOfBirth) {
+            return (string) (new \DateTime($this->dateOfBirth))
             ->diff(now())
             ->y;
+        } else {
+            return '?';
+        }
     }
 
     /**
      * Returns country flag emoji
      *
-     * @param string $code
+     * @param ?string $code
      * @return string
      */
     public function flag(
-        string $code
+        ?string $code
     ): string {
         if (!$code) {
-            return '🏴‍☠️';
+            return '❓';
         }
         $emoji = [];
         foreach (str_split($code) as $c) {
@@ -213,7 +159,11 @@ class Customer extends \Illuminate\Database\Eloquent\Model
             }
             $emoji[] = $c;
         }
-        return join($emoji);
+        return '<span style="cursor: default;" title="'
+            . \Locale::getDisplayRegion('-' . $code, 'en')
+            . '">'
+            . join($emoji)
+            . '</span>';
     }
 
     /**
@@ -223,8 +173,53 @@ class Customer extends \Illuminate\Database\Eloquent\Model
      */
     public function location(): string
     {
-        return '🏠 ' . $this->flag($this->residency()) . ' • '
-            . '👶🏽 ' . $this->flag($this->placeOfBirth()) . ' • '
-            . '🏝️ ' . $this->flag($this->nationality());
+        return '🏥 ' . $this->flag($this->placeOfBirth) . ' • '
+            . '🌍 ' . $this->flag($this->nationality) . ' • '
+            . '🏠 ' . $this->flag($this->residency);
+    }
+
+    /**
+     * Represents the customer's volume snapshot
+     *
+     * @return string
+     */
+    public function volumeEmojis(): string
+    {
+        if (!$this->volumeSnapshot) {
+            return '❓';
+        }
+        $emojis = '';
+        for ($i = 0; $i < (int) log10($this->volumeSnapshot / 100); $i++) {
+            $emojis .= '🤑';
+        }
+        return '<span style="cursor: default;" title="'
+            . number_format($this->volumeSnapshot, 0, '.', ',')
+            . '">'
+            . $emojis
+            . '</span>';
+    }
+
+    /**
+     * Represents the customer's age
+     *
+     * @return string
+     */
+    public function ageEmojis(): string
+    {
+        if (!$this->dateOfBirth) {
+            return '❓';
+        }
+        if ($this->age() > 60) {
+            $emoji = '🧓🏽';
+        } elseif ($this->age() > 30) {
+            $emoji = '🧑🏽';
+        } else {
+            $emoji = '👶🏽';
+        }
+        return '<span style="cursor: default;" title="'
+            . $this->age()
+            . '">'
+            . $emoji
+            . '</span>';
     }
 }

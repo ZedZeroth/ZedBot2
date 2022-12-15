@@ -18,9 +18,6 @@ return new class extends Migration
             $table->string('state'); // e.g. valid, expired
             $table->string('identifier'); // type::familyname::givenname::expirydate
             $table->tinyText('type'); // pp, dl, brp
-            $table->tinyText('nationality')->nullable(); // 2-character country ISO
-            $table->tinyText('placeOfBirth')->nullable(); // 2-character country ISO  // nullable while importing
-            $table->date('dateOfBirth')->nullable(); // nullable while importing
             $table->date('dateOfExpiry')->nullable(); // nullable while importing
             $table->foreignId('customer_id'); // Contact owner
             $table->timestamps(); // Laravel

@@ -52,7 +52,9 @@
         </h3>
 
         <h2><anchor id="model-data">Model data</h2>
-        {!! $modelTable !!}
+        <table>
+        {!! $account->tableRow() !!}
+        </table>
 
         <span style="color: green;">
             <h3><anchor id="credits">Credits to this account</h3>

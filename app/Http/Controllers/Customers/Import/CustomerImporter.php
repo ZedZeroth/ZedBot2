@@ -40,6 +40,11 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                         'givenName2',
                         'companyName',
                         'preferredName',
+                        'dateOfBirth',
+                        'placeOfBirth',
+                        'nationality',
+                        'residency',
+                        'volumeSnapshot',
                         'accountDTOs',
                         'contactDTOs',
                         'identityDocumentDTOs'
