@@ -22,6 +22,7 @@ class HtmlStringShortener
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $string,
             stringName: 'string',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 0,
             longestLength: pow(10, 3),

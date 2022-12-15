@@ -11,6 +11,7 @@ class TimestampValidator
      *
      * @param string $timestamp
      * @param string $timestampName
+     * @param string $source
      * @param string $after
      * @param string $before
      * @return bool
@@ -18,6 +19,7 @@ class TimestampValidator
     public function validate(
         string $timestamp,
         string $timestampName,
+        string $source,
         string $after,
         string $before,
     ): bool {
@@ -25,6 +27,7 @@ class TimestampValidator
         (new StringValidator())->validate(
             string: $timestamp,
             stringName: 'timestamp',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['-', 'T', ':', '.', '+'],
             shortestLength: 25,
             longestLength: 25,
@@ -42,6 +45,7 @@ class TimestampValidator
         (new StringValidator())->validate(
             string: $timestampName,
             stringName: 'timestampName',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 3,
             longestLength: 20,
@@ -59,6 +63,7 @@ class TimestampValidator
         (new StringValidator())->validate(
             string: $after,
             stringName: 'after',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['-', 'T', ':', '.', '+'],
             shortestLength: 25,
             longestLength: 25,
@@ -76,6 +81,7 @@ class TimestampValidator
         (new StringValidator())->validate(
             string: $before,
             stringName: 'before',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['-', 'T', ':', '.', '+'],
             shortestLength: 25,
             longestLength: 25,
@@ -89,7 +95,7 @@ class TimestampValidator
             isHexadecimal: false
         );
 
-        $prefix = '"' . $timestampName . '" timestamp ';
+        $prefix = $source . ': "' . $timestampName . '" timestamp ';
         $datetime = strtotime($timestamp);
         if (!is_numeric($datetime)) {
             throw new TimestampValidationException(

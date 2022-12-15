@@ -21,6 +21,7 @@ class CurrencyUpdater implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $modelDTO->code,
             stringName: '$modelDTO->code',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['-'],
             shortestLength: 3,
             longestLength: 10,
@@ -38,6 +39,7 @@ class CurrencyUpdater implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $modelDTO->symbol,
             stringName: '$modelDTO->symbol',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 1,
             longestLength: 16,
@@ -63,6 +65,7 @@ class CurrencyUpdater implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $modelDTO->$name,
                 stringName: '$modelDTO->' . $name,
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [' ', '-', '(', ')'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),

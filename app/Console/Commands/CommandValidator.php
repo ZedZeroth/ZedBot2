@@ -23,6 +23,7 @@ class CommandValidator
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $commandName,
             stringName: 'commandName',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [':'],
             shortestLength: 8,
             longestLength: 18,
@@ -81,6 +82,7 @@ class CommandValidator
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string:             $source,
             stringName:         'source',
+            source:             __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength:     3,
             longestLength:      9,

@@ -23,6 +23,7 @@ class DtoValidator
         (new StringValidator())->validate(
             string: $dtoName,
             stringName: 'dtoName',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 6,
             longestLength: 20,

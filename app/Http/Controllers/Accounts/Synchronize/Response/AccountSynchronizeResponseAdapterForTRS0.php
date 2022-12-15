@@ -41,6 +41,7 @@ class AccountSynchronizeResponseAdapterForTRS0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $addressDetails['label'],
                 stringName: '$addressDetails[label]',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [' ', '-', '’'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),

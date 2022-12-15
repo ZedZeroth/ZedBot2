@@ -72,6 +72,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['transactionCurrency'],
                 stringName: 'transactionCurrency',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [],
                 shortestLength: 3,
                 longestLength: 3,
@@ -89,6 +90,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['counterparty'],
                 stringName: 'counterparty',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [',', ' ', '(', ')', '-', '.', '/', '&', '+'],
                 shortestLength: 25,
                 longestLength: pow(10, 2),
@@ -106,6 +108,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['accno'],
                 stringName: 'accno',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [],
                 shortestLength: 22,
                 longestLength: 22,
@@ -131,6 +134,7 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['paymentReference'],
                 stringName: 'paymentReference',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: ['-', '.', ' ', '/'],
                 shortestLength: 0,
                 longestLength: 20,
@@ -146,10 +150,11 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
 
             // Validate $result['transactionTimeLocal']
             (new \App\Http\Controllers\MultiDomain\Validators\TimestampValidator())->validate(
-                timestamp: $result['transactionTimeLocal'],
-                timestampName: 'transactionTimeLocal',
-                after: '2017-01-01T00:00:00.0000000+00:00',
-                before: '2027-01-01T00:00:00.0000000+00:00',
+                timestamp:      $result['transactionTimeLocal'],
+                timestampName:  'transactionTimeLocal',
+                source:         __FILE__ . ' (' . __LINE__ . ')',
+                after:          '2017-01-01T00:00:00.0000000+00:00',
+                before:         '2027-01-01T00:00:00.0000000+00:00',
             );
 
             // Determine the currency

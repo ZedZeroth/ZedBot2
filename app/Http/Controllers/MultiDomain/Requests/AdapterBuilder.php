@@ -25,6 +25,7 @@ class AdapterBuilder
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $model,
             stringName: 'model',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 7,
             longestLength: 7,
@@ -42,6 +43,7 @@ class AdapterBuilder
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $action,
             stringName: 'action',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 6,
             longestLength: 11,

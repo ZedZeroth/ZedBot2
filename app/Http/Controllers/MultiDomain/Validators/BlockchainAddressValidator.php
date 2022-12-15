@@ -23,6 +23,7 @@ class BlockchainAddressValidator
         (new StringValidator())->validate(
             string: $addressName,
             stringName: 'addressName',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [' ', '-', '’'],
             shortestLength: 4,
             longestLength: pow(10, 2),
@@ -40,6 +41,7 @@ class BlockchainAddressValidator
         (new StringValidator())->validate(
             string: $address,
             stringName: 'address',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 14,
             longestLength: 74,

@@ -41,6 +41,7 @@ class CustomerImportAdapterForCSV implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['sortCode'],
                 stringName: 'sortCode',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [],
                 shortestLength: 6,
                 longestLength: 6,
@@ -58,6 +59,7 @@ class CustomerImportAdapterForCSV implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['accountNumber'],
                 stringName: 'accountNumber',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [],
                 shortestLength: 8,
                 longestLength: 8,
@@ -75,6 +77,7 @@ class CustomerImportAdapterForCSV implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $result['accountName'],
                 stringName: 'accountName',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [' ', '/', '-', '&', '(', ')', '\'', '.'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),

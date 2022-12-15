@@ -22,6 +22,7 @@ class GetAdapterForLCS0 implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $endpoint,
             stringName: 'endpoint',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['/'],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),

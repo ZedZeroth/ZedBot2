@@ -51,6 +51,7 @@ class PaymentSynchronizeResponseAdapterForTRS0 implements
             (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                 string: $addressDetails['label'],
                 stringName: '$addressDetails[label]',
+                source: __FILE__ . ' (' . __LINE__ . ')',
                 charactersToRemove: [' ', '-', '’'],
                 shortestLength: 3,
                 longestLength: pow(10, 2),
@@ -93,6 +94,7 @@ class PaymentSynchronizeResponseAdapterForTRS0 implements
                 (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
                     string: $txDetails['txid'],
                     stringName: 'txid',
+            source: __FILE__ . ' (' . __LINE__ . ')',
                     charactersToRemove: [],
                     shortestLength: 64,
                     longestLength: 64,

@@ -30,6 +30,7 @@ class ExceptionInformer
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $e->getMessage(),
             stringName: '$e->getMessage()',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 1,
             longestLength: pow(10, 4),
@@ -47,6 +48,7 @@ class ExceptionInformer
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $e->getFile(),
             stringName: $e->getFile(),
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['/', '.', '-', '(', ')', ' ', ':', '\''],
             shortestLength: 1,
             longestLength: pow(10, 3),
@@ -69,7 +71,8 @@ class ExceptionInformer
         );
 
         // Explode exception path
-        $exceptionPath = explode('\\', $e::class); // Multi-line
+        $exceptionPath = explode('\\', $e::class);
+        $message = explode('/', $e->getMessage());
 
         // Store the details in an array
         $errorDetails = [
@@ -79,10 +82,7 @@ class ExceptionInformer
                 array_key_last($exceptionPath)
             ],
             '---------------------------------',
-            'Message:   ' . $e->getMessage(),
-            'Exception: ' . $e::class,
-            'File:      ' . $e->getFile(),
-            'Line:      ' . $e->getLine(),
+            $message[array_key_last($message)],
             '---------------------------------',
             ''
         ];

@@ -33,6 +33,7 @@ class IdentityDocumentUpdater implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $modelDTO->type,
             stringName: '$modelDTO->type',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 2,
             longestLength: 3,

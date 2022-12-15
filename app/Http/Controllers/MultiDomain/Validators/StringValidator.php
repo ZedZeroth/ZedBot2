@@ -11,6 +11,7 @@ class StringValidator
      *
      * @param string $string
      * @param string $stringName
+     * @param string $source
      * @param array $charactersToRemove
      * @param int $shortestLength
      * @param int $longestLength
@@ -27,6 +28,7 @@ class StringValidator
     public function validate(
         string $string,
         string $stringName,
+        string $source,
         array $charactersToRemove,
         int $shortestLength,
         int $longestLength,
@@ -56,7 +58,7 @@ class StringValidator
         );
 
         // Set prefix
-        $prefix = '"' . $stringName . '" string ';
+        $prefix = $source . ': "' . $stringName . '" string ';
 
         // Remove unwated characters
         $string = str_replace($charactersToRemove, '', $string);

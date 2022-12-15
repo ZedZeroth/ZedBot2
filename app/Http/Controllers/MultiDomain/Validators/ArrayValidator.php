@@ -25,6 +25,7 @@ class ArrayValidator
         (new StringValidator())->validate(
             string: $arrayName,
             stringName: 'arrayName',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 3,
             longestLength: pow(10, 2),

@@ -25,6 +25,7 @@ class AdapterValidator
         (new StringValidator())->validate(
             string: $adapterName,
             stringName: 'adapterName',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),

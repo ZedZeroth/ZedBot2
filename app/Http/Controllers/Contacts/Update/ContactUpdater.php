@@ -19,6 +19,7 @@ class ContactUpdater implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $modelDTO->type,
             stringName: '$modelDTO->type',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
             shortestLength: 4,
             longestLength: 5,
@@ -36,6 +37,7 @@ class ContactUpdater implements
         (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
             string: $modelDTO->handle,
             stringName: '$modelDTO->handle',
+            source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: ['+', '@', ' ', '.', '_', '-'],
             shortestLength: pow(10, 1),
             longestLength: pow(10, 2),
