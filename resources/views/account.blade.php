@@ -60,7 +60,7 @@
             <h3><anchor id="credits">Credits to this account</h3>
             <table>
             @if ($account->credits)
-                @foreach ($account->credits as $credit)
+                @foreach ($account->credits->sortByDesc('timestamp') as $credit)
                     {!! $credit->tableRow() !!}
                 @endforeach
             @else
@@ -73,7 +73,7 @@
             <h3><anchor id="debits">Debits from this account</h3>
             <table>
             @if ($account->debits)
-                @foreach ($account->debits as $debit)
+                @foreach ($account->debits->sortByDesc('timestamp') as $debit)
                     {!! $debit->tableRow() !!}
                 @endforeach
             @else

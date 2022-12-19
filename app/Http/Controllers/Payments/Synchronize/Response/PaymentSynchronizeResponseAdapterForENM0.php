@@ -314,9 +314,15 @@ class PaymentSynchronizeResponseAdapterForENM0 implements
     public function convertIbanToAccountIdentifier(
         string $iban
     ): string {
-        return 'fps'
-            . '::' . 'gbp'
-            . '::' . substr($iban, -14, 6) // Sort code
-            . '::' . substr($iban, -8); // Account number
+        if (substr($iban, 0, 2) == 'GB') {
+            return 'fps'
+                . '::' . 'gbp'
+                . '::' . substr($iban, -14, 6) // Sort code
+                . '::' . substr($iban, -8); // Account number
+        } else {
+            return 'fps'
+                . '::' . 'gbp'
+                . '::' . $iban;
+        }
     }
 }

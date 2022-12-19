@@ -57,7 +57,10 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
             // Create and assign accounts
             foreach ($customerDTO->accountDTOs as $accountDTO) {
                 $accountDTO->customer_id = $customer->id;
-                $accountUpdater->update($accountDTO);
+                $account = $accountUpdater->update($accountDTO);
+                if ($customer->id < 10) {
+                    /*💬*/ // echo $customer->identifier . ' ' . $account->identifier . PHP_EOL;
+                }
             }
 
             // Create and assign contacts

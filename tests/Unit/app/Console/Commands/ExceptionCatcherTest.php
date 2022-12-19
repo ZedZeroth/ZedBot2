@@ -28,10 +28,13 @@ test('GIVEN a Command mocked to throw an Exception
         ->shouldReceive('runThisCommand')->once()->with()->andThrow(new $exceptionType('test'))
         ->shouldReceive('warn')->twice()->with('')->andReturn()
         ->shouldReceive('warn')->once()->with('[💀] Exception')->andReturn()
+        ->shouldReceive('warn')->once()->with('test')->andReturn()
+        /*
         ->shouldReceive('warn')->once()->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->once()->with('Exception: ' . $exceptionType)->andReturn()
         ->shouldReceive('warn')->once()->with('File:      ' . __FILE__)->andReturn()
         ->shouldReceive('warn')->once()->with('Line:      28')->andReturn() // Line exception thrown above
+        */
         ->shouldReceive('warn')->twice()->with('---------------------------------')->andReturn()
         ->shouldReceive('info')->times(3)->andReturn()
         ->getMock();
@@ -59,10 +62,13 @@ test('GIVEN a Command mocked to throw a StringValidationException
         ->shouldReceive('runThisCommand')->once()->with()->andThrow(new $exceptionType('test'))
         ->shouldReceive('warn')->twice()->with('')->andReturn()
         ->shouldReceive('warn')->once()->with('[💀] StringValidationException')->andReturn()
+        ->shouldReceive('warn')->once()->with('test')->andReturn()
+        /*
         ->shouldReceive('warn')->once()->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->once()->with('Exception: ' . $exceptionType)->andReturn()
         ->shouldReceive('warn')->once()->with('File:      ' . __FILE__)->andReturn()
         ->shouldReceive('warn')->once()->with('Line:      59')->andReturn() // Line exception thrown above
+        */
         ->shouldReceive('warn')->twice()->with('---------------------------------')->andReturn()
         ->shouldReceive('info')->times(3)->andReturn()
         ->getMock();
@@ -90,10 +96,13 @@ test('GIVEN a Command mocked to throw an unknown exception
         ->shouldReceive('runThisCommand')->once()->with()->andThrow(new $exceptionType('test'))
         ->shouldReceive('warn')->twice()->with('')->andReturn()
         ->shouldReceive('warn')->once()->with('[💀] TestException')->andReturn()
+        ->shouldReceive('warn')->once()->with('test')->andReturn()
+        /*
         ->shouldReceive('warn')->once()->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->once()->with('Exception: ' . $exceptionType)->andReturn()
         ->shouldReceive('warn')->once()->with('File:      ' . __FILE__)->andReturn()
         ->shouldReceive('warn')->once()->with('Line:      90')->andReturn() // Line exception thrown above
+        */
         ->shouldReceive('warn')->twice()->with('---------------------------------')->andReturn()
         ->shouldReceive('info')->times(3)->andReturn()
         ->getMock();

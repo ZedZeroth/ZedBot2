@@ -44,9 +44,11 @@ class PaymentUpdater implements
                 if (
                     $key != 'id' and
                     $key != 'state' and
+                    $key != 'amount' and // Held payments are stored as 0 GBP
                     $key != 'timestamp' and
                     $key != 'created_at' and
-                    $key != 'updated_at'
+                    $key != 'updated_at' and
+                    $key != 'deleted_at'
                 ) {
                     if ($modelDTO->$key != $value) {
                         throw new \Exception(
@@ -82,8 +84,18 @@ class PaymentUpdater implements
             $payment->save();
         } elseif ($payment->timestamp != $modelDTO->timestamp) {
             throw new \Exception(
-                'Model[' . $key . '] = ' . $value
-                . ' vs modelDTO[' . $key . '] = ' . $modelDTO->$key
+                'Model[timestamp] = ' . $payment->timestamp
+                . ' vs modelDTO[timestamp] = ' . $modelDTO->$timestamp
+            );
+        }
+        // Only update these attributes if they were zero
+        if ($payment->amount == 0) {
+            $payment->amount    = $modelDTO->amount;
+            $payment->save();
+        } elseif ($payment->amount != $modelDTO->amount) {
+            throw new \Exception(
+                'Model[amount] = ' . $payment->amount
+                . ' vs modelDTO[amount] = ' . $modelDTO->$amount
             );
         }
 

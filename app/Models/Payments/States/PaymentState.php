@@ -24,6 +24,7 @@ abstract class PaymentState extends \Spatie\ModelStates\State
             ->allowTransition(AmountError::class, Held::class)
             ->allowTransition(Matched::class, Held::class)
             ->allowTransition(Held::class, Unconfirmed::class)
+            ->allowTransition(Held::class, Settled::class)
 
             // Unconfirmed  -> Settled   -> AmountError
             //                           -> OriginatorError

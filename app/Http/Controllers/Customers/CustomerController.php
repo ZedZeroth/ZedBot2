@@ -43,6 +43,15 @@ class CustomerController extends \App\Http\Controllers\Controller
      */
     public function import(): bool
     {
+        // Compare records with live CSV
+        /*
+        (new \App\Http\Controllers\MultiDomain\Imports\CsvComparer())
+            ->compare(
+                primaryFileName: 'customer_records.csv',
+                secondaryFileName: 'buyers.csv'
+            );
+        */
+
         // ↖️ Creat customers from the CustomerDTOs
         return (new \App\Http\Controllers\Customers\Import\CustomerImporter())
             ->import(
@@ -52,7 +61,7 @@ class CustomerController extends \App\Http\Controllers\Controller
                     ->import(
                         readerArray:
                             (new \App\Http\Controllers\MultiDomain\Imports\CsvReader())
-                                ->read('customer_records.csv'),
+                                ->read(fileName: 'customer_records.csv'),
                         importerAdapter:
                             (new \App\Http\Controllers\Customers\Import\CustomerImportAdapterForCSV())
                     ),
