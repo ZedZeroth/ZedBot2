@@ -29,6 +29,8 @@ test('GIVEN a test exception & error
         ->shouldReceive('warn')->once()->with('[💀] Error')->andReturn('[💀] Error')
         ->shouldReceive('warn')->times(4)->with('---------------------------------')->andReturn('---------------------------------')
         ->shouldReceive('warn')->twice()->with('test')->andReturn()
+        ->shouldReceive('warn')->once()->with('/home/jph/zedtech/finance/zedbot/laravel/tests/Unit/app/Console/Commands/ExceptionInformerTest.php (21)')->andReturn()
+        ->shouldReceive('warn')->once()->with('/home/jph/zedtech/finance/zedbot/laravel/tests/Unit/app/Console/Commands/ExceptionInformerTest.php (22)')->andReturn()
         ->getMock();
         /*
         ->shouldReceive('warn')->twice()->with('Message:   test')->andReturn('Message:   test')->getMock()

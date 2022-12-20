@@ -22,10 +22,10 @@ test('GIVEN a real identity document expiry date
         where('dateOfExpiry', config('app.ZED_SELF_ID_DOC_EXPIRY'))
         ->firstOrFail();
 
-    // Expect the contact to exist
+    // Expect the identity document to exist
     $this->assertInstanceOf(IdentityDocument::class, $identityDocument);
 
-    // Expect the contact to have an owner
+    // Expect the identity document to have an owner
     $this->assertInstanceOf(
         \App\Models\Customer::class,
         $identityDocument->customer->firstOrFail()
@@ -42,7 +42,7 @@ test('GIVEN an invalid identity document expiry date
         where('dateOfExpiry', '3000-01-01')
         ->firstOrFail();
 
-    // Expect the contact to exist
+    // Expect the identity document to exist
     $this->assertInstanceOf(IdentityDocument::class, $identityDocument);
 })->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
 
@@ -60,7 +60,7 @@ test('GIVEN a real identity document expiry date
         where('dateOfExpiry', config('app.ZED_SELF_ID_DOC_EXPIRY'))
         ->firstOrFail();
 
-    // Expect the contact to exist
+    // Expect the identity document to exist
     $this->assertInstanceOf(IdentityDocument::class, $identityDocument);
 
     // Expect the correct emoji

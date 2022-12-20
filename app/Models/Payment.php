@@ -50,7 +50,7 @@ class Payment extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Formats the account balance into
+     * Formats the payment amount into
      * its standard denomination.
      *
      * @return string

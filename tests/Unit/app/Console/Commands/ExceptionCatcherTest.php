@@ -29,6 +29,7 @@ test('GIVEN a Command mocked to throw an Exception
         ->shouldReceive('warn')->twice()->with('')->andReturn()
         ->shouldReceive('warn')->once()->with('[💀] Exception')->andReturn()
         ->shouldReceive('warn')->once()->with('test')->andReturn()
+        ->shouldReceive('warn')->once()->with('/home/jph/zedtech/finance/zedbot/laravel/tests/Unit/app/Console/Commands/ExceptionCatcherTest.php (28)')->andReturn()
         /*
         ->shouldReceive('warn')->once()->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->once()->with('Exception: ' . $exceptionType)->andReturn()
@@ -63,6 +64,7 @@ test('GIVEN a Command mocked to throw a StringValidationException
         ->shouldReceive('warn')->twice()->with('')->andReturn()
         ->shouldReceive('warn')->once()->with('[💀] StringValidationException')->andReturn()
         ->shouldReceive('warn')->once()->with('test')->andReturn()
+        ->shouldReceive('warn')->once()->with('/home/jph/zedtech/finance/zedbot/laravel/tests/Unit/app/Console/Commands/ExceptionCatcherTest.php (63)')->andReturn()
         /*
         ->shouldReceive('warn')->once()->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->once()->with('Exception: ' . $exceptionType)->andReturn()
@@ -97,6 +99,7 @@ test('GIVEN a Command mocked to throw an unknown exception
         ->shouldReceive('warn')->twice()->with('')->andReturn()
         ->shouldReceive('warn')->once()->with('[💀] TestException')->andReturn()
         ->shouldReceive('warn')->once()->with('test')->andReturn()
+        ->shouldReceive('warn')->once()->with('/home/jph/zedtech/finance/zedbot/laravel/tests/Unit/app/Console/Commands/ExceptionCatcherTest.php (98)')->andReturn()
         /*
         ->shouldReceive('warn')->once()->with('Message:   test')->andReturn()
         ->shouldReceive('warn')->once()->with('Exception: ' . $exceptionType)->andReturn()

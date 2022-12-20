@@ -17,6 +17,7 @@
                 <td>{!! $customer->ageEmojis() !!}</td>
                 <td>{!! $customer->location() !!}</td>
                 <td>{!! $customer->volumeEmojis() !!}</td>
+                <td>{!! $customer->riskAssessmentEmojis() !!}</td>
                 <td>
                 @foreach ($customer->identityDocuments as $identityDocument)
                     {{ $identityDocument->emoji() }}

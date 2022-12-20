@@ -74,6 +74,11 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                 $identityDocumentDTO->customer_id = $customer->id;
                 $identityDocumentUpdater->update($identityDocumentDTO);
             }
+
+            // Calculate and assign risk assessments
+            foreach (config('app.ZED_RISK_ASSESSMENT_TYPES') as $riskAssessmentType) {
+                $customer->assess($riskAssessmentType);
+            }
         }
         return true;
     }

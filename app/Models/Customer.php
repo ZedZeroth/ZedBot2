@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Support\Collection;
+
 class Customer extends \Illuminate\Database\Eloquent\Model
 {
     use \Illuminate\Database\Eloquent\SoftDeletes;
@@ -58,9 +60,17 @@ class Customer extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
+    * Get the risk assessments for this customer.
+    */
+    public function riskAssessments()
+    {
+        return $this->hasMany(RiskAssessment::class);
+    }
+
+    /**
     * Get the credits for this customer.
     */
-    public function credits()
+    public function credits(): Collection
     {
         $credits = collect();
         foreach ($this->accounts()->get() as $account) {
@@ -72,13 +82,23 @@ class Customer extends \Illuminate\Database\Eloquent\Model
     /**
     * Get the debits for this customer.
     */
-    public function debits()
+    public function debits(): Collection
     {
         $debits = collect();
         foreach ($this->accounts()->get() as $account) {
             $debits = $debits->merge($account->debits()->get());
         }
         return $debits;
+    }
+
+    /**
+     * Returns a customer's payments.
+     *
+     * @return Collection
+     */
+    public function payments(): Collection
+    {
+        return $this->credits()->merge($this->debits());
     }
 
     /**
@@ -221,5 +241,96 @@ class Customer extends \Illuminate\Database\Eloquent\Model
             . '">'
             . $emoji
             . '</span>';
+    }
+
+    /**
+     * Creates/updates a new risk assessment for the customer
+     *
+     * @param ?string $type
+     * @return RiskAssessment
+     */
+    public function assess(
+        ?string $type = null
+    ): void {
+        if ($type) {
+            if (in_array($type, config('app.ZED_RISK_ASSESSMENT_TYPES'))) {
+                $typeArray = [$type];
+            } else {
+                throw new \Exception('RiskAssessment type "' . $type . '" does not exist');
+            }
+        } else {
+            $typeArray = config('app.ZED_RISK_ASSESSMENT_TYPES');
+        }
+
+        foreach ($typeArray as $assessmentType) {
+            $assessorName = '\App\Http\Controllers\Customers\Assess\Customer'
+                . $assessmentType
+                . 'RiskAssessor';
+            (new $assessorName())->assess($this);
+        }
+    }
+
+    /**
+     * Represents the customer's risk assessments
+     *
+     * @return string
+     */
+    public function riskAssessmentEmojis(): string
+    {
+        // Update assessments
+        $this->assess();
+
+        // Generate string
+        $string = '<table style="border-collapse: collapse;"><tr>';
+        foreach ($this->riskAssessments as $riskAssessment) {
+            $string .= '<td style="padding: 0; margin: 0;">'
+                . $riskAssessment->tag()
+                . '</td>';
+        }
+        $string .= '</tr><tr>';
+        foreach ($this->riskAssessments as $riskAssessment) {
+            $string .= '<td style="padding: 0; margin: 0;">'
+                . $riskAssessment->emoji()
+                . '</td>';
+        }
+        $string .= '</tr></table>';
+        return $string;
+    }
+
+    /**
+     * Returns a customer's volume by currency
+     * over a given number of days.
+     *
+     * @param string $currency
+     * @param int $days
+     * @param bool $formatted
+     * @return int|string
+     */
+    public function volume(
+        string $currency,
+        int $days,
+        ?bool $formatted = false
+    ): int|string {
+        $volume = 0;
+        foreach ($this->payments() as $payment) {
+            if (
+                $payment->currency->code == $currency
+                and
+                (int) (new \DateTime(
+                    $payment->timestamp
+                ))->diff(now())->format('%a') < $days
+            ) {
+                $volume += $payment->amount;
+            }
+        }
+        if ($formatted) {
+            return (string) (new \App\Http\Controllers\MultiDomain\Money\MoneyFormatter())
+                ->format(
+                    amount: $volume,
+                    currency: \App\Models\Currency::where('code', $currency)->firstOrFail()
+                );
+        } else {
+            return (int) $volume;
+        }
     }
 }

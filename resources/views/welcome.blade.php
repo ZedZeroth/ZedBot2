@@ -16,17 +16,21 @@
 
         <table>
             <tr>
-                <td style="width: 300px;"><h3>CUSTOMER</h3></td>
+                <td style="width: 300px;"><h3>CUSTOMER/MARKET/OTHER</h3></td>
                 <td style="width: 300px;"><h3>EXCHANGE</h3></td>
                 <td style="width: 600px;"><h3>NETWORK</h3></td>
-                <td style="width: 300px;"><h3>MARKET</h3></td>
             </tr>
                 <td>
                     🗿 <a href="/customers">Customers</a>
                     <livewire:customer-importer-component />
 
                     <p>
-                    📒 RiskAssessments
+                    💹 Rates   
+                    </p>                 
+
+                    <p>
+                    💷 <a href="currencies">Currencies</a>
+                    <livewire:currency-populator-component />
                     </p>
                 </td>
                 <td>
@@ -54,14 +58,6 @@
                     <p>
                     <livewire:payment-synchronizer-component />
                     </p>
-                </td>
-                <td>
-                    💹 Rates                    
-                
-                    <h3>OTHER</h3>
-
-                    💷 <a href="currencies">Currencies</a>
-                    <livewire:currency-populator-component />
                 </td>
             </tr>
         </table>

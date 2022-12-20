@@ -82,9 +82,8 @@ class ExceptionInformer
                 array_key_last($exceptionPath)
             ],
             '---------------------------------',
-            $message[array_key_last($message)]
-            . PHP_EOL
-            . $e->getFile() . ' (' . $e->getLine() . ')',
+            $message[array_key_last($message)],
+            $e->getFile() . ' (' . $e->getLine() . ')',
             '---------------------------------',
             ''
         ];

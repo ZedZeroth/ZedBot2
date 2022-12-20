@@ -26,12 +26,22 @@
         <li>Name: {{ $customer->fullName() }}</li>
         <li>Age: {{ $customer->age() }} ({{ $customer->dateOfBirth }})</li>
         <li>{!! $customer->location() !!}</li>
-        <li>Volume: {{ $customer->volumeEmojis() }}</li>
+        <li>Bank Volume: {!! $customer->volumeEmojis() !!}</li>
+        <li>Payment Count: {{ $customer->payments()->count() }}</li>
+        <li>GBP Payment Volumes:
+            Week:{{ $customer->volume('GBP', 7, true) }}
+            Month:{{ $customer->volume('GBP', 30, true) }}
+            Quarter:{{ $customer->volume('GBP', 90, true) }}
+            Year:{{ $customer->volume('GBP', 365, true) }}
+        </li>
+        <li>Risk Assessments: {!! $customer->riskAssessmentEmojis() !!}
+        </li>
         <li>Identity Documents:
             @foreach ($customer->identityDocuments as $identityDocument)
                 {{ $identityDocument->emoji() }}
                 {{ $identityDocument->dateOfExpiry }}
             @endforeach
+        </li>
         <li>Contacts:
             @foreach ($customer->contacts as $contact)
                 {{ $contact->emoji() }}

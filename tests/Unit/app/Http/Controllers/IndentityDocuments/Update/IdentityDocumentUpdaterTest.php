@@ -30,7 +30,7 @@ test('GIVEN a valid identityDocumentDTO
 
     $newIdentityDocument = (new IdentityDocumentUpdater())->update($identityDocumentDTO);
 
-    // Expect a identity document to have been returned
+    // Expect an identity document to have been returned
     $this->assertInstanceOf(
         IdentityDocument::class,
         $newIdentityDocument
@@ -57,7 +57,7 @@ test('GIVEN an invalid date of birth
     THEN throw a QueryException
     ', function () {
 
-    $identityDocumentIdentifier = 'pp::test::test::IdentityDocumentUpdater';
+    $identityDocumentIdentifier = 'pp::test::test::IdentityDocumentUpdaterTest';
     $identityDocumentDTO = new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
         state: '',
         identifier: $identityDocumentIdentifier,
@@ -68,7 +68,7 @@ test('GIVEN an invalid date of birth
 
     $newIdentityDocument = (new IdentityDocumentUpdater())->update($identityDocumentDTO);
 
-    // Expect a identity document to have been returned
+    // Expect an identity document to have been returned
     $this->assertInstanceOf(
         IdentityDocument::class,
         $newIdentityDocument

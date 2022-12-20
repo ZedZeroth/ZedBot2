@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\IdentityDocuments\Update;
+namespace App\Http\Controllers\RiskAssessments\Update;
 
-class IdentityDocumentUpdater implements
+class RiskAssessmentUpdater implements
     \App\Http\Controllers\MultiDomain\Interfaces\UpdaterInterface
 {
     /**
-     * Uses the DTOs to create/update identity document models.
+     * Uses the DTOs to create/update risk assessment models.
      *
      * @param ModelDtoInterface $modelDTO
      */
@@ -24,7 +24,8 @@ class IdentityDocumentUpdater implements
                     'state',
                     'identifier',
                     'type',
-                    'dateOfExpiry',
+                    'action',
+                    'notes',
                     'customer_id',
                 ]
             );
@@ -35,11 +36,11 @@ class IdentityDocumentUpdater implements
             stringName: '$modelDTO->type',
             source: __FILE__ . ' (' . __LINE__ . ')',
             charactersToRemove: [],
-            shortestLength: 2,
-            longestLength: 3,
-            mustHaveUppercase: false,
-            canHaveUppercase: false,
-            mustHaveLowercase: true,
+            shortestLength: 3,
+            longestLength: 18,
+            mustHaveUppercase: true,
+            canHaveUppercase: true,
+            mustHaveLowercase: false,
             canHaveLowercase: true,
             isAlphabetical: true,
             isNumeric: false,
@@ -47,37 +48,35 @@ class IdentityDocumentUpdater implements
             isHexadecimal: false
         );
 
-        // Validate countries
-        // Country ISO validator
-
-        // Validate dates
-        // Date validator
+        // Validate state?
+        // Validate action
+        // Validate notes
 
         // Validate contact type
         if (
             !in_array(
                 $modelDTO->type,
-                [
-                    'brp',
-                    'dl',
-                    'pp'
-                ]
+                config('app.ZED_RISK_ASSESSMENT_TYPES')
             )
         ) {
-            throw new \Exception('Invalid identity document type: ' . $modelDTO->type);
+            throw new \Exception('Invalid risk assessment type: ' . $modelDTO->type);
         }
 
         // Create
-        $identityDocument = \App\Models\IdentityDocument::firstOrCreate(
+        $riskAssessment = \App\Models\RiskAssessment::firstOrCreate(
             ['identifier' => $modelDTO->identifier],
             [
                 'state'         => $modelDTO->state,
                 'type'          => $modelDTO->type,
-                'dateOfExpiry'  => $modelDTO->dateOfExpiry,
+                'action'        => $modelDTO->action,
+                'notes'         => $modelDTO->notes,
                 'customer_id'   => $modelDTO->customer_id
             ]
         );
 
-        return $identityDocument;
+        $riskAssessment->state = $modelDTO->state;
+        $riskAssessment->save();
+
+        return $riskAssessment;
     }
 }

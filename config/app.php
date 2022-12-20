@@ -233,6 +233,10 @@ return [
     'ZED_SELF_EMAIL_ADDRESS' => env('ZED_SELF_EMAIL_ADDRESS'),
     'ZED_SELF_ID_DOC_EXPIRY' => env('ZED_SELF_ID_DOC_EXPIRY'),
 
+    #RAs
+
+    'ZED_RISK_ASSESSMENT_TYPES' => (array) explode(',', env('ZED_RISK_ASSESSMENT_TYPES')),
+
     #CSVs
     'ZED_CUSTOMER_RECORDS_CSV_HEADERS' => (array) explode(',', env('ZED_CUSTOMER_RECORDS_CSV_HEADERS')),
 

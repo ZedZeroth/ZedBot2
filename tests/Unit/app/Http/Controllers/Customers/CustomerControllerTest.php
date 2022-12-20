@@ -99,3 +99,13 @@ THEN the correct View is returned
  * objects are tested via their dependencies as mocking hard
  * dependencies (overloading) has proven problematic...
  */
+
+/**
+ * Testing assess() method
+ */
+
+/**
+ * Top-level methods responsible for instantiating and injecting
+ * objects are tested via their dependencies as mocking hard
+ * dependencies (overloading) has proven problematic...
+ */
