@@ -193,9 +193,13 @@ class Customer extends \Illuminate\Database\Eloquent\Model
      */
     public function location(): string
     {
-        return '🏥 ' . $this->flag($this->placeOfBirth) . ' • '
-            . '🌍 ' . $this->flag($this->nationality) . ' • '
-            . '🏠 ' . $this->flag($this->residency);
+        return '<table style="border-collapse: collapse;"><tr>'
+            . '<td style="padding: 0; margin: 0;">🏥 🌍 🏠</td></tr>'
+            . '<tr><td style="padding: 0; margin: 0;">'
+            . $this->flag($this->placeOfBirth) . ' '
+            . $this->flag($this->nationality) . ' '
+            . $this->flag($this->residency) . ' '
+            . '</td></tr></table>';
     }
 
     /**
@@ -251,7 +255,7 @@ class Customer extends \Illuminate\Database\Eloquent\Model
      */
     public function assess(
         ?string $type = null
-    ): void {
+    ): bool {
         if ($type) {
             if (in_array($type, config('app.ZED_RISK_ASSESSMENT_TYPES'))) {
                 $typeArray = [$type];
@@ -268,6 +272,8 @@ class Customer extends \Illuminate\Database\Eloquent\Model
                 . 'RiskAssessor';
             (new $assessorName())->assess($this);
         }
+
+        return true;
     }
 
     /**
@@ -283,15 +289,15 @@ class Customer extends \Illuminate\Database\Eloquent\Model
         // Generate string
         $string = '<table style="border-collapse: collapse;"><tr>';
         foreach ($this->riskAssessments as $riskAssessment) {
-            $string .= '<td style="padding: 0; margin: 0;">'
+            $string .= '<td style="padding: 0; margin: 0;">&nbsp;'
                 . $riskAssessment->tag()
-                . '</td>';
+                . '&nbsp;</td>';
         }
         $string .= '</tr><tr>';
         foreach ($this->riskAssessments as $riskAssessment) {
-            $string .= '<td style="padding: 0; margin: 0;">'
+            $string .= '<td style="padding: 0; margin: 0;">&nbsp;'
                 . $riskAssessment->emoji()
-                . '</td>';
+                . '&nbsp;</td>';
         }
         $string .= '</tr></table>';
         return $string;
@@ -332,5 +338,32 @@ class Customer extends \Illuminate\Database\Eloquent\Model
         } else {
             return (int) $volume;
         }
+    }
+
+    /**
+     * Returns a customer's velocity by currency
+     * over a given number of days.
+     *
+     * @param string $currency
+     * @param int $days
+     * @return int
+     */
+    public function velocity(
+        string $currency,
+        int $days
+    ): int {
+        $velocity = 0;
+        foreach ($this->payments() as $payment) {
+            if (
+                $payment->currency->code == $currency
+                and
+                (int) (new \DateTime(
+                    $payment->timestamp
+                ))->diff(now())->format('%a') < $days
+            ) {
+                $velocity++;
+            }
+        }
+        return (int) $velocity;
     }
 }

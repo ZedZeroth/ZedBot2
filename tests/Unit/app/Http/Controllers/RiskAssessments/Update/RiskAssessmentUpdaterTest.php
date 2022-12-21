@@ -23,7 +23,7 @@ test('GIVEN a valid riskAssessmentDTO
     $riskAssessmentDTO = new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
         state: '', // Lower, Standard, MitigatedHigher, NoData, UnmitigatedHigher
         identifier: $riskAssessmentIdentifier,
-        type: 'volume',
+        type: 'Volume',
         action: 'test',
         notes: 'test',
         customer_id: 1

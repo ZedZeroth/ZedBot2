@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Customers\Assess;
 
-class CustomerVolumeRiskAssessor implements RiskAssessorInterface
+class CustomerVelocityRiskAssessor implements RiskAssessorInterface
 {
     /**
-     * Builds a volume risk assessment DTO for
+     * Builds a velocity risk assessment DTO for
      * a given customer, sends it to the updater
      * and returns the assessment model.
      *
@@ -20,24 +20,24 @@ class CustomerVolumeRiskAssessor implements RiskAssessorInterface
         // Calculate
         $state = 'HigherUnmitigated';
         if (
-            (int) $customer->volume('GBP', 7)     < 10 * 1000 * 100 /* 10k GBP in a single week */
+            (int) $customer->velocity('GBP', 7)     <= 14 /* ~2 trades per day */
             and
-            (int) $customer->volume('GBP', 30)    < 15 * 1000 * 100 /* 500 GBP/day */
+            (int) $customer->velocity('GBP', 30)    <= 60 /* ~2 trades per day */
             and
-            (int) $customer->volume('GBP', 90)    < 40 * 1000 * 100 /* ~€500 GBP/day */
+            (int) $customer->velocity('GBP', 90)    <= 180 /* ~2 trades per day */
             and
-            (int) $customer->volume('GBP', 365)   < 60 * 1000 * 100 /* Enumis limit (60k GBP/yr) */
+            (int) $customer->velocity('GBP', 365)   <= 720 /* ~2 trades per day */
         ) {
             $state = 'Standard';
         }
         if (
-            (int) $customer->volume('GBP', 7)     < 1 * 1000 * 100 /* 1k GBP in a single week */
+            (int) $customer->velocity('GBP', 7)     <= 1 + 1 /* DCA once per week */
             and
-            (int) $customer->volume('GBP', 30)    < 2 * 1000 * 100 /* 2k GBP per month */
+            (int) $customer->velocity('GBP', 30)    <= 4 + 1 /* DCA once per week */
             and
-            (int) $customer->volume('GBP', 90)    < 5 * 1000 * 100 /* 5k GBP in 3 months */
+            (int) $customer->velocity('GBP', 90)    <= 12 + 1 /* DCA once per week */
             and
-            (int) $customer->volume('GBP', 365)   < 10 * 1000 * 100 /* 10k GPB/yr */
+            (int) $customer->velocity('GBP', 365)   <= 52 + 1 /* DCA once per week */
         ) {
             $state = 'Lower';
         }
@@ -45,11 +45,11 @@ class CustomerVolumeRiskAssessor implements RiskAssessorInterface
         // Build the DTO
         $riskAssessmentDTO = new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
             state: $state,
-            identifier: 'volume::'
+            identifier: 'velocity::'
                 . $customer->familyName
                 . '::'
                 . $customer->givenName1,
-            type: 'Volume',
+            type: 'Velocity',
             action: null,
             notes: null,
             customer_id: (int) $customer->id,

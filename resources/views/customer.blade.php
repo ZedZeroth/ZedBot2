@@ -34,6 +34,12 @@
             Quarter:{{ $customer->volume('GBP', 90, true) }}
             Year:{{ $customer->volume('GBP', 365, true) }}
         </li>
+        <li>GBP Payment Velocities:
+            Week:{{ $customer->velocity('GBP', 7) }}
+            Month:{{ $customer->velocity('GBP', 30) }}
+            Quarter:{{ $customer->velocity('GBP', 90) }}
+            Year:{{ $customer->velocity('GBP', 365) }}
+        </li>
         <li>Risk Assessments: {!! $customer->riskAssessmentEmojis() !!}
         </li>
         <li>Identity Documents:

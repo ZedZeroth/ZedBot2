@@ -26,13 +26,16 @@ test('GIVEN Customer identifier = env(ZED_TEST_CUSTOMER_IDENTIFIER)
     )->firstOrFail();
 
     // Expect at least one Customer to exist
-    expect($customer)
-        ->toBeInstanceOf(Customer::class);
+    $this->assertInstanceOf(
+        Customer::class,
+        $customer
+    );
 
     // Expect the Customer to have at least one Account
-    expect(
+    $this->assertInstanceOf(
+        Account::class,
         $customer->accounts->firstOrFail()
-    )->toBeInstanceOf(Account::class);
+    );
 })->group('requiresModels');
 
 // NEGATIVE TEST
@@ -44,8 +47,10 @@ test('GIVEN Customer familyName ""
     $customer = Customer::where('familyName', '')->firstOrFail();
     echo $customer->identifier;
     // Expect at least one Customer to exist
-    expect($customer)
-        ->toBeInstanceOf(Customer::class);
+    $this->assertInstanceOf(
+        Customer::class,
+        $customer
+    );
 })->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
 
 /**
@@ -53,7 +58,7 @@ test('GIVEN Customer familyName ""
  */
 
 // POSITIVE TEST
-test('GIVEN "volume"
+test('GIVEN "Volume"
     WHEN calling assess()
     THEN return a newly created volume risk assessment
     ', function () {
@@ -64,11 +69,36 @@ test('GIVEN "volume"
     )->firstOrFail();
 
     // Expect at least one Customer to exist
-    expect($customer)
-        ->toBeInstanceOf(Customer::class);
+    $this->assertInstanceOf(
+        Customer::class,
+        $customer
+    );
 
     // Expect assessing the customer's volume to generate a volume risk assessment
-    expect(
+    $this->assertTrue(
         $customer->assess('Volume')
-    )->toBeInstanceOf(RiskAssessment::class);
+    );
+})->group('requiresModels');
+
+// POSITIVE TEST
+test('GIVEN "Velocity"
+    WHEN calling assess()
+    THEN return a newly created volume risk assessment
+    ', function () {
+
+    $customer = Customer::where(
+        'identifier',
+        env('ZED_TEST_CUSTOMER_IDENTIFIER')
+    )->firstOrFail();
+
+    // Expect at least one Customer to exist
+    $this->assertInstanceOf(
+        Customer::class,
+        $customer
+    );
+
+    // Expect assessing the customer's volume to generate a volume risk assessment
+    $this->assertTrue(
+        $customer->assess('Velocity')
+    );
 })->group('requiresModels');

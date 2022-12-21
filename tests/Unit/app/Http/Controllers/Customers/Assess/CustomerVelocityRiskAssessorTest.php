@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Unit tests for the CustomerVolumeRiskAssessor class and its methods.
+ * Unit tests for the CustomerVelocityRiskAssessor class and its methods.
  */
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Customers\Assess\CustomerVolumeRiskAssessor;
+use App\Http\Controllers\Customers\Assess\CustomerVelocityRiskAssessor;
 use App\Models\Customer;
 
 /**
@@ -16,7 +16,7 @@ use App\Models\Customer;
 // POSITIVE TEST
 test('GIVEN a valid customer
     WHEN calling assess()
-    THEN return a newly created volume risk assessment
+    THEN return a newly created velocity risk assessment
     ', function () {
 
     $customer = Customer::where(
@@ -30,17 +30,17 @@ test('GIVEN a valid customer
         $customer
     );
 
-    $riskAssessment = (new CustomerVolumeRiskAssessor())->assess($customer);
+    $riskAssessment = (new CustomerVelocityRiskAssessor())->assess($customer);
 
-    // Expect assessing the customer's volume to generate a risk assessment
+    // Expect assessing the customer's velocity to generate a risk assessment
     $this->assertInstanceOf(
         \App\Models\RiskAssessment::class,
         $riskAssessment
     );
 
-    // Expect the risk assessment's tag to be "VOL"
+    // Expect the risk assessment's tag to be "VEL"
     $this->assertSame(
-        'VOL',
+        'VEL',
         $riskAssessment->tag()
     );
 });

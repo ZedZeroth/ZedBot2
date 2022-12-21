@@ -23,6 +23,8 @@ class RiskAssessment extends \Illuminate\Database\Eloquent\Model
         return $this->belongsTo(Customer::class);
     }
 
+    // MOVE THESE TO THE STATE CLASSES //
+
     /**
      * Returns a color span for the risk classification.
      * @param string $string
@@ -67,19 +69,6 @@ class RiskAssessment extends \Illuminate\Database\Eloquent\Model
     }
 
     /**
-     * Returns a short string for the risk assessment type.
-     *
-     * @return string
-     */
-    public function tag(): string
-    {
-        return match ($this->type) {
-                'Volume'                => 'VOL',
-                'Velocity'              => 'VEL',
-        };
-    }
-
-    /**
      * Returns an integer value for the risk classification.
      *
      * @return int
@@ -92,6 +81,19 @@ class RiskAssessment extends \Illuminate\Database\Eloquent\Model
             'HigherMitigated'   => 3,
             'NoData'            => 4,
             'HigherUnmitigated' => 5,
+        };
+    }
+
+    /**
+     * Returns a short string for the risk assessment type.
+     *
+     * @return string
+     */
+    public function tag(): string
+    {
+        return match ($this->type) {
+                'Volume'                => 'VOL',
+                'Velocity'              => 'VEL',
         };
     }
 }

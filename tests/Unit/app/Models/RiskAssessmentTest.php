@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-use App\Models\IdentityDocument;
+use App\Models\RiskAssessment;
 
 /**
  * Testing IdentityDocument relationships
