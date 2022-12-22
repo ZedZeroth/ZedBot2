@@ -75,4 +75,15 @@ class CustomerController extends \App\Http\Controllers\Controller
                     (new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater())
             );
     }
+
+    /**
+     * Updates all risk assessments.
+     *
+     * @return true
+     */
+    public function assess(): bool
+    {
+        return (new \App\Http\Controllers\Customers\Assess\CustomerAssessor())
+            ->assess(\App\Models\Customer::all());
+    }
 }

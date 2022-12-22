@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         Commands\ImportCustomersCommand::class,
         Commands\SyncAccountsCommand::class,
         Commands\SyncPaymentsCommand::class,
+        Commands\AssessCustomersCommand::class,
 
     ];
 

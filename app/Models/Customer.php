@@ -283,9 +283,6 @@ class Customer extends \Illuminate\Database\Eloquent\Model
      */
     public function riskAssessmentEmojis(): string
     {
-        // Update assessments
-        $this->assess();
-
         // Generate string
         $string = '<table style="border-collapse: collapse;"><tr>';
         foreach ($this->riskAssessments as $riskAssessment) {

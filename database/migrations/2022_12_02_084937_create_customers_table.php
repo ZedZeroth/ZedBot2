@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id(); // Laravel
             $table->string('state'); // unverified -> active <-> suspended -> banned
             $table->string('identifier'); // "customer"::customer_id::surname::surname_collision_increment::given_name_1::given_name_2
-            $table->string('type'); // individual, company, bank, vasp, self, personal
+            $table->tinyText('type'); // individual, company, bank, vasp, self, personal
             $table->string('familyName'); // "last name" / "surname"
             $table->string('givenName1'); // first name
             $table->string('givenName2')->nullable(); // first middle name
