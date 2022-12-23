@@ -15,6 +15,7 @@
 
         <ul>
             <li><a href="#details">Details</a></li>
+            <li><a href="#risk-assessments">Risk assessments</a></li>
             <li><a href="#model-data">Model data</a></li>
             <li><a href="#accounts">Accounts held</a></li>
             <li><a href="#credits">Credits to this customer</a></li>
@@ -28,20 +29,6 @@
         <li>{!! $customer->location() !!}</li>
         <li>Bank Volume: {!! $customer->volumeEmojis() !!}</li>
         <li>Payment Count: {{ $customer->payments()->count() }}</li>
-        <li>GBP Payment Volumes:
-            Week:{{ $customer->volume('GBP', 7, true) }}
-            Month:{{ $customer->volume('GBP', 30, true) }}
-            Quarter:{{ $customer->volume('GBP', 90, true) }}
-            Year:{{ $customer->volume('GBP', 365, true) }}
-        </li>
-        <li>GBP Payment Velocities:
-            Week:{{ $customer->velocity('GBP', 7) }}
-            Month:{{ $customer->velocity('GBP', 30) }}
-            Quarter:{{ $customer->velocity('GBP', 90) }}
-            Year:{{ $customer->velocity('GBP', 365) }}
-        </li>
-        <li>Risk Assessments: {!! $customer->riskAssessmentEmojis() !!}
-        </li>
         <li>Identity Documents:
             @foreach ($customer->identityDocuments as $identityDocument)
                 {{ $identityDocument->emoji() }}
@@ -55,6 +42,28 @@
             @endforeach
         </li>
         </ul>
+
+        <h2><anchor id="risk-assessments">Risk assessments</h2>
+        {!! $customer->riskAssessmentEmojis() !!}
+        <h3>{!! $customer->riskAssessments->where('type', 'Volume')->firstOrFail()->emoji() !!} Volume</h3>
+        <ul><li>GBP Payment Volumes:
+            Week:{{ $customer->volume('GBP', 7, true) }}
+            Month:{{ $customer->volume('GBP', 30, true) }}
+            Quarter:{{ $customer->volume('GBP', 90, true) }}
+            Year:{{ $customer->volume('GBP', 365, true) }}
+        </li><li>Action: {{ $customer->riskAssessments->where('type', 'Volume')->firstOrFail()->action }}
+        </li><li>Notes: {{ $customer->riskAssessments->where('type', 'Volume')->firstOrFail()->notes }}
+        </li></ul>
+        <h3>{!! $customer->riskAssessments->where('type', 'Velocity')->firstOrFail()->emoji() !!} Velocity</h3>
+        <ul><li>GBP Payment Velocities:
+            Week:{{ $customer->velocity('GBP', 7) }}
+            Month:{{ $customer->velocity('GBP', 30) }}
+            Quarter:{{ $customer->velocity('GBP', 90) }}
+            Year:{{ $customer->velocity('GBP', 365) }}
+        </li><li>Action: {{ $customer->riskAssessments->where('type', 'Velocity')->firstOrFail()->action }}
+        </li><li>Notes: {{ $customer->riskAssessments->where('type', 'Velocity')->firstOrFail()->notes }}
+        </li></ul>
+
         <h2><anchor id="model-data">Model data</h2>
         {!! $modelTable !!}
 

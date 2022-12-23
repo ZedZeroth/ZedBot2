@@ -11,6 +11,7 @@ use App\Models\Account;
 use App\Models\Contact;
 use App\Models\Customer;
 use App\Models\IdentityDocument;
+use App\Models\RiskAssessment;
 
 /**
  * Testing import() method
@@ -54,6 +55,17 @@ test('GIVEN a valid customerDTO
         customer_id: null
     );
 
+    // Construct the riskAssessment DTO
+    $riskAssessmentIdentifier = 'volume::test::CustomerImporterTest';
+    $riskAssessmentDTO = new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
+        state: '',
+        identifier: $riskAssessmentIdentifier,
+        type: 'Volume',
+        action: null,
+        notes: null,
+        customer_id: null
+    );
+
     // Construct the customer DTO
     $customerIdentifier = 'customer::test::CustomerImporterTest';
     $customerDTO = new \App\Http\Controllers\Customers\CustomerDTO(
@@ -73,6 +85,7 @@ test('GIVEN a valid customerDTO
         accountDTOs:            [$accountDTO],
         contactDTOs:            [$contactDTO],
         identityDocumentDTOs:   [$identityDocumentDTO],
+        riskAssessmentDTOs:   [$riskAssessmentDTO],
     );
 
     // Build updater and model mocks
@@ -99,7 +112,8 @@ test('GIVEN a valid customerDTO
             customerUpdater: new \App\Http\Controllers\Customers\Update\CustomerUpdater(),
             accountUpdater: new \App\Http\Controllers\Accounts\Update\AccountUpdater(),
             contactUpdater: new \App\Http\Controllers\Contacts\Update\ContactUpdater(),
-            identityDocumentUpdater: new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater()
+            identityDocumentUpdater: new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater(),
+            riskAssessmentUpdater: new \App\Http\Controllers\RiskAssessments\Update\RiskAssessmentUpdater()
         )
     );
 
@@ -108,6 +122,7 @@ test('GIVEN a valid customerDTO
     Contact::where('identifier', $contactIdentifier)->forceDelete();
     Customer::where('identifier', $customerIdentifier)->forceDelete();
     IdentityDocument::where('identifier', $identityDocumentIdentifier)->forceDelete();
+    RiskAssessment::where('identifier', $riskAssessmentIdentifier)->forceDelete();
 
     // Expect the models to no longer exist in the database
     $this->assertNull(
@@ -128,6 +143,11 @@ test('GIVEN a valid customerDTO
     $this->assertNull(
         IdentityDocument::withTrashed()
             ->where('identifier', $identityDocumentIdentifier)
+            ->first()
+    );
+    $this->assertNull(
+        RiskAssessment::withTrashed()
+            ->where('identifier', $riskAssessmentIdentifier)
             ->first()
     );
 });

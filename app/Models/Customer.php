@@ -251,7 +251,7 @@ class Customer extends \Illuminate\Database\Eloquent\Model
      * Creates/updates a new risk assessment for the customer
      *
      * @param ?string $type
-     * @return RiskAssessment
+     * @return bool
      */
     public function assess(
         ?string $type = null

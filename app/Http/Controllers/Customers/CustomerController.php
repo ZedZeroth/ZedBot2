@@ -72,7 +72,9 @@ class CustomerController extends \App\Http\Controllers\Controller
                 contactUpdater:
                     (new \App\Http\Controllers\Contacts\Update\ContactUpdater()),
                 identityDocumentUpdater:
-                    (new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater())
+                    (new \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater()),
+                riskAssessmentUpdater:
+                    (new \App\Http\Controllers\RiskAssessments\Update\RiskAssessmentUpdater())
             );
     }
 

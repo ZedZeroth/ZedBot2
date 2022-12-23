@@ -74,6 +74,7 @@ class RiskAssessmentUpdater implements
             ]
         );
 
+        // Update the state of existing risk assessments
         $riskAssessment->state = $modelDTO->state;
         $riskAssessment->save();
 

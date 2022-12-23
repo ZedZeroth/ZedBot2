@@ -73,7 +73,9 @@ class CommandInformer
             'Contact' => \App\Models\Contact::all()->count(),
             'Currency' => \App\Models\Currency::all()->count(),
             'Customer' => \App\Models\Customer::all()->count(),
+            'IdentityDocument' => \App\Models\IdentityDocument::all()->count(),
             'Payment' => \App\Models\Payment::all()->count(),
+            'RiskAssessment' => \App\Models\RiskAssessment::all()->count(),
         ];
         $startTime = now();
 

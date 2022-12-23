@@ -38,7 +38,8 @@ class CustomerUpdater implements
                     'volumeSnapshot',
                     'accountDTOs',
                     'contactDTOs',
-                    'identityDocumentDTOs'
+                    'identityDocumentDTOs',
+                    'riskAssessmentDTOs'
                 ]
             );
 

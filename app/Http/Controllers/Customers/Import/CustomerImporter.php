@@ -17,13 +17,15 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
      * @param AccountUpdater $accountUpdater
      * @param ContactUpdater $contactUpdater
      * @param IdentityDocumentUpdater $identityDocumentUpdater
+     * @param RiskAssessmentUpdater $riskAssessmentUpdater
      */
     public function import(
         array $modelDTOs,
         \App\Http\Controllers\Customers\Update\CustomerUpdater $customerUpdater,
         \App\Http\Controllers\Accounts\Update\AccountUpdater $accountUpdater,
         \App\Http\Controllers\Contacts\Update\ContactUpdater $contactUpdater,
-        \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater $identityDocumentUpdater
+        \App\Http\Controllers\IdentityDocuments\Update\IdentityDocumentUpdater $identityDocumentUpdater,
+        \App\Http\Controllers\RiskAssessments\Update\RiskAssessmentUpdater $riskAssessmentUpdater
     ): bool {
         foreach ($modelDTOs as $customerDTO) {
             //Validate DTOs
@@ -47,7 +49,8 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
                         'volumeSnapshot',
                         'accountDTOs',
                         'contactDTOs',
-                        'identityDocumentDTOs'
+                        'identityDocumentDTOs',
+                        'riskAssessmentDTOs'
                     ]
                 );
 
@@ -73,6 +76,12 @@ class CustomerImporter// implements \App\Http\Controllers\MultiDomain\Interfaces
             foreach ($customerDTO->identityDocumentDTOs as $identityDocumentDTO) {
                 $identityDocumentDTO->customer_id = $customer->id;
                 $identityDocumentUpdater->update($identityDocumentDTO);
+            }
+
+            // Create and assign risk assessments
+            foreach ($customerDTO->riskAssessmentDTOs as $riskAssessmentDTO) {
+                $riskAssessmentDTO->customer_id = $customer->id;
+                $riskAssessmentUpdater->update($riskAssessmentDTO);
             }
         }
         return true;

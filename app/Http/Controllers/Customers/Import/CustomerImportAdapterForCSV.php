@@ -334,6 +334,46 @@ class CustomerImportAdapterForCSV implements
                     );
                 }
 
+                // Validate $row['vol_action']
+                if ($row['vol_mitigated']) {
+                    (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                        string: $row['vol_mitigated'],
+                        stringName: 'vol_mitigated',
+                        source: __FILE__ . ' (' . __LINE__ . ')',
+                        charactersToRemove: [],
+                        shortestLength: 1,
+                        longestLength: 1,
+                        mustHaveUppercase: false,
+                        canHaveUppercase: false,
+                        mustHaveLowercase: true,
+                        canHaveLowercase: true,
+                        isAlphabetical: true,
+                        isNumeric: false,
+                        isAlphanumeric: true,
+                        isHexadecimal: false
+                    );
+                }
+
+                // Validate $row['vol_action']
+                if ($row['vol_action']) {
+                    (new \App\Http\Controllers\MultiDomain\Validators\StringValidator())->validate(
+                        string: $row['vol_action'],
+                        stringName: 'vol_action',
+                        source: __FILE__ . ' (' . __LINE__ . ')',
+                        charactersToRemove: [' ', '.', ',', '’'],
+                        shortestLength: pow(10, 1),
+                        longestLength: pow(10, 3),
+                        mustHaveUppercase: true,
+                        canHaveUppercase: true,
+                        mustHaveLowercase: true,
+                        canHaveLowercase: true,
+                        isAlphabetical: false,
+                        isNumeric: false,
+                        isAlphanumeric: true,
+                        isHexadecimal: false
+                    );
+                }
+
                 // Multi-Currency account DTOs
                 $accountDTOs = [];
 
@@ -439,7 +479,6 @@ class CustomerImportAdapterForCSV implements
                 // Build the identity document DTOs
                 $identityDocumentDTOs = [];
                 if ($row['doc_type']) {
-                    // Create a dl
                     array_push(
                         $identityDocumentDTOs,
                         new \App\Http\Controllers\IdentityDocuments\IdentityDocumentDTO(
@@ -450,6 +489,31 @@ class CustomerImportAdapterForCSV implements
                             . '::' . $row['doc_expiry'],
                             type: $row['doc_type'],
                             dateOfExpiry: $row['doc_expiry'],
+                            customer_id: null
+                        )
+                    );
+                }
+
+                // Build the risk assessment DTOs
+                $riskAssessmentDTOs = [];
+                if ($row['vol_action']) {
+                    if ($row['vol_mitigated'] == 'y') {
+                        $action = $row['vol_action'];
+                        $notes = null;
+                    } else {
+                        $action = null;
+                        $notes = $row['vol_action'];
+                    }
+                    array_push(
+                        $riskAssessmentDTOs,
+                        new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
+                            state: '',
+                            identifier: 'volume'
+                            . '::' . $row['ID SURNAME']
+                            . '::' . $row['GIVEN NAME 1'],
+                            type: 'Volume',
+                            action: $action,
+                            notes: $notes,
                             customer_id: null
                         )
                     );
@@ -506,7 +570,8 @@ class CustomerImportAdapterForCSV implements
                         volumeSnapshot:         $volumeSnapshot,
                         accountDTOs:            (array) $accountDTOs,
                         contactDTOs:            (array) $contactDTOs,
-                        identityDocumentDTOs:   (array) $identityDocumentDTOs
+                        identityDocumentDTOs:   (array) $identityDocumentDTOs,
+                        riskAssessmentDTOs:     (array) $riskAssessmentDTOs
                     ),
                 );
             }

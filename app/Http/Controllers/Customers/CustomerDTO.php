@@ -29,6 +29,7 @@ class CustomerDTO implements
         public array $accountDTOs,
         public array $contactDTOs,
         public array $identityDocumentDTOs,
+        public array $riskAssessmentDTOs,
     ) {
     }
 }
