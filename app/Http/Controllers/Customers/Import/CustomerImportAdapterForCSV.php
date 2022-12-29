@@ -494,8 +494,12 @@ class CustomerImportAdapterForCSV implements
                     );
                 }
 
-                // Build the risk assessment DTOs
+                // Assign mitigations to the risk assessment DTOs
                 $riskAssessmentDTOs = [];
+                $riskAssessmentIdentifierSuffix = '::' . $row['ID SURNAME']
+                    . '::' . $row['GIVEN NAME 1']
+                    . '::' . $row['GIVEN NAME 2'];
+                // Volume
                 if ($row['vol_action']) {
                     if ($row['vol_mitigated'] == 'y') {
                         $action = $row['vol_action'];
@@ -509,9 +513,52 @@ class CustomerImportAdapterForCSV implements
                         new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
                             state: '',
                             identifier: 'volume'
-                            . '::' . $row['ID SURNAME']
-                            . '::' . $row['GIVEN NAME 1'],
+                            . $riskAssessmentIdentifierSuffix,
                             type: 'Volume',
+                            action: $action,
+                            notes: $notes,
+                            customer_id: null
+                        )
+                    );
+                }
+                // Velocity
+                if ($row['vel_action']) {
+                    if ($row['vel_mitigated'] == 'y') {
+                        $action = $row['vel_action'];
+                        $notes = null;
+                    } else {
+                        $action = null;
+                        $notes = $row['vel_action'];
+                    }
+                    array_push(
+                        $riskAssessmentDTOs,
+                        new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
+                            state: '',
+                            identifier: 'velocity'
+                            . $riskAssessmentIdentifierSuffix,
+                            type: 'Velocity',
+                            action: $action,
+                            notes: $notes,
+                            customer_id: null
+                        )
+                    );
+                }
+                // SourceOfFunds
+                if ($row['sof_action']) {
+                    if ($row['sof_mitigated'] == 'y') {
+                        $action = $row['sof_action'];
+                        $notes = null;
+                    } else {
+                        $action = null;
+                        $notes = $row['sof_action'];
+                    }
+                    array_push(
+                        $riskAssessmentDTOs,
+                        new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
+                            state: '',
+                            identifier: 'sourceOfFunds'
+                            . $riskAssessmentIdentifierSuffix,
+                            type: 'SourceOfFunds',
                             action: $action,
                             notes: $notes,
                             customer_id: null
@@ -523,7 +570,7 @@ class CustomerImportAdapterForCSV implements
                 $customerIdentifier = 'customer'
                     . '::' . $row['ID SURNAME']
                     . '::' . $row['GIVEN NAME 1']
-                    . '::' . $row['GIVEN NAME 2'];
+                    . '::' . str_replace('"', '', $row['GIVEN NAME 2']);
                 $type = 'individual';
                 if ($row['customer_type']) {
                     $type = $row['customer_type'];
@@ -550,28 +597,69 @@ class CustomerImportAdapterForCSV implements
                 if ($row['bank_vol']) {
                     $volumeSnapshot = (int) $row['bank_vol'];
                 }
+                // Not yet validated
+                $sourceOfFiatFundsType = null;
+                if ($row['sof_fiat_cat']) {
+                    $sourceOfFiatFundsType = $row['sof_fiat_cat'];
+                }
+                $sourceOfFiatFundsQuote = null;
+                if ($row['sof_fiat_quote']) {
+                    $sourceOfFiatFundsQuote = $row['sof_fiat_quote'];
+                }
+                $sourceOfCvcFundsType = null;
+                if ($row['sof_cvc_cat']) {
+                    $sourceOfCvcFundsType = $row['sof_cvc_cat'];
+                }
+                $sourceOfCvcFundsQuote = null;
+                if ($row['sof_cvc_quote']) {
+                    $sourceOfCvcFundsQuote = $row['sof_cvc_quote'];
+                }
+                $destinationOfFiatFundsType = null;
+                if ($row['dof_fiat_cat']) {
+                    $destinationOfFiatFundsType = $row['dof_fiat_cat'];
+                }
+                $destinationOfFiatFundsQuote = null;
+                if ($row['dof_fiat_quote']) {
+                    $destinationOfFiatFundsQuote = $row['dof_fiat_quote'];
+                }
+                $destinationOfCvcFundsType = null;
+                if ($row['dof_cvc_cat']) {
+                    $destinationOfCvcFundsType = $row['dof_cvc_cat'];
+                }
+                $destinationOfCvcFundsQuote = null;
+                if ($row['dof_cvc_quote']) {
+                    $destinationOfCvcFundsQuote = $row['dof_cvc_quote'];
+                }
                 array_push(
                     $customerDTOs,
                     new \App\Http\Controllers\Customers\CustomerDTO(
                         // Build identifiers in importer/synchronizer!
                         // "customer"::customer_id::surname::surname_collision_increment::given_name_1::given_name_2
-                        state:                  \App\Models\Customers\States\Unverified::class,
-                        identifier:             (string) $customerIdentifier,
-                        type:                   (string) $type, // Needs reviewing
-                        familyName:             (string) $row['ID SURNAME'],
-                        givenName1:             (string) $row['GIVEN NAME 1'],
-                        givenName2:             $row['GIVEN NAME 2'],
-                        companyName:            null,
-                        preferredName:          $row['PREFERRED NAME'],
-                        dateOfBirth:            $dateOfBirth,
-                        placeOfBirth:           $placeOfBirth,
-                        nationality:            $nationality,
-                        residency:              $residency,
-                        volumeSnapshot:         $volumeSnapshot,
-                        accountDTOs:            (array) $accountDTOs,
-                        contactDTOs:            (array) $contactDTOs,
-                        identityDocumentDTOs:   (array) $identityDocumentDTOs,
-                        riskAssessmentDTOs:     (array) $riskAssessmentDTOs
+                        state:                          \App\Models\Customers\States\Unverified::class,
+                        identifier:                     (string) $customerIdentifier,
+                        type:                           (string) $type, // Needs reviewing
+                        familyName:                     (string) $row['ID SURNAME'],
+                        givenName1:                     (string) $row['GIVEN NAME 1'],
+                        givenName2:                     $row['GIVEN NAME 2'],
+                        companyName:                    null,
+                        preferredName:                  $row['PREFERRED NAME'],
+                        dateOfBirth:                    $dateOfBirth,
+                        placeOfBirth:                   $placeOfBirth,
+                        nationality:                    $nationality,
+                        residency:                      $residency,
+                        volumeSnapshot:                 $volumeSnapshot,
+                        sourceOfFiatFundsType:          $sourceOfFiatFundsType,
+                        sourceOfFiatFundsQuote:         $sourceOfFiatFundsQuote,
+                        sourceOfCvcFundsType:           $sourceOfCvcFundsType,
+                        sourceOfCvcFundsQuote:          $sourceOfCvcFundsQuote,
+                        destinationOfFiatFundsType:     $destinationOfFiatFundsType,
+                        destinationOfFiatFundsQuote:    $destinationOfFiatFundsQuote,
+                        destinationOfCvcFundsType:      $destinationOfCvcFundsType,
+                        destinationOfCvcFundsQuote:     $destinationOfCvcFundsQuote,
+                        accountDTOs:                    (array) $accountDTOs,
+                        contactDTOs:                    (array) $contactDTOs,
+                        identityDocumentDTOs:           (array) $identityDocumentDTOs,
+                        riskAssessmentDTOs:             (array) $riskAssessmentDTOs
                     ),
                 );
             }

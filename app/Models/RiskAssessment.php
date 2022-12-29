@@ -35,11 +35,11 @@ class RiskAssessment extends \Illuminate\Database\Eloquent\Model
     ): string {
         return '<span style="color: '
             . match ($this->state) {
-                'Lower'             => '#0B0',
-                'Standard'          => '#F90',
-                'HigherMitigated'   => '#F20',
-                'NoData'            => '#333',
-                'HigherUnmitigated' => '#000',
+                'Lower'             => '#0BB',
+                'Standard'          => '#0B0',
+                'HigherMitigated'   => '#F90',
+                'NoData'            => '#000',
+                'HigherUnmitigated' => '#F20',
             }
             . ';">'
             . $string
@@ -94,6 +94,7 @@ class RiskAssessment extends \Illuminate\Database\Eloquent\Model
         return match ($this->type) {
                 'Volume'                => 'VOL',
                 'Velocity'              => 'VEL',
+                'SourceOfFunds'         => 'SOF',
         };
     }
 }

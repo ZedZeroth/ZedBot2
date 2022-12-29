@@ -28,6 +28,14 @@ return new class extends Migration
             $table->tinyText('residency')->nullable(); // 2-character country ISO  // nullable while importing
             $table->tinyText('nationality')->nullable(); // 2-character country ISO
             $table->integer('volumeSnapshot')->nullable(); // Usually a monthly in+out GBP volume on bank statement
+            $table->tinyText('sourceOfFiatFundsType')->nullable(); // verifiedSalary, salary, save, foreign, trading, gift, other
+            $table->text('sourceOfFiatFundsQuote')->nullable();
+            $table->tinyText('sourceOfCvcFundsType')->nullable(); // salary, invest, exchange, wallet, foreign, trading?, gift, other
+            $table->text('sourceOfCvcFundsQuote')->nullable();
+            $table->tinyText('destinationOfFiatFundsType')->nullable(); // spend, save
+            $table->text('destinationOfFiatFundsQuote')->nullable();
+            $table->tinyText('destinationOfCvcFundsType')->nullable(); // invest, foreign, spend, trading
+            $table->text('destinationOfCvcFundsQuote')->nullable();
             $table->timestamps(); // Laravel
             $table->softDeletes(); // Allow softDeletes
         });

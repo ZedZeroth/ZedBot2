@@ -60,7 +60,7 @@ test('GIVEN Customer familyName ""
 // POSITIVE TEST
 test('GIVEN "Volume"
     WHEN calling assess()
-    THEN return a newly created volume risk assessment
+    THEN return true
     ', function () {
 
     $customer = Customer::where(
@@ -83,7 +83,7 @@ test('GIVEN "Volume"
 // POSITIVE TEST
 test('GIVEN "Velocity"
     WHEN calling assess()
-    THEN return a newly created volume risk assessment
+    THEN return true
     ', function () {
 
     $customer = Customer::where(
@@ -100,5 +100,28 @@ test('GIVEN "Velocity"
     // Expect assessing the customer's volume to generate a volume risk assessment
     $this->assertTrue(
         $customer->assess('Velocity')
+    );
+})->group('requiresModels');
+
+// POSITIVE TEST
+test('GIVEN "SourceOfFunds"
+    WHEN calling assess()
+    THEN return true
+    ', function () {
+
+    $customer = Customer::where(
+        'identifier',
+        env('ZED_TEST_CUSTOMER_IDENTIFIER')
+    )->firstOrFail();
+
+    // Expect at least one Customer to exist
+    $this->assertInstanceOf(
+        Customer::class,
+        $customer
+    );
+
+    // Expect assessing the customer's volume to generate a volume risk assessment
+    $this->assertTrue(
+        $customer->assess('SourceOfFunds')
     );
 })->group('requiresModels');

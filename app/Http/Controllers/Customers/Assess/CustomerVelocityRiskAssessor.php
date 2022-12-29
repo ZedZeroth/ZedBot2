@@ -42,13 +42,32 @@ class CustomerVelocityRiskAssessor implements RiskAssessorInterface
             $state = 'Lower';
         }
 
+        if (
+            $customer->riskAssessments()
+                ->where('type', 'Velocity')
+                ->exists()
+        ) {
+            if (
+                $state == 'HigherUnmitigated'
+                and
+                $customer->riskAssessments()
+                    ->where('type', 'Velocity')
+                    ->first()
+                    ->action
+            ) {
+                $state = 'HigherMitigated';
+            }
+        }
+
         // Build the DTO
         $riskAssessmentDTO = new \App\Http\Controllers\RiskAssessments\RiskAssessmentDTO(
             state: $state,
             identifier: 'velocity::'
                 . $customer->familyName
                 . '::'
-                . $customer->givenName1,
+                . $customer->givenName1
+                . '::'
+                . $customer->givenName2,
             type: 'Velocity',
             action: null,
             notes: null,
